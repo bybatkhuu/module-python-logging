@@ -22,8 +22,8 @@ setup(
     long_description_content_type="text/markdown",
     author="Batkhuu Byambajav",
     author_email="batkhuu10@gmail.com",
-    url="https://github.com/bybatkhuu/module.python-logging",
-    download_url=f"https://github.com/bybatkhuu/module.python-logging/archive/v{_package_version}.tar.gz",
+    url="https://github.com/bybatkhuu/module-python-logging",
+    download_url=f"https://github.com/bybatkhuu/module-python-logging/archive/v{_package_version}.tar.gz",
     keywords=[
         _package_name,
         "loguru",

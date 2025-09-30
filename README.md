@@ -1,8 +1,8 @@
 # beans_logging
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
-[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/bybatkhuu/module.python-logging/2.build-publish.yml?logo=GitHub)](https://github.com/bybatkhuu/module.python-logging/actions/workflows/2.build-publish.yml)
-[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/bybatkhuu/module.python-logging?logo=GitHub)](https://github.com/bybatkhuu/module.python-logging/releases)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/bybatkhuu/module-python-logging/2.build-publish.yml?logo=GitHub)](https://github.com/bybatkhuu/module-python-logging/actions/workflows/2.build-publish.yml)
+[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/bybatkhuu/module-python-logging?logo=GitHub)](https://github.com/bybatkhuu/module-python-logging/releases)
 [![PyPI](https://img.shields.io/pypi/v/beans-logging?logo=PyPi)](https://pypi.org/project/beans-logging)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/beans-logging?logo=Python)](https://docs.conda.io/en/latest/miniconda.html)
 
@@ -49,12 +49,12 @@ pip install -U beans-logging
 
 ```sh
 # Install package by git:
-pip install git+https://github.com/bybatkhuu/module.python-logging.git
+pip install git+https://github.com/bybatkhuu/module-python-logging.git
 ```
 
 **C.** Install from **pre-built release** files
 
-1. Download **`.whl`** or **`.tar.gz`** file from **releases** - <https://github.com/bybatkhuu/module.python-logging/releases>
+1. Download **`.whl`** or **`.tar.gz`** file from **releases** - <https://github.com/bybatkhuu/module-python-logging/releases>
 2. Install with pip:
 
 ```sh
@@ -68,7 +68,7 @@ pip install ./beans_logging-[VERSION].tar.gz
 
 ```sh
 # Clone repository by git:
-git clone https://github.com/bybatkhuu/module.python-logging.git beans_logging
+git clone https://github.com/bybatkhuu/module-python-logging.git beans_logging
 cd ./beans_logging
 
 # Install python build tool:
@@ -89,7 +89,7 @@ pip install ./dist/beans_logging-${_VERSION}.tar.gz
 
 ```sh
 # Clone repository by git:
-git clone https://github.com/bybatkhuu/module.python-logging.git beans_logging
+git clone https://github.com/bybatkhuu/module-python-logging.git beans_logging
 cd ./beans_logging
 
 # Install with editable development mode:
@@ -100,7 +100,7 @@ pip install -e .
 
 ```sh
 # Clone repository by git:
-git clone https://github.com/bybatkhuu/module.python-logging.git beans_logging
+git clone https://github.com/bybatkhuu/module-python-logging.git beans_logging
 cd ./beans_logging
 
 # Install python dependencies:
@@ -126,7 +126,7 @@ logger.info("Logging info.")
 
 ### **Simple**
 
-[**`configs/logger.yml`**](https://github.com/bybatkhuu/module.python-logging/blob/main/examples/simple/configs/logger.yml):
+[**`configs/logger.yml`**](https://github.com/bybatkhuu/module-python-logging/blob/main/examples/simple/configs/logger.yml):
 
 ```yml
 logger:
@@ -139,7 +139,7 @@ logger:
       enabled: true
 ```
 
-[**`main.py`**](https://github.com/bybatkhuu/module.python-logging/blob/main/examples/simple/main.py):
+[**`main.py`**](https://github.com/bybatkhuu/module-python-logging/blob/main/examples/simple/main.py):
 
 ```python
 from beans_logging.auto import logger
@@ -170,7 +170,7 @@ except Exception as err:
     logger.exception("Show me, what value is wrong:")
 ```
 
-Run the [**`examples/simple`**](https://github.com/bybatkhuu/module.python-logging/tree/main/examples/simple):
+Run the [**`examples/simple`**](https://github.com/bybatkhuu/module-python-logging/tree/main/examples/simple):
 
 ```sh
 cd ./examples/simple
@@ -233,7 +233,7 @@ python -m pytest -v
 
 ## Environment Variables
 
-You can use the following environment variables inside [**`.env.example`**](https://github.com/bybatkhuu/module.python-logging/blob/main/.env.example) file:
+You can use the following environment variables inside [**`.env.example`**](https://github.com/bybatkhuu/module-python-logging/blob/main/.env.example) file:
 
 ```sh
 ENV=development
@@ -246,7 +246,7 @@ BEANS_LOGGING_LOGS_DIR="./logs"
 
 ## Configuration
 
-You can use the following configuration template [**`logger.yml`**](https://github.com/bybatkhuu/module.python-logging/blob/main/templates/configs/logger.yml): file:
+You can use the following configuration template [**`logger.yml`**](https://github.com/bybatkhuu/module-python-logging/blob/main/templates/configs/logger.yml): file:
 
 ```yaml
 logger:
@@ -286,8 +286,8 @@ logger:
 
 ## Documentation
 
-- [docs](https://github.com/bybatkhuu/module.python-logging/blob/main/docs/README.md)
-- [scripts](https://github.com/bybatkhuu/module.python-logging/blob/main/docs/scripts/README.md)
+- [docs](https://github.com/bybatkhuu/module-python-logging/blob/main/docs/README.md)
+- [scripts](https://github.com/bybatkhuu/module-python-logging/blob/main/docs/scripts/README.md)
 
 ---
 
