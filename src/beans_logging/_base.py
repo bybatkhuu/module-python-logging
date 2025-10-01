@@ -9,12 +9,7 @@ from typing import Any
 import yaml
 from loguru import logger
 from loguru._logger import Logger
-import pydantic
-
-if "2.0.0" <= pydantic.__version__:
-    from pydantic import validate_call
-else:
-    from pydantic import validate_arguments as validate_call
+from pydantic import validate_call
 
 # Internal modules
 from ._utils import create_dir, deep_merge
@@ -171,11 +166,7 @@ class LoggerLoader:
         """
 
         if isinstance(config, dict):
-            if "2.0.0" <= pydantic.__version__:
-                _config_dict = self.config.model_dump()
-            else:
-                _config_dict = self.config.dict()
-
+            _config_dict = self.config.model_dump()
             _merged_dict = deep_merge(_config_dict, config)
             try:
                 self.config = LoggerConfigPM(**_merged_dict)
@@ -224,10 +215,7 @@ class LoggerLoader:
                             return
 
                         _new_config_dict = _new_config_dict["logger"]
-                        if "2.0.0" <= pydantic.__version__:
-                            _config_dict = self.config.model_dump()
-                        else:
-                            _config_dict = self.config.dict()
+                        _config_dict = self.config.model_dump()
 
                         _merged_dict = deep_merge(_config_dict, _new_config_dict)
                         self.config = LoggerConfigPM(**_merged_dict)
@@ -247,10 +235,7 @@ class LoggerLoader:
                             return
 
                         _new_config_dict = _new_config_dict["logger"]
-                        if "2.0.0" <= pydantic.__version__:
-                            _config_dict = self.config.model_dump()
-                        else:
-                            _config_dict = self.config.dict()
+                        _config_dict = self.config.model_dump()
 
                         _merged_dict = deep_merge(_config_dict, _new_config_dict)
                         self.config = LoggerConfigPM(**_merged_dict)
@@ -274,10 +259,7 @@ class LoggerLoader:
             #                 return
 
             #             _new_config_dict = _new_config_dict["logger"]
-            #             if "2.0.0" <= pydantic.__version__:
-            #                 _config_dict = self.config.model_dump()
-            #             else:
-            #                 _config_dict = self.config.dict()
+            #             _config_dict = self.config.model_dump()
 
             #             _merged_dict = deep_merge(_config_dict, _new_config_dict)
             #             self.config = LoggerConfigPM(**_merged_dict)
