@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 
 from beans_logging import Logger, LoggerConfigPM, LoggerLoader

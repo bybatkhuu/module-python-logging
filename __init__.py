@@ -1,3 +1,6 @@
-# -*- coding: utf-8 -*-
+# flake8: noqa
 
-from .beans_logging import *
+try:
+    from .src.beans_logging import *
+except ImportError:
+    from src.beans_logging import *
