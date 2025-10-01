@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 from beans_logging.auto import logger
 
@@ -28,5 +27,5 @@ def nested(c):
 
 try:
     nested(0)
-except Exception as err:
+except Exception:
     logger.exception("Show me, what value is wrong:")

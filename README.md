@@ -1,16 +1,16 @@
-# beans_logging
+# Python Logging (beans-logging)
 
-[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit)
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/bybatkhuu/module-python-logging/2.build-publish.yml?logo=GitHub)](https://github.com/bybatkhuu/module-python-logging/actions/workflows/2.build-publish.yml)
-[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/bybatkhuu/module-python-logging?logo=GitHub)](https://github.com/bybatkhuu/module-python-logging/releases)
+[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/bybatkhuu/module-python-logging?logo=GitHub&color=blue)](https://github.com/bybatkhuu/module-python-logging/releases)
 [![PyPI](https://img.shields.io/pypi/v/beans-logging?logo=PyPi)](https://pypi.org/project/beans-logging)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/beans-logging?logo=Python)](https://docs.conda.io/en/latest/miniconda.html)
 
-`beans_logging` is a python package for simple logger and easily managing logging modules.
+`beans-logging` is a python package for simple logger and easily managing logs.
 
 It is a `Loguru` based custom logging package for python projects.
 
-## Features
+## ✨ Features
 
 - Main **logger** based on **Loguru** logging - <https://pypi.org/project/loguru>
 - Logging to **log files** (all, error, json)
@@ -23,94 +23,119 @@ It is a `Loguru` based custom logging package for python projects.
 - **Multiprocess** compatibility (Linux, macOS - 'fork')
 - Add custom **handlers**
 - **Base** logging module
-- Support **Pydantic-v1** and **Pydantic-v2**
 
 ---
 
-## Installation
+## 🛠 Installation
 
-### 1. Prerequisites
+### 1. 🚧 Prerequisites
 
-- **Python (>= v3.8)**
-- **PyPi (>= v23)**
+- Install **Python (>= v3.10)** and **pip (>= 23)**:
+    - **[RECOMMENDED] [Miniconda (v3)](https://www.anaconda.com/docs/getting-started/miniconda/install)**
+    - *[arm64/aarch64] [Miniforge (v3)](https://github.com/conda-forge/miniforge)*
+    - *[Python virutal environment] [venv](https://docs.python.org/3/library/venv.html)*
 
-### 2. Install beans-logging package
+[OPTIONAL] For **DEVELOPMENT** environment:
 
-Choose one of the following methods to install the package **[A ~ F]**:
+- Install [**git**](https://git-scm.com/downloads)
+- Setup an [**SSH key**](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh) ([video tutorial](https://www.youtube.com/watch?v=snCP3c7wXw0))
 
-**A.** [**RECOMMENDED**] Install from **PyPi**
+### 2. 📥 Download or clone the repository
+
+[TIP] Skip this step, if you're going to install the package directly from **PyPi** or **GitHub** repository.
+
+**2.1.** Prepare projects directory (if not exists):
 
 ```sh
-# Install or upgrade beans-logging package:
+# Create projects directory:
+mkdir -pv ~/workspaces/projects
+
+# Enter into projects directory:
+cd ~/workspaces/projects
+```
+
+**2.2.** Follow one of the below options **[A]**, **[B]** or **[C]**:
+
+**OPTION A.** Clone the repository:
+
+```sh
+git clone https://github.com/bybatkhuu/module-python-logging.git && \
+    cd module-python-logging
+```
+
+**OPTION B.** Clone the repository (for **DEVELOPMENT**: git + ssh key):
+
+```sh
+git clone git@github.com:bybatkhuu/module-python-logging.git && \
+    cd module-python-logging
+```
+
+**OPTION C.** Download source code:
+
+1. Download archived **zip** file from [**releases**](https://github.com/bybatkhuu/module-python-logging/releases).
+2. Extract it into the projects directory.
+
+### 3. 📦 Install the package
+
+[NOTE] Choose one of the following methods to install the package **[A ~ F]**:
+
+**OPTION A.** [**RECOMMENDED**] Install from **PyPi**:
+
+```sh
 pip install -U beans-logging
 ```
 
-**B.** Install latest version from **GitHub**
+**OPTION B.** Install latest version directly from **GitHub** repository:
 
 ```sh
-# Install package by git:
 pip install git+https://github.com/bybatkhuu/module-python-logging.git
 ```
 
-**C.** Install from **pre-built release** files
+**OPTION C.** Install from the downloaded **source code**:
 
-1. Download **`.whl`** or **`.tar.gz`** file from **releases** - <https://github.com/bybatkhuu/module-python-logging/releases>
+```sh
+# Install directly from the source code:
+pip install .
+
+# Or install with editable mode:
+pip install -e .
+```
+
+**OPTION D.** Install for **DEVELOPMENT** environment:
+
+```sh
+pip install -e .[dev]
+
+# Install pre-commit hooks:
+pre-commit install
+```
+
+**OPTION E.** Install from **pre-built release** files:
+
+1. Download **`.whl`** or **`.tar.gz`** file from [**releases**](https://github.com/bybatkhuu/module-python-logging/releases)
 2. Install with pip:
 
 ```sh
 # Install from .whl file:
 pip install ./beans_logging-[VERSION]-py3-none-any.whl
+
 # Or install from .tar.gz file:
 pip install ./beans_logging-[VERSION].tar.gz
 ```
 
-**D.** Install from **source code** by building package
+**OPTION F.** Copy the **module** into the project directory (for **testing**):
 
 ```sh
-# Clone repository by git:
-git clone https://github.com/bybatkhuu/module-python-logging.git beans_logging
-cd ./beans_logging
-
-# Install python build tool:
-pip install -U pip build
-
-# Build python package:
-python -m build
-
-_VERSION=$(./scripts/get-version.sh)
-
-# Install from .whl file:
-pip install ./dist/beans_logging-${_VERSION}-py3-none-any.whl
-# Or install from .tar.gz file:
-pip install ./dist/beans_logging-${_VERSION}.tar.gz
-```
-
-**E.** Install with pip editable **development mode** (from source code)
-
-```sh
-# Clone repository by git:
-git clone https://github.com/bybatkhuu/module-python-logging.git beans_logging
-cd ./beans_logging
-
-# Install with editable development mode:
-pip install -e .
-```
-
-**F.** Manually add to **PYTHONPATH** (not recommended)
-
-```sh
-# Clone repository by git:
-git clone https://github.com/bybatkhuu/module-python-logging.git beans_logging
-cd ./beans_logging
-
 # Install python dependencies:
 pip install -r ./requirements.txt
 
-# Add current path to PYTHONPATH:
-export PYTHONPATH="${PWD}:${PYTHONPATH}"
+# Copy the module source code into the project:
+cp -r ./src/beans_logging [PROJECT_DIR]
+# For example:
+cp -r ./src/beans_logging /some/path/project/
 ```
 
-## Usage/Examples
+## 🚸 Usage/Examples
 
 To use `beans_logging`, import the `logger` instance from the `beans_logging.auto` package:
 
@@ -210,43 +235,13 @@ Traceback (most recent call last):
 ZeroDivisionError: division by zero
 ```
 
-### **FastAPI**
-
-Checkout `beans_logging_fastapi` package: <https://github.com/bybatkhuu/module.fastapi-logging>
-
-- FastAPI HTTP access logging middleware
-- Install with pip: `pip install -U beans-logging-fastapi`
+👍
 
 ---
 
-## Running Tests
+## ⚙️ Configuration
 
-To run tests, run the following command:
-
-```sh
-# Install python test dependencies:
-pip install -r ./requirements.test.txt
-
-# Run tests:
-python -m pytest -v
-```
-
-## Environment Variables
-
-You can use the following environment variables inside [**`.env.example`**](https://github.com/bybatkhuu/module-python-logging/blob/main/.env.example) file:
-
-```sh
-ENV=development
-DEBUG=true
-
-BEANS_LOGGING_DISABLE_DEFAULT=false
-BEANS_LOGGING_CONFIG_PATH="./configs/logger.yml"
-BEANS_LOGGING_LOGS_DIR="./logs"
-```
-
-## Configuration
-
-You can use the following configuration template [**`logger.yml`**](https://github.com/bybatkhuu/module-python-logging/blob/main/templates/configs/logger.yml): file:
+[**`templates/configs/config.yml`**](./templates/configs/config.yml):
 
 ```yaml
 logger:
@@ -284,16 +279,79 @@ logger:
   extra:
 ```
 
-## Documentation
+### 🌎 Environment Variables
 
-- [docs](https://github.com/bybatkhuu/module-python-logging/blob/main/docs/README.md)
-- [scripts](https://github.com/bybatkhuu/module-python-logging/blob/main/docs/scripts/README.md)
+[**`.env.example`**](./.env.example):
+
+```sh
+# ENV=LOCAL
+# DEBUG=false
+# TZ=UTC
+
+# BEANS_LOGGING_DISABLE_DEFAULT=false
+# BEANS_LOGGING_CONFIG_PATH="./configs/logger.yml"
+# BEANS_LOGGING_LOGS_DIR="./logs"
+```
 
 ---
 
-## References
+## 🧪 Running Tests
+
+To run tests, run the following command:
+
+```sh
+# Install python test dependencies:
+pip install .[test]
+
+# Run tests:
+python -m pytest -sv -o log_cli=true
+# Or use the test script:
+./scripts/test.sh -l -v -c
+```
+
+## 🏗️ Build Package
+
+To build the python package, run the following command:
+
+```sh
+# Install python build dependencies:
+pip install -r ./requirements/requirements.build.txt
+
+# Build python package:
+python -m build
+# Or use the build script:
+./scripts/build.sh
+```
+
+## 📝 Generate Docs
+
+To build the documentation, run the following command:
+
+```sh
+# Install python documentation dependencies:
+pip install -r ./requirements/requirements.docs.txt
+
+# Serve documentation locally (for development):
+mkdocs serve -a 0.0.0.0:8000
+# Or use the docs script:
+./scripts/docs.sh
+
+# Or build documentation:
+mkdocs build
+# Or use the docs script:
+./scripts/docs.sh -b
+```
+
+## 📚 Documentation
+
+- [Docs](./docs)
+
+---
+
+## 📑 References
 
 - <https://github.com/Delgan/loguru>
 - <https://loguru.readthedocs.io/en/stable/api/logger.html>
 - <https://loguru.readthedocs.io/en/stable/resources/recipes.html>
-- <https://github.com/bybatkhuu/module.fastapi-logging>
+- <https://docs.python.org/3/library/logging.html>
+- <https://github.com/bybatkhuu/module-fastapi-logging>
