@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
 def add_level_short(record: dict) -> dict:
     """Filter for adding short level name to log record.
 

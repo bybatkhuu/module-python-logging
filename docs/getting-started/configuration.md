@@ -4,10 +4,10 @@ title: Configuration
 
 # ⚙️ Configuration
 
-[**`templates/configs/config.yml`**](https://github.com/bybatkhuu/module-python-logging/blob/main/templates/configs/config.yml):
+[**`templates/configs/logger.yml`**](https://github.com/bybatkhuu/module-python-logging/blob/main/templates/configs/logger.yml):
 
 ```yaml
---8<-- "./templates/configs/config.yml"
+--8<-- "./templates/configs/logger.yml"
 ```
 
 ## 🌎 Environment Variables

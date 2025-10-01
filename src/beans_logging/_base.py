@@ -1,13 +1,11 @@
-# -*- coding: utf-8 -*-
-
-## Standard libraries
+# Standard libraries
 import os
 import copy
 import json
 import logging
-from typing import Union, Dict, Any
+from typing import Any
 
-## Third-party libraries
+# Third-party libraries
 import yaml
 from loguru import logger
 from loguru._logger import Logger
@@ -18,7 +16,7 @@ if "2.0.0" <= pydantic.__version__:
 else:
     from pydantic import validate_arguments as validate_call
 
-## Internal modules
+# Internal modules
 from ._utils import create_dir, deep_merge
 from ._handlers import InterceptHandler
 from .rotation import RotationChecker
@@ -67,7 +65,7 @@ class LoggerLoader:
     @validate_call
     def __init__(
         self,
-        config: Union[LoggerConfigPM, Dict[str, Any], None] = None,
+        config: LoggerConfigPM | dict[str, Any] | None = None,
         config_file_path: str = _CONFIG_FILE_PATH,
         auto_config_file: bool = True,
         auto_load: bool = False,
@@ -75,12 +73,14 @@ class LoggerLoader:
         """LoggerLoader constructor method.
 
         Args:
-            config           (Union[LoggerConfigPM,
-                                    dict,
-                                    None           ], optional): New logger config to update loaded config. Defaults to None.
-            config_file_path (str                   , optional): Logger config file path. Defaults to `LoggerLoader._CONFIG_FILE_PATH`.
-            auto_config_file (bool                  , optional): Indicates whether to load logger config file or not. Defaults to True.
-            auto_load        (bool                  , optional): Indicates whether to load logger handlers or not. Defaults to False.
+            config           (LoggerConfigPM | dict | None], optional): New logger config to update loaded config.
+                                                                            Defaults to None.
+            config_file_path (str                          , optional): Logger config file path. Defaults to
+                                                                            `LoggerLoader._CONFIG_FILE_PATH`.
+            auto_config_file (bool                         , optional): Indicates whether to load logger config
+                                                                            file or not. Defaults to True.
+            auto_load        (bool                         , optional): Indicates whether to load logger
+                                                                            handlers or not. Defaults to False.
         """
 
         self.handlers_map = {"default": 0}
@@ -125,9 +125,7 @@ class LoggerLoader:
         return logger
 
     @validate_call
-    def remove_handler(
-        self, handler: Union[str, None] = None, handler_type: str = "NAME"
-    ):
+    def remove_handler(self, handler: str | None = None, handler_type: str = "NAME"):
         """Remove all handlers or specific handler by name or id from logger.
 
         Raises:
@@ -162,7 +160,7 @@ class LoggerLoader:
         self.handlers_map.clear()
 
     @validate_call
-    def update_config(self, config: Union[LoggerConfigPM, Dict[str, Any]]):
+    def update_config(self, config: LoggerConfigPM | dict[str, Any]):
         """Update logger config with new config.
 
         Args:
@@ -213,13 +211,11 @@ class LoggerLoader:
         # elif self.config_file_path.lower().endswith(".toml"):
         #     _file_format = "TOML"
 
-        ## Loading config from file, if it's exits:
+        # Loading config from file, if it's exits:
         if os.path.isfile(self.config_file_path):
             if _file_format == "YAML":
                 try:
-                    with open(
-                        self.config_file_path, "r", encoding="utf-8"
-                    ) as _config_file:
+                    with open(self.config_file_path, encoding="utf-8") as _config_file:
                         _new_config_dict = yaml.safe_load(_config_file) or {}
                         if "logger" not in _new_config_dict:
                             logger.warning(
@@ -242,9 +238,7 @@ class LoggerLoader:
                     raise
             elif _file_format == "JSON":
                 try:
-                    with open(
-                        self.config_file_path, "r", encoding="utf-8"
-                    ) as _config_file:
+                    with open(self.config_file_path, encoding="utf-8") as _config_file:
                         _new_config_dict = json.load(_config_file) or {}
                         if "logger" not in _new_config_dict:
                             logger.warning(
@@ -296,7 +290,7 @@ class LoggerLoader:
     def _check_env(self):
         """Check environment variables for logger config."""
 
-        ## Checking environment for DEBUG option:
+        # Checking environment for DEBUG option:
         _is_debug = False
         _ENV = str(os.getenv("ENV")).strip().lower()
         _DEBUG = str(os.getenv("DEBUG")).strip().lower()
@@ -314,7 +308,7 @@ class LoggerLoader:
             self.config.file.logs_dir = os.getenv("BEANS_LOGGING_LOGS_DIR")
 
         # if self.config.stream.use_color:
-        #     ## Checking terminal could support xterm colors:
+        #     # Checking terminal could support xterm colors:
         #     _TERM = str(os.getenv("TERM")).strip()
         #     if not "xterm" in _TERM:
         #         self.config.stream.use_color = False
@@ -536,7 +530,7 @@ class LoggerLoader:
 
         _intercept_handler = InterceptHandler()
 
-        ## Intercepting all logs from standard (root logger) logging:
+        # Intercepting all logs from standard (root logger) logging:
         logging.basicConfig(handlers=[_intercept_handler], level=0, force=True)
 
         _intercepted_modules = set()
@@ -579,10 +573,10 @@ class LoggerLoader:
             f"Intercepted modules: {list(_intercepted_modules)}; Muted modules: {list(_muted_modules)};"
         )
 
-    ### ATTRIBUTES ###
-    ## handlers_map ##
+    # ATTRIBUTES #
+    # handlers_map
     @property
-    def handlers_map(self) -> Dict[str, int]:
+    def handlers_map(self) -> dict[str, int]:
         try:
             return self.__handlers_map
         except AttributeError:
@@ -591,7 +585,7 @@ class LoggerLoader:
         return self.__handlers_map
 
     @handlers_map.setter
-    def handlers_map(self, handlers_map: Dict[str, int]):
+    def handlers_map(self, handlers_map: dict[str, int]):
         if not isinstance(handlers_map, dict):
             raise TypeError(
                 f"`handlers_map` attribute type {type(handlers_map)} is invalid, must be <dict>!."
@@ -599,9 +593,9 @@ class LoggerLoader:
 
         self.__handlers_map = copy.deepcopy(handlers_map)
 
-    ## handlers_map ##
+    # handlers_map
 
-    ## config ##
+    # config
     @property
     def config(self) -> LoggerConfigPM:
         try:
@@ -620,9 +614,9 @@ class LoggerLoader:
 
         self.__config = copy.deepcopy(config)
 
-    ## config ##
+    # config
 
-    ## config_file_path ##
+    # config_file_path
     @property
     def config_file_path(self) -> str:
         try:
@@ -648,11 +642,13 @@ class LoggerLoader:
         ):
             if not config_file_path.lower().endswith(".toml"):
                 raise NotImplementedError(
-                    f"`config_file_path` attribute value '{config_file_path}' is invalid, TOML file format is not supported yet!"
+                    f"`config_file_path` attribute value '{config_file_path}' is invalid, "
+                    f"TOML file format is not supported yet!"
                 )
 
             raise ValueError(
-                f"`config_file_path` attribute value '{config_file_path}' is invalid, file must be '.yml', '.yaml' or '.json' format!"
+                f"`config_file_path` attribute value '{config_file_path}' is invalid, "
+                f"file must be '.yml', '.yaml' or '.json' format!"
             )
 
         if not os.path.isabs(config_file_path):
@@ -660,5 +656,5 @@ class LoggerLoader:
 
         self.__config_file_path = config_file_path
 
-    ## config_file_path ##
-    ### ATTRIBUTES ###
+    # config_file_path
+    # ATTRIBUTES #

@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "beans_logging"
 authors = [{ name = "Batkhuu Byambajav", email = "batkhuu10@gmail.com" }]
-description = "'beans-logging' is a python package for simple logger and easily managing logging."
+description = "'beans-logging' is a python package for simple logger and easily managing logs."
 readme = "README.md"
 requires-python = ">=3.10,<4.0"
 keywords = [

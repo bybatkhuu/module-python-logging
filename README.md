@@ -38,7 +38,7 @@ It is a `Loguru` based custom logging package for python projects.
 [OPTIONAL] For **DEVELOPMENT** environment:
 
 - Install [**git**](https://git-scm.com/downloads)
-- Setup an [**SSH key**](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh) ([video tutorial](https://www.youtube.com/watch?v=snCP3c7wXw0))
+- Setup an [**SSH key**](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh)
 
 ### 2. 📥 Download or clone the repository
 
@@ -151,7 +151,7 @@ logger.info("Logging info.")
 
 ### **Simple**
 
-[**`configs/logger.yml`**](https://github.com/bybatkhuu/module-python-logging/blob/main/examples/simple/configs/logger.yml):
+[**`configs/logger.yml`**](./examples/simple/configs/logger.yml):
 
 ```yml
 logger:
@@ -164,9 +164,11 @@ logger:
       enabled: true
 ```
 
-[**`main.py`**](https://github.com/bybatkhuu/module-python-logging/blob/main/examples/simple/main.py):
+[**`main.py`**](./examples/simple/main.py):
 
 ```python
+#!/usr/bin/env python
+
 from beans_logging.auto import logger
 
 
@@ -178,9 +180,11 @@ logger.warning("Warning something.")
 logger.error("Error occured.")
 logger.critical("CRITICAL ERROR.")
 
+
 def divide(a, b):
     _result = a / b
     return _result
+
 
 def nested(c):
     try:
@@ -189,13 +193,14 @@ def nested(c):
         logger.error(err)
         raise
 
+
 try:
     nested(0)
-except Exception as err:
+except Exception:
     logger.exception("Show me, what value is wrong:")
 ```
 
-Run the [**`examples/simple`**](https://github.com/bybatkhuu/module-python-logging/tree/main/examples/simple):
+Run the [**`examples/simple`**](./examples/simple):
 
 ```sh
 cd ./examples/simple
@@ -241,7 +246,7 @@ ZeroDivisionError: division by zero
 
 ## ⚙️ Configuration
 
-[**`templates/configs/config.yml`**](./templates/configs/config.yml):
+[**`templates/configs/logger.yml`**](./templates/configs/logger.yml):
 
 ```yaml
 logger:

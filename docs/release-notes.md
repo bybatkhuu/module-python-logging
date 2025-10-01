@@ -16,5 +16,3 @@ hide:
 
 
 **Full Changelog**: https://github.com/bybatkhuu/module-python-logging/compare/v6.0.0...v6.0.1
-
-

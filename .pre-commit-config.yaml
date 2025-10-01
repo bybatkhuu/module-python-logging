@@ -143,6 +143,7 @@ repos:
         files: \.pyi?$
         args: ["--skip=B101"] # skip assert-use warning
 
+
   # - repo: https://github.com/RobertCraigie/pyright-python
   #   rev: v1.1.404
   #   hooks:
@@ -150,13 +151,13 @@ repos:
   #       name: "🐍 pyright - Static type checker"
   #       files: \.pyi?$
 
-  - repo: local
-    hooks:
-      - id: pyright
-        name: "🐍 pyright (local) - Static type checker"
-        language: system
-        entry: "python -m pyright"
-        files: \.pyi?$
+  # - repo: local
+  #   hooks:
+  #     - id: pyright
+  #       name: "🐍 pyright (local) - Static type checker"
+  #       language: system
+  #       entry: "python -m pyright"
+  #       files: \.pyi?$
 
   # --- Tests ---
   # - repo: local

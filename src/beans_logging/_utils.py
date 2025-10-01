@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import os
 import sys
 import copy
@@ -22,7 +20,8 @@ def create_dir(create_dir: str, warn_mode: WarnEnum = WarnEnum.DEBUG):
 
     Args:
         create_dir (str, required): Create directory path.
-        warn_mode  (str, optional): Warning message mode, for example: 'ERROR', 'ALWAYS', 'DEBUG', 'IGNORE'. Defaults to "DEBUG".
+        warn_mode  (str, optional): Warning message mode, for example: 'ERROR', 'ALWAYS', 'DEBUG', 'IGNORE'.
+                                        Defaults to "DEBUG".
     """
 
     if not os.path.isdir(create_dir):
