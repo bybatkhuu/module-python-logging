@@ -1,5 +1,5 @@
 site_name: Python Logging (beans-logging)
-site_description: "'beans-logging' is a python package for simple logger and easily managing logging."
+site_description: "'beans-logging' is a python package for simple logger and easily managing logs."
 site_url: https://pylogging-docs.bybatkhuu.dev
 repo_name: bybatkhuu/module-python-logging
 repo_url: https://github.com/bybatkhuu/module-python-logging

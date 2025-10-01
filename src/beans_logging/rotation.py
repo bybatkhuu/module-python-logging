@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import datetime
 from typing import TextIO
 
@@ -35,8 +33,8 @@ class RotationChecker:
         )
 
         if _current_dtime >= self._dtime_limit:
-            ## The current time is already past the target time so it would rotate already.
-            ## Add one day to prevent an immediate rotation.
+            # The current time is already past the target time so it would rotate already.
+            # Add one day to prevent an immediate rotation.
             self._dtime_limit += datetime.timedelta(days=1)
 
     def should_rotate(self, message: Message, file: TextIO) -> bool:

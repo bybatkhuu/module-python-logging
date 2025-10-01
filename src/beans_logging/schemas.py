@@ -1,7 +1,4 @@
-# -*- coding: utf-8 -*-
-
 import datetime
-from typing import List
 
 
 import pydantic
@@ -34,7 +31,10 @@ class StreamPM(ExtraBaseModel):
     use_color: bool = Field(default=True)
     use_icon: bool = Field(default=False)
     format_str: constr(strip_whitespace=True) = Field(
-        default="[<c>{time:YYYY-MM-DD HH:mm:ss.SSS Z}</c> | <level>{level_short:<5}</level> | <w>{name}:{line}</w>]: <level>{message}</level>",
+        default=(
+            "[<c>{time:YYYY-MM-DD HH:mm:ss.SSS Z}</c> | <level>{level_short:<5}</level> | <w>{name}:{line}</w>]: "
+            "<level>{message}</level>"
+        ),
         min_length=3,
         max_length=511,
     )
@@ -145,13 +145,13 @@ class FilePM(ExtraBaseModel):
 class AutoLoadPM(ExtraBaseModel):
     enabled: bool = Field(default=True)
     only_base: bool = Field(default=False)
-    ignore_modules: List[str] = Field(default=[])
+    ignore_modules: list[str] = Field(default=[])
 
 
 class InterceptPM(ExtraBaseModel):
     auto_load: AutoLoadPM = Field(default_factory=AutoLoadPM)
-    include_modules: List[str] = Field(default=[])
-    mute_modules: List[str] = Field(default=[])
+    include_modules: list[str] = Field(default=[])
+    mute_modules: list[str] = Field(default=[])
 
 
 class ExtraPM(ExtraBaseModel):

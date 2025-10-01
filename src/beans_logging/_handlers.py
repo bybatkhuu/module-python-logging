@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import sys
 import logging
 from logging import LogRecord
@@ -25,13 +23,13 @@ class InterceptHandler(logging.Handler):
             record (LogRecord, required): Log needs to be handled.
         """
 
-        ## Get corresponding Loguru level if it exists
+        # Get corresponding Loguru level if it exists
         try:
             _level = logger.level(record.levelname).name
         except ValueError:
             _level = record.levelno
 
-        ## Find caller from where originated the logged message
+        # Find caller from where originated the logged message
         _frame, _depth = sys._getframe(6), 6
         while _frame and _frame.f_code.co_filename == logging.__file__:
             _frame = _frame.f_back
