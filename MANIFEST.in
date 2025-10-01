@@ -27,6 +27,7 @@ exclude .ipynb_checkpoints
 exclude .markdownlint.json
 exclude .pre-commit-config.yaml
 exclude .DS_Store
+exclude auto.py
 exclude CHANGELOG.md
 exclude environment.yml
 exclude Makefile
