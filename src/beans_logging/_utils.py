@@ -6,7 +6,7 @@ import errno
 from loguru import logger
 from pydantic import validate_call
 
-from ._consts import WarnEnum
+from ._constants import WarnEnum
 
 
 @validate_call
@@ -69,26 +69,33 @@ def deep_merge(dict1: dict, dict2: dict) -> dict:
     return _merged
 
 
-def get_default_logs_dir() -> str:
-    """Return default logs directory path (current working directory + 'logs').
+@validate_call
+def get_slug_name(file_path: str | None = None) -> str:
+    """Slugify the file name from the given file path or the current script's file path.
+
+    Args:
+        file_path (str | None, optional): The file path to slugify. If None, uses the current script's file path.
+                                            Defaults to None.
 
     Returns:
-        str: Default logs directory path.
+        str: The slugified file name.
     """
 
-    return os.path.join(os.getcwd(), "logs")
+    if not file_path:
+        file_path = sys.argv[0]
 
-
-def get_app_name() -> str:
-    """Return application name (sys.argv[0]).
-
-    Returns:
-        str: Application name.
-    """
-
-    return (
-        os.path.splitext(os.path.basename(sys.argv[0]))[0]
+    _slug_name = (
+        os.path.splitext(os.path.basename(file_path))[0]
         .strip()
         .replace(" ", "-")
+        .replace("_", "-")
         .lower()
     )
+    return _slug_name
+
+
+__all__ = [
+    "create_dir",
+    "deep_merge",
+    "get_slug_name",
+]

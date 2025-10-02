@@ -15,7 +15,7 @@ from pydantic import validate_call
 from ._utils import create_dir, deep_merge
 from ._handlers import InterceptHandler
 from .rotation import RotationChecker
-from .schemas import LoggerConfigPM
+from .config import LoggerConfigPM
 from .sinks import std_sink
 from .formats import json_format
 from .filters import (
@@ -68,13 +68,13 @@ class LoggerLoader:
         """LoggerLoader constructor method.
 
         Args:
-            config           (LoggerConfigPM | dict | None], optional): New logger config to update loaded config.
+            config           (LoggerConfigPM | dict | None, optional): New logger config to update loaded config.
                                                                             Defaults to None.
-            config_file_path (str                          , optional): Logger config file path. Defaults to
+            config_file_path (str                         , optional): Logger config file path. Defaults to
                                                                             `LoggerLoader._CONFIG_FILE_PATH`.
-            auto_config_file (bool                         , optional): Indicates whether to load logger config
+            auto_config_file (bool                        , optional): Indicates whether to load logger config
                                                                             file or not. Defaults to True.
-            auto_load        (bool                         , optional): Indicates whether to load logger
+            auto_load        (bool                        , optional): Indicates whether to load logger
                                                                             handlers or not. Defaults to False.
         """
 
