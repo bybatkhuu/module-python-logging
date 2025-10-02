@@ -1,6 +1,6 @@
 from ._base import Logger, logger, LoggerLoader
-from .schemas import LoggerConfigPM
-from ._consts import WarnEnum
+from .config import LoggerConfigPM
+from ._constants import WarnEnum
 from .__version__ import __version__
 
 
