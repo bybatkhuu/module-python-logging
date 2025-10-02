@@ -1,5 +1,16 @@
 # Changelog
 
+## v6.0.3 (2025-10-02)
+
+<!-- Release notes generated using configuration in .github/release.yml at v6.0.3 -->
+
+## What's Changed
+### 🐛 Fixes
+* Simplify Pydantic version checks and reorganize schemas by @bybatkhuu in https://github.com/bybatkhuu/module-python-logging/pull/31
+
+
+**Full Changelog**: https://github.com/bybatkhuu/module-python-logging/compare/v6.0.2...v6.0.3
+
 ## v6.0.2 (2025-10-01)
 
 <!-- Release notes generated using configuration in .github/release.yml at v6.0.2 -->
