@@ -51,6 +51,7 @@ main()
 {
 	## --- Menu arguments --- ##
 	if [ -n "${1:-}" ]; then
+		local _input
 		for _input in "${@:-}"; do
 			case ${_input} in
 				-m=* | --module-name=*)
@@ -86,8 +87,8 @@ main()
 		_OUTPUT_DIR="${OUTPUT_DIR}"
 	fi
 
-	_classes_dir="${_OUTPUT_DIR}/classes"
-	_packages_dir="${_OUTPUT_DIR}/packages"
+	local _classes_dir="${_OUTPUT_DIR}/classes"
+	local _packages_dir="${_OUTPUT_DIR}/packages"
 
 	if [ ! -d "${_classes_dir}" ]; then
 		mkdir -vp "${_classes_dir}"
@@ -99,10 +100,11 @@ main()
 
 
 	echo "[INFO]: Generating UML diagrams..."
-	_cp_formats=("html" "pdf" "png" "svg")
+	local _cp_formats=("html" "pdf" "png" "svg")
+	local _cp_format
 	for _cp_format in "${_cp_formats[@]}"; do
-		_tmp_class_path="${_OUTPUT_DIR}/classes_${_MODULE_NAME}.${_cp_format}"
-		_tmp_package_path="${_OUTPUT_DIR}/packages_${_MODULE_NAME}.${_cp_format}"
+		local _tmp_class_path="${_OUTPUT_DIR}/classes_${_MODULE_NAME}.${_cp_format}"
+		local _tmp_package_path="${_OUTPUT_DIR}/packages_${_MODULE_NAME}.${_cp_format}"
 
 		echo "[INFO]: Generating ['${_tmp_class_path}', '${_tmp_package_path}'] files..."
 		pyreverse -d "${_OUTPUT_DIR}" -o "${_cp_format}" -p "${_MODULE_NAME}" "${_MODULE_DIR}" || exit 2

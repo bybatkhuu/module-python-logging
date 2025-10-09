@@ -37,6 +37,7 @@ main()
 {
 	## --- Menu arguments --- ##
 	if [ -n "${1:-}" ]; then
+		local _input
 		for _input in "${@:-}"; do
 			case ${_input} in
 				-b | --build)
@@ -56,9 +57,10 @@ main()
 		./scripts/build.sh -c
 	fi
 
-	_cur_version="$(./scripts/get-version.sh)"
-	echo "[INFO]: Creating release for version: 'v${_cur_version}'..."
-	gh release create "v${_cur_version}" ./dist/* --generate-notes
+	local _current_version
+	_current_version="$(./scripts/get-version.sh)"
+	echo "[INFO]: Creating release for version: 'v${_current_version}'..."
+	gh release create "v${_current_version}" ./dist/* --generate-notes
 	echo "[OK]: Done."
 }
 
