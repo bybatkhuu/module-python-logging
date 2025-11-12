@@ -1,11 +1,16 @@
 from enum import Enum
 
 
-class WarnEnum(str, Enum):
-    ERROR = "ERROR"
-    ALWAYS = "ALWAYS"
-    DEBUG = "DEBUG"
-    IGNORE = "IGNORE"
+class HandlerTypeEnum(str, Enum):
+    STREAM = "STREAM"
+    FILE = "FILE"
+    SOCKET = "SOCKET"
+    HTTP = "HTTP"
+    SYSLOG = "SYSLOG"
+    QUEUE = "QUEUE"
+    MEMORY = "MEMORY"
+    NULL = "NULL"
+    CUSTOM = "CUSTOM"
 
 
 class LogLevelEnum(str, Enum):
@@ -16,3 +21,9 @@ class LogLevelEnum(str, Enum):
     WARNING = "WARNING"
     ERROR = "ERROR"
     CRITICAL = "CRITICAL"
+
+
+__all__ = [
+    "HandlerTypeEnum",
+    "LogLevelEnum",
+]

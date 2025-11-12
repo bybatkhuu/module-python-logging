@@ -3,7 +3,7 @@ import sys
 from loguru._handler import Message
 
 
-def std_sink(message: Message):
+def std_sink(message: Message) -> None:
     """Print message based on log level to stdout or stderr.
 
     Args:
@@ -14,3 +14,8 @@ def std_sink(message: Message):
         sys.stdout.write(message)
     else:
         sys.stderr.write(message)
+
+    return
+
+
+__all__ = ["std_sink"]
