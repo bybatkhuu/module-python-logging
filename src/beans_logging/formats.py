@@ -1,5 +1,6 @@
 import json
 import traceback
+from typing import cast
 
 from loguru import Record
 
@@ -8,7 +9,7 @@ class JsonRecord(Record):
     serialized: str
 
 
-def json_format(record: JsonRecord) -> str:
+def json_format(record: Record) -> str:
     """Custom json formatter for loguru logger.
 
     Args:
@@ -45,6 +46,7 @@ def json_format(record: JsonRecord) -> str:
         "elapsed": str(record["elapsed"]),
     }
 
+    record = cast(JsonRecord, record)
     record["serialized"] = json.dumps(_json_record)
     return "{serialized}\n"
 

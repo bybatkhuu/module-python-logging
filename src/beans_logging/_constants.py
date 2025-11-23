@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class HandlerTypeEnum(str, Enum):
+class LogHandlerTypeEnum(str, Enum):
     STREAM = "STREAM"
     FILE = "FILE"
     SOCKET = "SOCKET"
@@ -11,6 +11,7 @@ class HandlerTypeEnum(str, Enum):
     MEMORY = "MEMORY"
     NULL = "NULL"
     CUSTOM = "CUSTOM"
+    UNKNOWN = "UNKNOWN"
 
 
 class LogLevelEnum(str, Enum):
@@ -24,6 +25,6 @@ class LogLevelEnum(str, Enum):
 
 
 __all__ = [
-    "HandlerTypeEnum",
+    "LogHandlerTypeEnum",
     "LogLevelEnum",
 ]

@@ -16,7 +16,7 @@ from ._utils import create_dir, deep_merge
 from ._handlers import InterceptHandler
 from .rotation import RotationChecker
 from .config import LoggerConfigPM
-from ._sinks import std_sink
+from .sinks import std_sink
 from .formats import json_format
 from .filters import (
     use_all_filter,

@@ -1,6 +1,6 @@
 import sys
 
-from loguru._handler import Message
+from loguru import Message
 
 
 def std_sink(message: Message) -> None:
