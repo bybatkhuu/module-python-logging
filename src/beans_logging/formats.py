@@ -6,7 +6,7 @@ if TYPE_CHECKING:
     from loguru import Record
 
 
-def json_format(record: "Record") -> str:
+def json_formatter(record: "Record") -> str:
     """Custom json formatter for loguru logger.
 
     Args:
@@ -28,6 +28,9 @@ def json_format(record: "Record") -> str:
     if record["extra"] and (0 < len(record["extra"])):
         _extra = record["extra"]
 
+    if _extra and ("serialized" in _extra):
+        del _extra["serialized"]
+
     _json_record = {
         "timestamp": record["time"].strftime("%Y-%m-%dT%H:%M:%S%z"),
         "level": record["level"].name,
@@ -43,10 +46,10 @@ def json_format(record: "Record") -> str:
         "elapsed": str(record["elapsed"]),
     }
 
-    record["serialized"] = json.dumps(_json_record)  # type: ignore
-    return "{serialized}\n"
+    record["extra"]["serialized"] = json.dumps(_json_record)
+    return "{extra[serialized]}\n"
 
 
 __all__ = [
-    "json_format",
+    "json_formatter",
 ]

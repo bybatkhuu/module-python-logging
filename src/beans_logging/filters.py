@@ -11,20 +11,20 @@ def add_level_short(record: "Record") -> "Record":
         record (Record, required): Log record as dictionary.
 
     Returns:
-        CustomRecord: Log record as dictionary with short level name.
+        Record: Log record as dictionary with short level name.
     """
 
-    if "level_short" not in record:
+    if "level_short" not in record["extra"]:
         if record["level"].name == "SUCCESS":
-            record["level_short"] = "OK"  # type: ignore
+            record["extra"]["level_short"] = "OK"
         elif record["level"].name == "WARNING":
-            record["level_short"] = "WARN"  # type: ignore
+            record["extra"]["level_short"] = "WARN"
         elif record["level"].name == "CRITICAL":
-            record["level_short"] = "CRIT"  # type: ignore
+            record["extra"]["level_short"] = "CRIT"
         elif 5 < len(record["level"].name):
-            record["level_short"] = record["level"].name[:5]  # type: ignore
+            record["extra"]["level_short"] = record["level"].name[:5]
         else:
-            record["level_short"] = record["level"].name  # type: ignore
+            record["extra"]["level_short"] = record["level"].name
 
     return record
 

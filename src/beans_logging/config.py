@@ -10,7 +10,7 @@ from pydantic import Field, model_validator, field_validator
 from ._constants import LogHandlerTypeEnum, LogLevelEnum
 from .schemas import ExtraBaseModel, LogHandlerPM, LoguruHandlerPM
 from .sinks import std_sink
-from .formats import json_format
+from .formats import json_formatter
 from .filters import (
     use_all_filter,
     use_std_filter,
@@ -62,7 +62,7 @@ class StreamConfigPM(ExtraBaseModel):
     colorize: bool = Field(default=True)
     format_str: str = Field(
         default=(
-            "[<c>{time:YYYY-MM-DD HH:mm:ss.SSS Z}</c> | <level>{level_short:<5}</level> | <w>{name}:{line}</w>]: "
+            "[<c>{time:YYYY-MM-DD HH:mm:ss.SSS Z}</c> | <level>{extra[level_short]:<5}</level> | <w>{name}:{line}</w>]: "
             "<level>{message}</level>"
         ),
         min_length=8,
@@ -72,7 +72,7 @@ class StreamConfigPM(ExtraBaseModel):
 
 class PlainFileConfigPM(ExtraBaseModel):
     format_str: str = Field(
-        default="[{time:YYYY-MM-DD HH:mm:ss.SSS Z} | {level_short:<5} | {name}:{line}]: {message}",
+        default="[{time:YYYY-MM-DD HH:mm:ss.SSS Z} | {extra[level_short]:<5} | {name}:{line}]: {message}",
         min_length=8,
         max_length=512,
     )
@@ -128,7 +128,7 @@ class DefaultConfigPM(ExtraBaseModel):
     level: LevelConfigPM = Field(default_factory=LevelConfigPM)
     stream: StreamConfigPM = Field(default_factory=StreamConfigPM)
     file: FileConfigPM = Field(default_factory=FileConfigPM)
-    custom_json: bool = Field(default=False)
+    custom_serialize: bool = Field(default=False)
 
 
 class InterceptConfigPM(ExtraBaseModel):
@@ -166,7 +166,8 @@ class LoggerConfigPM(ExtraBaseModel):
                     raise TypeError(
                         f"'handlers' attribute index {_i} type {type(_handler).__name__} is invalid, must be <LogHandlerPM>, <LoguruHandlerPM> or dict!"
                     )
-                elif isinstance(_handler, LoguruHandlerPM):
+
+                if isinstance(_handler, LoguruHandlerPM):
                     val[_i] = LogHandlerPM(
                         **_handler.model_dump(exclude_none=True, exclude_unset=True)
                     )
@@ -198,107 +199,104 @@ class LoggerConfigPM(ExtraBaseModel):
                 app_name=self.app_name
             )
 
-        if self.handlers:
-            for _handler in self.handlers:
-                if _handler.sink is None:
-                    if _handler.type_ == LogHandlerTypeEnum.STREAM:
-                        _handler.sink = std_sink
-                    elif _handler.type_ == LogHandlerTypeEnum.FILE:
-                        _logs_path: str = ""
-                        if _handler.serialize:
-                            if _handler.is_error:
-                                _logs_path = os.path.join(
-                                    self.default.file.logs_dir,
-                                    self.default.file.json_.err_path,
-                                )
-                            else:
-                                _logs_path = os.path.join(
-                                    self.default.file.logs_dir,
-                                    self.default.file.json_.log_path,
-                                )
+        for _handler in self.handlers:
+            if _handler.sink is None:
+                if _handler.type_ == LogHandlerTypeEnum.STREAM:
+                    _handler.sink = std_sink
+                elif _handler.type_ == LogHandlerTypeEnum.FILE:
+                    _logs_path: str = ""
+                    if _handler.serialize or _handler.custom_serialize:
+                        if _handler.is_error:
+                            _logs_path = os.path.join(
+                                self.default.file.logs_dir,
+                                self.default.file.json_.err_path,
+                            )
                         else:
-                            if _handler.is_error:
-                                _logs_path = os.path.join(
-                                    self.default.file.logs_dir,
-                                    self.default.file.plain.err_path,
-                                )
-                            else:
-                                _logs_path = os.path.join(
-                                    self.default.file.logs_dir,
-                                    self.default.file.plain.log_path,
-                                )
-
-                        _logs_dir, _ = os.path.split(_logs_path)
-                        io_utils.create_dir(create_dir=_logs_dir)
-                        _handler.sink = _logs_path
+                            _logs_path = os.path.join(
+                                self.default.file.logs_dir,
+                                self.default.file.json_.log_path,
+                            )
                     else:
-                        raise ValueError(
-                            "'sink' attribute is empty, required to for custom handler!"
-                        )
-
-                if _handler.level is None:
-                    if _handler.is_error:
-                        _handler.level = self.default.level.err
-                    else:
-                        _handler.level = self.default.level.base
-
-                if _handler.filter_ is None:
-                    if _handler.type_ == LogHandlerTypeEnum.STREAM:
-                        _handler.filter_ = use_std_filter
-                    elif _handler.type_ == LogHandlerTypeEnum.FILE:
-                        if _handler.serialize:
-                            if _handler.is_error:
-                                _handler.filter_ = use_file_json_err_filter
-                            else:
-                                _handler.filter_ = use_file_json_filter
+                        if _handler.is_error:
+                            _logs_path = os.path.join(
+                                self.default.file.logs_dir,
+                                self.default.file.plain.err_path,
+                            )
                         else:
-                            if _handler.is_error:
-                                _handler.filter_ = use_file_err_filter
-                            else:
-                                _handler.filter_ = use_file_filter
-                    else:
-                        _handler.filter_ = use_all_filter
+                            _logs_path = os.path.join(
+                                self.default.file.logs_dir,
+                                self.default.file.plain.log_path,
+                            )
 
-                if _handler.backtrace is None:
-                    _handler.backtrace = True
-
-                if (_handler.diagnose is None) and (
-                    (_handler.level == LogLevelEnum.TRACE) or (_handler.level == 5)
-                ):
-                    _handler.diagnose = True
-
-                if _handler.serialize:
-                    if _handler.custom_json:
-                        _handler.serialize = False
-                        _handler.format_ = json_format
+                    _logs_dir, _ = os.path.split(_logs_path)
+                    io_utils.create_dir(create_dir=_logs_dir)
+                    _handler.sink = _logs_path
                 else:
-                    if _handler.format_ is None:
-                        if _handler.type_ == LogHandlerTypeEnum.STREAM:
-                            _handler.format_ = self.default.stream.format_str
-                        # elif _handler.type_ == LogHandlerTypeEnum.FILE:
+                    raise ValueError(
+                        "'sink' attribute is empty, required for any handlers!"
+                    )
+
+            if _handler.level is None:
+                if _handler.is_error:
+                    _handler.level = self.default.level.err
+                else:
+                    _handler.level = self.default.level.base
+
+            if _handler.custom_serialize:
+                _handler.serialize = False
+                _handler.format_ = json_formatter
+
+            if (_handler.format_ is None) and (not _handler.serialize):
+                if _handler.type_ == LogHandlerTypeEnum.STREAM:
+                    _handler.format_ = self.default.stream.format_str
+                else:
+                    _handler.format_ = self.default.file.plain.format_str
+
+            if _handler.filter_ is None:
+                if _handler.type_ == LogHandlerTypeEnum.STREAM:
+                    _handler.filter_ = use_std_filter
+                elif _handler.type_ == LogHandlerTypeEnum.FILE:
+                    if _handler.serialize or _handler.custom_serialize:
+                        if _handler.is_error:
+                            _handler.filter_ = use_file_json_err_filter
                         else:
-                            _handler.format_ = self.default.file.plain.format_str
+                            _handler.filter_ = use_file_json_filter
+                    else:
+                        if _handler.is_error:
+                            _handler.filter_ = use_file_err_filter
+                        else:
+                            _handler.filter_ = use_file_filter
+                else:
+                    _handler.filter_ = use_all_filter
 
-                if ((_handler.colorize) is None) and (
-                    _handler.type_ == LogHandlerTypeEnum.STREAM
-                ):
-                    _handler.colorize = self.default.stream.colorize
+            if _handler.backtrace is None:
+                _handler.backtrace = True
 
-                if _handler.type_ == LogHandlerTypeEnum.FILE:
-                    if _handler.enqueue is None:
-                        _handler.enqueue = True
+            if (_handler.diagnose is None) and (
+                (_handler.level == LogLevelEnum.TRACE) or (_handler.level == 5)
+            ):
+                _handler.diagnose = True
 
-                    if _handler.rotation is None:
-                        _rotator = Rotator(
-                            rotate_size=self.default.file.rotate_size,
-                            rotate_time=self.default.file.rotate_time,
-                        )
-                        _handler.rotation = _rotator.rotate
-                    if _handler.retention is None:
-                        _handler.retention = self.default.file.retention
+            if (_handler.colorize is None) and (
+                _handler.type_ == LogHandlerTypeEnum.STREAM
+            ):
+                _handler.colorize = self.default.stream.colorize
 
-                    if _handler.encoding is None:
-                        _handler.encoding = self.default.file.encoding
+            if _handler.type_ == LogHandlerTypeEnum.FILE:
+                if _handler.enqueue is None:
+                    _handler.enqueue = True
+
+                if _handler.rotation is None:
+                    _handler.rotation = Rotator(
+                        rotate_size=self.default.file.rotate_size,
+                        rotate_time=self.default.file.rotate_time,
+                    ).should_rotate
+
+                if _handler.retention is None:
+                    _handler.retention = self.default.file.retention
+
+                if _handler.encoding is None:
+                    _handler.encoding = self.default.file.encoding
 
         return self
 

@@ -7,7 +7,6 @@ logger = logger_loader.load()
 
 
 __all__ = [
-    "Logger",
     "logger",
     "LoggerLoader",
     "logger_loader",

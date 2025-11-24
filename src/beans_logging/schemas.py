@@ -6,7 +6,7 @@ import datetime
 from pathlib import Path
 from asyncio import AbstractEventLoop
 from multiprocessing.context import BaseContext
-from typing import Any, TextIO, Union, Protocol, runtime_checkable, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, TextIO, Union, Protocol, runtime_checkable
 from typing_extensions import Self
 from collections.abc import Callable, Awaitable
 
@@ -82,13 +82,11 @@ class LoguruHandlerPM(ExtraBaseModel):
 
 class LogHandlerPM(LoguruHandlerPM):
     name: str = Field(default_factory=lambda: f"log_handler.{uuid.uuid4().hex}")
-    type_: LogHandlerTypeEnum = Field(
-        default=LogHandlerTypeEnum.UNKNOWN, serialization_alias="type"
-    )
+    type_: LogHandlerTypeEnum = Field(default=LogHandlerTypeEnum.UNKNOWN)
     sink: _SinkType | None = Field(default=None)
     level: str | int | LogLevelEnum | None = Field(default=None)
     is_error: bool = Field(default=False)
-    custom_json: bool = Field(default=False)
+    custom_serialize: bool = Field(default=False)
     enabled: bool = Field(default=True)
 
     @model_validator(mode="after")

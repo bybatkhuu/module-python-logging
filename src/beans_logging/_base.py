@@ -26,10 +26,6 @@ class LoggerLoader:
         **kwargs,
     ) -> None:
 
-        logger.debug(
-            f"Initializing <{self.__class__.__name__}> object with '{__version__}' version..."
-        )
-
         self.handlers_map = {"default.loguru_handler": 0}
         if not config:
             config = LoggerConfigPM()
@@ -37,10 +33,6 @@ class LoggerLoader:
         self.config = config
         if kwargs:
             self.config = self.config.model_copy(update=kwargs)
-
-        logger.debug(
-            f"Initialized <{self.__class__.__name__}> object with '{__version__}' version."
-        )
 
         if auto_load:
             self.load()
@@ -53,8 +45,8 @@ class LoggerLoader:
         """
 
         self.remove_handler()
-        for _handler_pm in self.config.handlers:
-            self.add_handler(_handler_pm)
+        for _handler in self.config.handlers:
+            self.add_handler(_handler)
 
         self._load_intercept_handlers()
 
@@ -93,34 +85,32 @@ class LoggerLoader:
 
     @validate_call
     def add_handler(
-        self, handler_pm: LogHandlerPM | LoguruHandlerPM | dict[str, Any]
+        self, handler: LogHandlerPM | LoguruHandlerPM | dict[str, Any]
     ) -> int:
 
         _handler_id: int
         try:
-            if isinstance(handler_pm, dict):
-                handler_pm = LogHandlerPM(**handler_pm)
-            elif isinstance(handler_pm, LoguruHandlerPM):
-                handler_pm = LogHandlerPM(
-                    **handler_pm.model_dump(exclude_unset=True, exclude_none=True)
+            if isinstance(handler, dict):
+                handler = LogHandlerPM(**handler)
+            elif isinstance(handler, LoguruHandlerPM):
+                handler = LogHandlerPM(
+                    **handler.model_dump(exclude_unset=True, exclude_none=True)
                 )
-
-            print(
-                handler_pm.model_dump(
-                    exclude_none=True,
-                    exclude={"name", "type_", "is_error", "custom_json", "enabled"},
-                    by_alias=True,
-                )
-            )
 
             _handler_id = logger.add(
-                **handler_pm.model_dump(
+                **handler.model_dump(
                     exclude_none=True,
-                    exclude={"name", "type_", "is_error", "custom_json", "enabled"},
+                    exclude={
+                        "name",
+                        "type_",
+                        "is_error",
+                        "custom_serialize",
+                        "enabled",
+                    },
                     by_alias=True,
                 )
             )
-            self.handlers_map[handler_pm.name] = _handler_id
+            self.handlers_map[handler.name] = _handler_id
 
         except Exception:
             logger.critical(f"Failed to add custom log handler to logger!")
