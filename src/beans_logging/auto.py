@@ -2,15 +2,14 @@
 
 from . import *
 
-logger_loader: LoggerLoader = LoggerLoader()
-logger = logger_loader.load()
+logger_loader: LoggerLoader = LoggerLoader(auto_load=True)
 
 
 __all__ = [
+    "__version__",
+    "LoggerConfigPM",
     "Logger",
     "logger",
     "LoggerLoader",
     "logger_loader",
-    "LoggerConfigPM",
-    "__version__",
 ]
