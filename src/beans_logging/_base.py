@@ -6,6 +6,8 @@ from typing import Any, TYPE_CHECKING
 # Third-party libraries
 if TYPE_CHECKING:
     from loguru import Logger
+else:
+    from loguru._logger import Logger
 from loguru import logger
 from pydantic import validate_call
 
@@ -103,7 +105,7 @@ class LoggerLoader:
                     exclude={
                         "name",
                         "type_",
-                        "is_error",
+                        "error",
                         "custom_serialize",
                         "enabled",
                     },

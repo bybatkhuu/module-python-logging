@@ -1,9 +1,9 @@
 import os
 import uuid
 import inspect
-import logging
 import datetime
 from pathlib import Path
+from logging import Handler
 from asyncio import AbstractEventLoop
 from multiprocessing.context import BaseContext
 from typing import TYPE_CHECKING, Any, TextIO, Union, Protocol, runtime_checkable
@@ -39,19 +39,23 @@ _SinkType = Union[
     _SupportsWrite,
     Callable[[Any], Any],
     Callable[[Any], Awaitable[Any]],
-    logging.Handler,
+    Handler,
 ]
 
 
 class LoguruHandlerPM(ExtraBaseModel):
     sink: _SinkType = Field(...)
     level: str | int | None = Field(default=None)
-    format_: str | Callable[["Record"], str] | None = Field(
-        default=None, serialization_alias="format"
-    )
-    filter_: Callable[["Record"], bool] | str | dict[str, Any] | None = Field(
-        default=None, serialization_alias="filter"
-    )
+    format_: (
+        str | Callable[["Record"], str] | Callable[[dict[str, Any]], str] | None
+    ) = Field(default=None, serialization_alias="format")
+    filter_: (
+        Callable[["Record"], bool]
+        | Callable[[dict[str, Any]], bool]
+        | str
+        | dict[str, Any]
+        | None
+    ) = Field(default=None, serialization_alias="filter")
     colorize: bool | None = Field(default=None)
     serialize: bool | None = Field(default=None)
     backtrace: bool | None = Field(default=None)
@@ -65,8 +69,9 @@ class LoguruHandlerPM(ExtraBaseModel):
         | int
         | datetime.time
         | datetime.timedelta
-        | Callable[[str, Any], bool]
         | Callable[["Message", TextIO], bool]
+        | Callable[[str, TextIO], bool]
+        | Callable[[str, Any], bool]
         | None
     ) = Field(default=None)
     retention: str | int | datetime.timedelta | Callable[[Any], None] | None = Field(
@@ -85,8 +90,8 @@ class LogHandlerPM(LoguruHandlerPM):
     type_: LogHandlerTypeEnum = Field(default=LogHandlerTypeEnum.UNKNOWN)
     sink: _SinkType | None = Field(default=None)
     level: str | int | LogLevelEnum | None = Field(default=None)
-    is_error: bool = Field(default=False)
-    custom_serialize: bool = Field(default=False)
+    custom_serialize: bool | None = Field(default=None)
+    error: bool = Field(default=False)
     enabled: bool = Field(default=True)
 
     @model_validator(mode="after")

@@ -37,7 +37,7 @@ def _get_handlers() -> list[LogHandlerPM]:
         LogHandlerPM(
             name="default.err.file_handler",
             type_=LogHandlerTypeEnum.FILE,
-            is_error=True,
+            error=True,
             enabled=False,
         ),
         LogHandlerPM(
@@ -50,7 +50,7 @@ def _get_handlers() -> list[LogHandlerPM]:
             name="default.json.err.file_handler",
             type_=LogHandlerTypeEnum.FILE,
             serialize=True,
-            is_error=True,
+            error=True,
             enabled=False,
         ),
     ]
@@ -70,23 +70,9 @@ class StreamConfigPM(ExtraBaseModel):
     )
 
 
-class PlainFileConfigPM(ExtraBaseModel):
-    format_str: str = Field(
-        default="[{time:YYYY-MM-DD HH:mm:ss.SSS Z} | {extra[level_short]:<5} | {name}:{line}]: {message}",
-        min_length=8,
-        max_length=512,
-    )
-    log_path: str = Field(default="{app_name}.all.log", min_length=4, max_length=1024)
-    err_path: str = Field(default="{app_name}.err.log", min_length=4, max_length=1024)
-
-
-class JsonFileConfigPM(ExtraBaseModel):
-    log_path: str = Field(
-        default="json/{app_name}.json.all.log", min_length=4, max_length=1024
-    )
-    err_path: str = Field(
-        default="json/{app_name}.json.err.log", min_length=4, max_length=1024
-    )
+class PathsConfigPM(ExtraBaseModel):
+    log_path: str = Field(..., min_length=4, max_length=1024)
+    err_path: str = Field(..., min_length=4, max_length=1024)
 
 
 class FileConfigPM(ExtraBaseModel):
@@ -102,8 +88,18 @@ class FileConfigPM(ExtraBaseModel):
     retention: int = Field(default=90, ge=1)
     encoding: str = Field(default="utf8", min_length=2, max_length=31)
 
-    plain: PlainFileConfigPM = Field(default_factory=PlainFileConfigPM)
-    json_: JsonFileConfigPM = Field(default_factory=JsonFileConfigPM)
+    plain: PathsConfigPM = Field(
+        default_factory=lambda: PathsConfigPM(
+            log_path="{app_name}.all.log",
+            err_path="{app_name}.err.log",
+        )
+    )
+    json_: PathsConfigPM = Field(
+        default_factory=lambda: PathsConfigPM(
+            log_path="json/{app_name}.json.all.log",
+            err_path="json/{app_name}.json.err.log",
+        )
+    )
 
 
 class LevelConfigPM(ExtraBaseModel):
@@ -126,6 +122,11 @@ class LevelConfigPM(ExtraBaseModel):
 
 class DefaultConfigPM(ExtraBaseModel):
     level: LevelConfigPM = Field(default_factory=LevelConfigPM)
+    format_str: str = Field(
+        default="[{time:YYYY-MM-DD HH:mm:ss.SSS Z} | {extra[level_short]:<5} | {name}:{line}]: {message}",
+        min_length=8,
+        max_length=512,
+    )
     stream: StreamConfigPM = Field(default_factory=StreamConfigPM)
     file: FileConfigPM = Field(default_factory=FileConfigPM)
     custom_serialize: bool = Field(default=False)
@@ -206,7 +207,7 @@ class LoggerConfigPM(ExtraBaseModel):
                 elif _handler.type_ == LogHandlerTypeEnum.FILE:
                     _logs_path: str = ""
                     if _handler.serialize or _handler.custom_serialize:
-                        if _handler.is_error:
+                        if _handler.error:
                             _logs_path = os.path.join(
                                 self.default.file.logs_dir,
                                 self.default.file.json_.err_path,
@@ -217,7 +218,7 @@ class LoggerConfigPM(ExtraBaseModel):
                                 self.default.file.json_.log_path,
                             )
                     else:
-                        if _handler.is_error:
+                        if _handler.error:
                             _logs_path = os.path.join(
                                 self.default.file.logs_dir,
                                 self.default.file.plain.err_path,
@@ -237,10 +238,13 @@ class LoggerConfigPM(ExtraBaseModel):
                     )
 
             if _handler.level is None:
-                if _handler.is_error:
+                if _handler.error:
                     _handler.level = self.default.level.err
                 else:
                     _handler.level = self.default.level.base
+
+            if (_handler.custom_serialize is None) and _handler.serialize:
+                _handler.custom_serialize = self.default.custom_serialize
 
             if _handler.custom_serialize:
                 _handler.serialize = False
@@ -250,19 +254,19 @@ class LoggerConfigPM(ExtraBaseModel):
                 if _handler.type_ == LogHandlerTypeEnum.STREAM:
                     _handler.format_ = self.default.stream.format_str
                 else:
-                    _handler.format_ = self.default.file.plain.format_str
+                    _handler.format_ = self.default.format_str
 
             if _handler.filter_ is None:
                 if _handler.type_ == LogHandlerTypeEnum.STREAM:
                     _handler.filter_ = use_std_filter
                 elif _handler.type_ == LogHandlerTypeEnum.FILE:
                     if _handler.serialize or _handler.custom_serialize:
-                        if _handler.is_error:
+                        if _handler.error:
                             _handler.filter_ = use_file_json_err_filter
                         else:
                             _handler.filter_ = use_file_json_filter
                     else:
-                        if _handler.is_error:
+                        if _handler.error:
                             _handler.filter_ = use_file_err_filter
                         else:
                             _handler.filter_ = use_file_filter
