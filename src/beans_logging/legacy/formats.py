@@ -1,14 +1,8 @@
 import json
 import traceback
 
-from loguru import Record
 
-
-class JsonRecord(Record):
-    serialized: str
-
-
-def json_format(record: JsonRecord) -> str:
+def json_format(record: dict) -> str:
     """Custom json formatter for loguru logger.
 
     Args:
@@ -22,7 +16,7 @@ def json_format(record: JsonRecord) -> str:
     if record["exception"]:
         _error = {}
         _error_type, _error_value, _error_traceback = record["exception"]
-        _error["type"] = str(_error_type)
+        _error["type"] = _error_type.__name__
         _error["value"] = str(_error_value)
         _error["traceback"] = "".join(traceback.format_tb(_error_traceback))
 

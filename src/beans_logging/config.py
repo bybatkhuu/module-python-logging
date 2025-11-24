@@ -19,7 +19,7 @@ from .filters import (
     use_file_json_filter,
     use_file_json_err_filter,
 )
-from .rotation import RotationChecker
+from .rotator import Rotator
 
 
 def _get_handlers() -> list[LogHandlerPM]:
@@ -27,28 +27,28 @@ def _get_handlers() -> list[LogHandlerPM]:
     _log_handlers: list[LogHandlerPM] = [
         LogHandlerPM(
             name="default.std_handler",
-            type=LogHandlerTypeEnum.STREAM,
+            type_=LogHandlerTypeEnum.STREAM,
         ),
         LogHandlerPM(
             name="default.file_handler",
-            type=LogHandlerTypeEnum.FILE,
+            type_=LogHandlerTypeEnum.FILE,
             enabled=False,
         ),
         LogHandlerPM(
             name="default.err.file_handler",
-            type=LogHandlerTypeEnum.FILE,
+            type_=LogHandlerTypeEnum.FILE,
             is_error=True,
             enabled=False,
         ),
         LogHandlerPM(
             name="default.json.file_handler",
-            type=LogHandlerTypeEnum.FILE,
+            type_=LogHandlerTypeEnum.FILE,
             serialize=True,
             enabled=False,
         ),
         LogHandlerPM(
             name="default.json.err.file_handler",
-            type=LogHandlerTypeEnum.FILE,
+            type_=LogHandlerTypeEnum.FILE,
             serialize=True,
             is_error=True,
             enabled=False,
@@ -103,7 +103,7 @@ class FileConfigPM(ExtraBaseModel):
     encoding: str = Field(default="utf8", min_length=2, max_length=31)
 
     plain: PlainFileConfigPM = Field(default_factory=PlainFileConfigPM)
-    json: JsonFileConfigPM = Field(default_factory=JsonFileConfigPM)
+    json_: JsonFileConfigPM = Field(default_factory=JsonFileConfigPM)
 
 
 class LevelConfigPM(ExtraBaseModel):
@@ -188,13 +188,13 @@ class LoggerConfigPM(ExtraBaseModel):
                 app_name=self.app_name
             )
 
-        if "{app_name}" in self.default.file.json.log_path:
-            self.default.file.json.log_path = self.default.file.json.log_path.format(
+        if "{app_name}" in self.default.file.json_.log_path:
+            self.default.file.json_.log_path = self.default.file.json_.log_path.format(
                 app_name=self.app_name
             )
 
-        if "{app_name}" in self.default.file.json.err_path:
-            self.default.file.json.err_path = self.default.file.json.err_path.format(
+        if "{app_name}" in self.default.file.json_.err_path:
+            self.default.file.json_.err_path = self.default.file.json_.err_path.format(
                 app_name=self.app_name
             )
 
@@ -209,12 +209,12 @@ class LoggerConfigPM(ExtraBaseModel):
                             if _handler.is_error:
                                 _logs_path = os.path.join(
                                     self.default.file.logs_dir,
-                                    self.default.file.json.err_path,
+                                    self.default.file.json_.err_path,
                                 )
                             else:
                                 _logs_path = os.path.join(
                                     self.default.file.logs_dir,
-                                    self.default.file.json.log_path,
+                                    self.default.file.json_.log_path,
                                 )
                         else:
                             if _handler.is_error:
@@ -289,11 +289,11 @@ class LoggerConfigPM(ExtraBaseModel):
                         _handler.enqueue = True
 
                     if _handler.rotation is None:
-                        _handler.rotation = RotationChecker(
+                        _rotator = Rotator(
                             rotate_size=self.default.file.rotate_size,
                             rotate_time=self.default.file.rotate_time,
                         )
-
+                        _handler.rotation = _rotator.rotate
                     if _handler.retention is None:
                         _handler.retention = self.default.file.retention
 

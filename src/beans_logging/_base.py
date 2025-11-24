@@ -1,10 +1,12 @@
 # Standard libraries
 import copy
 import logging
-from typing import Any
+from typing import Any, TYPE_CHECKING
 
 # Third-party libraries
-from loguru import logger, Logger
+if TYPE_CHECKING:
+    from loguru import Logger
+from loguru import logger
 from pydantic import validate_call
 
 # Internal modules
@@ -43,7 +45,7 @@ class LoggerLoader:
         if auto_load:
             self.load()
 
-    def load(self) -> Logger:
+    def load(self) -> "Logger":
         """Load logger handlers based on logger config.
 
         Returns:
@@ -103,10 +105,19 @@ class LoggerLoader:
                     **handler_pm.model_dump(exclude_unset=True, exclude_none=True)
                 )
 
+            print(
+                handler_pm.model_dump(
+                    exclude_none=True,
+                    exclude={"name", "type_", "is_error", "custom_json", "enabled"},
+                    by_alias=True,
+                )
+            )
+
             _handler_id = logger.add(
                 **handler_pm.model_dump(
                     exclude_none=True,
                     exclude={"name", "type_", "is_error", "custom_json", "enabled"},
+                    by_alias=True,
                 )
             )
             self.handlers_map[handler_pm.name] = _handler_id

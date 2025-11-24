@@ -1,13 +1,10 @@
-from typing import cast
+from typing import TYPE_CHECKING
 
-from loguru import Record
-
-
-class CustomRecord(Record):
-    level_short: str
+if TYPE_CHECKING:
+    from loguru import Record
 
 
-def add_level_short(record: Record) -> CustomRecord:
+def add_level_short(record: "Record") -> "Record":
     """Filter for adding short level name to log record.
 
     Args:
@@ -18,22 +15,21 @@ def add_level_short(record: Record) -> CustomRecord:
     """
 
     if "level_short" not in record:
-        record = cast(CustomRecord, record)
         if record["level"].name == "SUCCESS":
-            record["level_short"] = "OK"
+            record["level_short"] = "OK"  # type: ignore
         elif record["level"].name == "WARNING":
-            record["level_short"] = "WARN"
+            record["level_short"] = "WARN"  # type: ignore
         elif record["level"].name == "CRITICAL":
-            record["level_short"] = "CRIT"
+            record["level_short"] = "CRIT"  # type: ignore
         elif 5 < len(record["level"].name):
-            record["level_short"] = record["level"].name[:5]
+            record["level_short"] = record["level"].name[:5]  # type: ignore
         else:
-            record["level_short"] = record["level"].name
+            record["level_short"] = record["level"].name  # type: ignore
 
     return record
 
 
-def use_all_filter(record: Record) -> bool:
+def use_all_filter(record: "Record") -> bool:
     """Filter message for all handlers that use this filter.
 
     Args:
@@ -51,7 +47,7 @@ def use_all_filter(record: Record) -> bool:
     return True
 
 
-def use_std_filter(record: Record) -> bool:
+def use_std_filter(record: "Record") -> bool:
     """Filter message for std handlers that use this filter.
 
     Args:
@@ -70,7 +66,7 @@ def use_std_filter(record: Record) -> bool:
     return True
 
 
-def use_file_filter(record: Record) -> bool:
+def use_file_filter(record: "Record") -> bool:
     """Filter message for file handlers that use this filter.
 
     Args:
@@ -89,7 +85,7 @@ def use_file_filter(record: Record) -> bool:
     return True
 
 
-def use_file_err_filter(record: Record) -> bool:
+def use_file_err_filter(record: "Record") -> bool:
     """Filter message for error file handlers that use this filter.
 
     Args:
@@ -108,7 +104,7 @@ def use_file_err_filter(record: Record) -> bool:
     return True
 
 
-def use_file_json_filter(record: Record) -> bool:
+def use_file_json_filter(record: "Record") -> bool:
     """Filter message for json file handlers that use this filter.
 
     Args:
@@ -127,7 +123,7 @@ def use_file_json_filter(record: Record) -> bool:
     return True
 
 
-def use_file_json_err_filter(record: Record) -> bool:
+def use_file_json_err_filter(record: "Record") -> bool:
     """Filter message for json error file handlers that use this filter.
 
     Args:

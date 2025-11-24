@@ -1,9 +1,11 @@
 import sys
+from typing import TYPE_CHECKING
 
-from loguru import Message
+if TYPE_CHECKING:
+    from loguru import Message
 
 
-def std_sink(message: Message) -> None:
+def std_sink(message: "Message") -> None:
     """Print message based on log level to stdout or stderr.
 
     Args:

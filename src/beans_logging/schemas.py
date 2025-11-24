@@ -6,15 +6,15 @@ import datetime
 from pathlib import Path
 from asyncio import AbstractEventLoop
 from multiprocessing.context import BaseContext
-from typing import Any, IO, Union, Protocol, runtime_checkable
+from typing import Any, TextIO, Union, Protocol, runtime_checkable, TYPE_CHECKING
 from typing_extensions import Self
 from collections.abc import Callable, Awaitable
 
+if TYPE_CHECKING:
+    from loguru import Record, Message
 from pydantic import BaseModel, Field, ConfigDict, model_validator
-from loguru import Record
 
 from ._constants import LogHandlerTypeEnum, LogLevelEnum
-from .rotation import BaseRotation
 
 
 class ExtraBaseModel(BaseModel):
@@ -27,7 +27,7 @@ class ExtraBaseModel(BaseModel):
 
 
 @runtime_checkable
-class SupportsWrite(Protocol):
+class _SupportsWrite(Protocol):
     def write(self, __s: str) -> Any: ...
     def flush(self) -> Any: ...
 
@@ -35,8 +35,8 @@ class SupportsWrite(Protocol):
 _SinkType = Union[
     str,
     Path,
-    IO[str],
-    SupportsWrite,
+    TextIO,
+    _SupportsWrite,
     Callable[[Any], Any],
     Callable[[Any], Awaitable[Any]],
     logging.Handler,
@@ -46,9 +46,11 @@ _SinkType = Union[
 class LoguruHandlerPM(ExtraBaseModel):
     sink: _SinkType = Field(...)
     level: str | int | None = Field(default=None)
-    format_: str | Callable[[Any], str] | None = Field(default=None, alias="format")
-    filter_: Callable[[Record], bool] | str | Record | None = Field(
-        default=None, alias="filter"
+    format_: str | Callable[["Record"], str] | None = Field(
+        default=None, serialization_alias="format"
+    )
+    filter_: Callable[["Record"], bool] | str | dict[str, Any] | None = Field(
+        default=None, serialization_alias="filter"
     )
     colorize: bool | None = Field(default=None)
     serialize: bool | None = Field(default=None)
@@ -64,7 +66,7 @@ class LoguruHandlerPM(ExtraBaseModel):
         | datetime.time
         | datetime.timedelta
         | Callable[[str, Any], bool]
-        | BaseRotation
+        | Callable[["Message", TextIO], bool]
         | None
     ) = Field(default=None)
     retention: str | int | datetime.timedelta | Callable[[Any], None] | None = Field(
@@ -80,7 +82,9 @@ class LoguruHandlerPM(ExtraBaseModel):
 
 class LogHandlerPM(LoguruHandlerPM):
     name: str = Field(default_factory=lambda: f"log_handler.{uuid.uuid4().hex}")
-    type_: LogHandlerTypeEnum = Field(default=LogHandlerTypeEnum.UNKNOWN, alias="type")
+    type_: LogHandlerTypeEnum = Field(
+        default=LogHandlerTypeEnum.UNKNOWN, serialization_alias="type"
+    )
     sink: _SinkType | None = Field(default=None)
     level: str | int | LogLevelEnum | None = Field(default=None)
     is_error: bool = Field(default=False)

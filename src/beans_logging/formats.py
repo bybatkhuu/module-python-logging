@@ -1,15 +1,12 @@
 import json
 import traceback
-from typing import cast
+from typing import TYPE_CHECKING
 
-from loguru import Record
-
-
-class JsonRecord(Record):
-    serialized: str
+if TYPE_CHECKING:
+    from loguru import Record
 
 
-def json_format(record: Record) -> str:
+def json_format(record: "Record") -> str:
     """Custom json formatter for loguru logger.
 
     Args:
@@ -46,8 +43,7 @@ def json_format(record: Record) -> str:
         "elapsed": str(record["elapsed"]),
     }
 
-    record = cast(JsonRecord, record)
-    record["serialized"] = json.dumps(_json_record)
+    record["serialized"] = json.dumps(_json_record)  # type: ignore
     return "{serialized}\n"
 
 

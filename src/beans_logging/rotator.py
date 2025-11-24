@@ -1,19 +1,12 @@
 import datetime
-from typing import TextIO
-from abc import ABC, abstractmethod
+from typing import TextIO, TYPE_CHECKING
 
-from loguru import Message
-
-
-class BaseRotation(ABC):
-
-    @abstractmethod
-    def should_rotate(self, message: Message, file: TextIO) -> bool:
-        pass
+if TYPE_CHECKING:
+    from loguru import Message
 
 
-class RotationChecker(BaseRotation):
-    """RotationChecker class for checking file size and time for rotation.
+class Rotator:
+    """Rotator class for checking file size and time for rotation.
 
     Attributes:
         _size_limit  (int              ): File size limit for rotation.
@@ -24,7 +17,7 @@ class RotationChecker(BaseRotation):
     """
 
     def __init__(self, *, rotate_size: int, rotate_time: datetime.time):
-        """RotationChecker constructor method.
+        """Rotator constructor method.
 
         Args:
             rotate_size (int,           required): File size limit for rotation.
@@ -45,7 +38,7 @@ class RotationChecker(BaseRotation):
             # Add one day to prevent an immediate rotation.
             self._dtime_limit += datetime.timedelta(days=1)
 
-    def should_rotate(self, message: Message, file: TextIO) -> bool:
+    def rotate(self, message: "Message", file: TextIO) -> bool:
         """Check if the log file should rotate.
 
         Args:
@@ -72,6 +65,5 @@ class RotationChecker(BaseRotation):
 
 
 __all__ = [
-    "BaseRotation",
-    "RotationChecker",
+    "Rotator",
 ]
