@@ -229,8 +229,10 @@ class LoggerConfigPM(ExtraBaseModel):
                                 self.default.file.plain.log_path,
                             )
 
-                    _logs_dir, _ = os.path.split(_logs_path)
-                    io_utils.create_dir(create_dir=_logs_dir)
+                    if _handler.enabled:
+                        _logs_dir, _ = os.path.split(_logs_path)
+                        io_utils.create_dir(create_dir=_logs_dir)
+
                     _handler.sink = _logs_path
                 else:
                     raise ValueError(

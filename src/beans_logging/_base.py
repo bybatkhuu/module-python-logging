@@ -88,9 +88,9 @@ class LoggerLoader:
     @validate_call
     def add_handler(
         self, handler: LogHandlerPM | LoguruHandlerPM | dict[str, Any]
-    ) -> int:
+    ) -> int | None:
 
-        _handler_id: int
+        _handler_id: int | None = None
         try:
             if isinstance(handler, dict):
                 handler = LogHandlerPM(**handler)
@@ -99,20 +99,21 @@ class LoggerLoader:
                     **handler.model_dump(exclude_unset=True, exclude_none=True)
                 )
 
-            _handler_id = logger.add(
-                **handler.model_dump(
-                    exclude_none=True,
-                    exclude={
-                        "name",
-                        "type_",
-                        "error",
-                        "custom_serialize",
-                        "enabled",
-                    },
-                    by_alias=True,
+            if handler.enabled:
+                _handler_id = logger.add(
+                    **handler.model_dump(
+                        exclude_none=True,
+                        exclude={
+                            "name",
+                            "type_",
+                            "error",
+                            "custom_serialize",
+                            "enabled",
+                        },
+                        by_alias=True,
+                    )
                 )
-            )
-            self.handlers_map[handler.name] = _handler_id
+                self.handlers_map[handler.name] = _handler_id
 
         except Exception:
             logger.critical(f"Failed to add custom log handler to logger!")
