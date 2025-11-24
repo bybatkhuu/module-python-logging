@@ -71,7 +71,7 @@ def init_intercepter(config: LoggerConfigPM) -> None:
     for _include_module_name in config.intercept.include_modules:
         _logger = logging.getLogger(_include_module_name)
         _logger.handlers = [_intercept_handler]
-        _logger.propagate = False
+        # _logger.propagate = False
 
         if _include_module_name not in _intercepted_modules:
             _intercepted_modules.add(_include_module_name)

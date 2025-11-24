@@ -4,7 +4,6 @@ from typing import Any
 from typing_extensions import Self
 
 import potato_util as utils
-from potato_util import io as io_utils
 from pydantic import Field, model_validator, field_validator
 
 from ._constants import LogHandlerTypeEnum, LogLevelEnum
@@ -229,15 +228,17 @@ class LoggerConfigPM(ExtraBaseModel):
                                 self.default.file.plain.log_path,
                             )
 
-                    if _handler.enabled:
-                        _logs_dir, _ = os.path.split(_logs_path)
-                        io_utils.create_dir(create_dir=_logs_dir)
-
                     _handler.sink = _logs_path
                 else:
                     raise ValueError(
-                        "'sink' attribute is empty, required for any handlers!"
+                        "'sink' attribute is empty, required for unknown/custom handlers!"
                     )
+
+            # if isinstance(_handler.sink, (str, Path)):
+            #     if not os.path.isabs(_handler.sink):
+            #         _handler.sink = os.path.join(
+            #             self.default.file.logs_dir, _handler.sink
+            #         )
 
             if _handler.level is None:
                 if _handler.error:

@@ -1,5 +1,7 @@
 # Standard libraries
+import os
 import copy
+from pathlib import Path
 from typing import Any, TYPE_CHECKING
 
 # Third-party libraries
@@ -9,6 +11,7 @@ else:
     from loguru._logger import Logger
 from loguru import logger
 from pydantic import validate_call
+from potato_util import io as io_utils
 
 # Internal modules
 from .__version__ import __version__
@@ -99,6 +102,11 @@ class LoggerLoader:
                 )
 
             if handler.enabled:
+                if isinstance(handler.sink, (str, Path)):
+                    _logs_dir = os.path.dirname(handler.sink)
+                    if _logs_dir:
+                        io_utils.create_dir(create_dir=_logs_dir)
+
                 _handler_id = logger.add(
                     **handler.model_dump(
                         exclude_none=True,
