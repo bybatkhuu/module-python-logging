@@ -1,6 +1,5 @@
 # Standard libraries
 import copy
-import logging
 from typing import Any, TYPE_CHECKING
 
 # Third-party libraries
@@ -15,7 +14,7 @@ from pydantic import validate_call
 from .__version__ import __version__
 from .schemas import LogHandlerPM, LoguruHandlerPM
 from .config import LoggerConfigPM
-from ._handlers import InterceptHandler
+from ._intercept import init_intercepter
 
 
 class LoggerLoader:
@@ -50,7 +49,7 @@ class LoggerLoader:
         for _handler in self.config.handlers:
             self.add_handler(_handler)
 
-        self._load_intercept_handlers()
+        self._load_intercepter()
 
         return logger
 
@@ -121,54 +120,10 @@ class LoggerLoader:
 
         return _handler_id
 
-    def _load_intercept_handlers(self) -> None:
+    def _load_intercepter(self) -> None:
         """Load intercept handlers to catch third-pary modules log or mute them."""
 
-        _intercept_handler = InterceptHandler()
-
-        # Intercepting all logs from standard (root logger) logging:
-        logging.basicConfig(handlers=[_intercept_handler], level=0, force=True)
-
-        _intercepted_modules = set()
-        _muted_modules = set()
-
-        if self.config.intercept.enabled:
-            for _module_name in list(logging.root.manager.loggerDict.keys()):
-                if self.config.intercept.only_base:
-                    _module_name = _module_name.split(".")[0]
-
-                if (_module_name not in _intercepted_modules) and (
-                    _module_name not in self.config.intercept.ignore_modules
-                ):
-                    _logger = logging.getLogger(_module_name)
-                    _logger.handlers = [_intercept_handler]
-                    _logger.propagate = False
-                    _intercepted_modules.add(_module_name)
-
-        for _include_module_name in self.config.intercept.include_modules:
-            _logger = logging.getLogger(_include_module_name)
-            _logger.handlers = [_intercept_handler]
-            _logger.propagate = False
-
-            if _include_module_name not in _intercepted_modules:
-                _intercepted_modules.add(_include_module_name)
-
-        for _mute_module_name in self.config.intercept.mute_modules:
-            _logger = logging.getLogger(_mute_module_name)
-            _logger.handlers = []
-            _logger.propagate = False
-            _logger.disabled = True
-
-            if _mute_module_name in _intercepted_modules:
-                _intercepted_modules.remove(_mute_module_name)
-
-            if _mute_module_name not in _muted_modules:
-                _muted_modules.add(_mute_module_name)
-
-        logger.trace(
-            f"Intercepted modules: {list(_intercepted_modules)}; Muted modules: {list(_muted_modules)};"
-        )
-
+        init_intercepter(self.config)
         return
 
     # ATTRIBUTES
