@@ -41,8 +41,3 @@ def json_format(record: dict) -> str:
 
     record["serialized"] = json.dumps(_json_record)
     return "{serialized}\n"
-
-
-__all__ = [
-    "json_format",
-]
