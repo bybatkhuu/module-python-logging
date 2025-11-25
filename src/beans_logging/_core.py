@@ -22,10 +22,13 @@ from ._intercept import init_intercepter
 
 class LoggerLoader:
 
+    _CONFIG_PATH = os.path.join(os.getcwd(), "configs", "logger.yml")
+
     @validate_call
     def __init__(
         self,
         config: LoggerConfigPM | dict[str, Any] | None = None,
+        config_path: str | Path | None = _CONFIG_PATH,
         auto_load: bool = False,
         **kwargs,
     ) -> None:
@@ -37,6 +40,7 @@ class LoggerLoader:
         self.config = config
         if kwargs:
             self.config = self.config.model_copy(update=kwargs)
+        self.config_path = config_path
 
         if auto_load:
             self.load()
@@ -49,6 +53,11 @@ class LoggerLoader:
         """
 
         self.remove_handler()
+        # if self.config_path:
+        #     self.config = LoggerConfigPM.model_validate_json(
+        #         io_utils.read_file(self.config_path)
+        #     )
+
         for _handler in self.config.handlers:
             self.add_handler(_handler)
 

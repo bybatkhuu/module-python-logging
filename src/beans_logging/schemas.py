@@ -1,4 +1,5 @@
 import os
+import sys
 import uuid
 import inspect
 import datetime
@@ -7,8 +8,13 @@ from logging import Handler
 from asyncio import AbstractEventLoop
 from multiprocessing.context import BaseContext
 from typing import TYPE_CHECKING, Any, TextIO, Union, Protocol, runtime_checkable
-from typing_extensions import Self
 from collections.abc import Callable, Awaitable
+
+if sys.version_info >= (3, 11):
+    from typing import Self
+else:
+    from typing_extensions import Self
+
 
 if TYPE_CHECKING:
     from loguru import Record, Message

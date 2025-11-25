@@ -1,7 +1,12 @@
+import sys
 import os
 import datetime
 from typing import Any
-from typing_extensions import Self
+
+if sys.version_info >= (3, 11):
+    from typing import Self
+else:
+    from typing_extensions import Self
 
 import potato_util as utils
 from pydantic import Field, model_validator, field_validator
