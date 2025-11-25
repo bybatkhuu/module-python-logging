@@ -100,7 +100,9 @@ class FileConfigPM(ExtraBaseModel):
         default_factory=lambda: PathsConfigPM(
             log_path="json/{app_name}.json.all.log",
             err_path="json/{app_name}.json.err.log",
-        )
+        ),
+        validation_alias="json",
+        serialization_alias="json",
     )
 
     @field_validator("rotate_time", mode="before")

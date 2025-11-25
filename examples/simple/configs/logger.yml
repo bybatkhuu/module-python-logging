@@ -1,8 +1,53 @@
 logger:
-  app_name: "my-app"
-  level: "TRACE"
-  file:
-    log_handlers:
+  app_name: app
+  default:
+    level:
+      base: TRACE
+      err: WARNING
+    format_str: "[{time:YYYY-MM-DD HH:mm:ss.SSS Z} | {extra[level_short]:<5} | {name}:{line}]: {message}"
+    stream:
+      colorize: true
+      format_str: "[<c>{time:YYYY-MM-DD HH:mm:ss.SSS Z}</c> | <level>{extra[level_short]:<5}</level> | <w>{name}:{line}</w>]: <level>{message}</level>"
+    file:
+      logs_dir: "./logs"
+      rotate_size: 10000000
+      rotate_time: "00:00:00"
+      retention: 90
+      encoding: utf8
+      plain:
+        log_path: "{app_name}.all.log"
+        err_path: "{app_name}.err.log"
+      json:
+        log_path: "json/{app_name}.json.all123.log"
+        err_path: "json/{app_name}.json.err.log"
+    custom_serialize: false
+  handlers:
+    - name: default.std_handler
+      type: STREAM
+      error: false
       enabled: true
-    json_handlers:
+    - name: default.file_handler
+      type: FILE
+      error: false
       enabled: true
+    - name: default.err.file_handler
+      type: FILE
+      error: true
+      enabled: true
+    - name: default.json.file_handler
+      type: FILE
+      serialize: true
+      error: false
+      enabled: true
+    - name: default.json.err.file_handler
+      type: FILE
+      serialize: true
+      error: true
+      enabled: true
+  intercept:
+    enabled: true
+    only_base: false
+    ignore_modules: []
+    include_modules: []
+    mute_modules: []
+  extra:

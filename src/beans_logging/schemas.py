@@ -28,6 +28,7 @@ class ExtraBaseModel(BaseModel):
         extra="allow",
         validate_default=True,
         validate_assignment=True,
+        serialize_by_alias=True,
         arbitrary_types_allowed=True,
     )
 
@@ -54,14 +55,14 @@ class LoguruHandlerPM(ExtraBaseModel):
     level: str | int | None = Field(default=None)
     format_: (
         str | Callable[["Record"], str] | Callable[[dict[str, Any]], str] | None
-    ) = Field(default=None, serialization_alias="format")
+    ) = Field(default=None, validation_alias="format", serialization_alias="format")
     filter_: (
         Callable[["Record"], bool]
         | Callable[[dict[str, Any]], bool]
         | str
         | dict[str, Any]
         | None
-    ) = Field(default=None, serialization_alias="filter")
+    ) = Field(default=None, validation_alias="filter", serialization_alias="filter")
     colorize: bool | None = Field(default=None)
     serialize: bool | None = Field(default=None)
     backtrace: bool | None = Field(default=None)
@@ -93,7 +94,11 @@ class LoguruHandlerPM(ExtraBaseModel):
 
 class LogHandlerPM(LoguruHandlerPM):
     name: str = Field(default_factory=lambda: f"log_handler.{uuid.uuid4().hex}")
-    type_: LogHandlerTypeEnum = Field(default=LogHandlerTypeEnum.UNKNOWN)
+    type_: LogHandlerTypeEnum = Field(
+        default=LogHandlerTypeEnum.UNKNOWN,
+        validation_alias="type",
+        serialization_alias="type",
+    )
     sink: _SinkType | None = Field(default=None)
     level: str | int | LogLevelEnum | None = Field(default=None)
     custom_serialize: bool | None = Field(default=None)

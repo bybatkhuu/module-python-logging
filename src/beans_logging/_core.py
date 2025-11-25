@@ -139,16 +139,16 @@ class LoggerLoader:
                     **handler.model_dump(exclude_unset=True, exclude_none=True)
                 )
 
-            _handler_dict = build_handler(handler=handler, config=self.config)
             if handler.enabled:
+                _handler_dict = build_handler(handler=handler, config=self.config)
                 _sink = _handler_dict.get("sink")
                 if isinstance(_sink, (str, Path)):
                     _logs_dir = os.path.dirname(_sink)
                     if _logs_dir:
                         io_utils.create_dir(create_dir=_logs_dir)
 
-            _handler_id = logger.add(**_handler_dict)
-            self.handlers_map[handler.name] = _handler_id
+                _handler_id = logger.add(**_handler_dict)
+                self.handlers_map[handler.name] = _handler_id
 
         except Exception:
             logger.critical(f"Failed to add custom log handler to logger!")
