@@ -5,6 +5,8 @@ from pathlib import Path
 from typing import Any, TYPE_CHECKING
 
 # Third-party libraries
+import potato_util as utils
+
 if TYPE_CHECKING:
     from loguru import Logger
 else:
@@ -14,9 +16,9 @@ from pydantic import validate_call
 from potato_util import io as io_utils
 
 # Internal modules
-from .__version__ import __version__
 from .schemas import LogHandlerPM, LoguruHandlerPM
 from .config import LoggerConfigPM
+from ._builder import build_handler
 from ._intercept import init_intercepter
 
 
@@ -28,7 +30,7 @@ class LoggerLoader:
     def __init__(
         self,
         config: LoggerConfigPM | dict[str, Any] | None = None,
-        config_path: str | Path | None = _CONFIG_PATH,
+        config_path: str | None = _CONFIG_PATH,
         auto_load: bool = False,
         **kwargs,
     ) -> None:
@@ -39,7 +41,8 @@ class LoggerLoader:
 
         self.config = config
         if kwargs:
-            self.config = self.config.model_copy(update=kwargs)
+            self.update_config(config=kwargs)
+
         self.config_path = config_path
 
         if auto_load:
@@ -53,17 +56,43 @@ class LoggerLoader:
         """
 
         self.remove_handler()
-        # if self.config_path:
-        #     self.config = LoggerConfigPM.model_validate_json(
-        #         io_utils.read_file(self.config_path)
-        #     )
+        self._load_config_file()
 
         for _handler in self.config.handlers:
             self.add_handler(_handler)
 
-        self._load_intercepter()
-
+        init_intercepter(config=self.config)
         return logger
+
+    def _load_config_file(self) -> None:
+
+        if self.config_path and os.path.isfile(self.config_path):
+            _config_data = io_utils.read_config_file(config_path=self.config_path)
+            if _config_data and ("logger" in _config_data):
+                _config_data = _config_data.get("logger", {})
+                if _config_data:
+                    self.update_config(config=_config_data)
+
+        return
+
+    @validate_call
+    def update_config(self, config: LoggerConfigPM | dict[str, Any]) -> None:
+
+        if isinstance(config, dict):
+            _config_dict = self.config.model_dump()
+            _merged_dict = utils.deep_merge(_config_dict, config)
+            try:
+                self.config = LoggerConfigPM(**_merged_dict)
+            except Exception:
+                logger.critical(
+                    "Failed to load `config` argument into <class 'LoggerConfigPM'>."
+                )
+                raise
+
+        elif isinstance(config, LoggerConfigPM):
+            self.config = config
+
+        return
 
     @validate_call
     def remove_handler(self, handler: str | int | None = None) -> None:
@@ -110,38 +139,22 @@ class LoggerLoader:
                     **handler.model_dump(exclude_unset=True, exclude_none=True)
                 )
 
+            _handler_dict = build_handler(handler=handler, config=self.config)
             if handler.enabled:
-                if isinstance(handler.sink, (str, Path)):
-                    _logs_dir = os.path.dirname(handler.sink)
+                _sink = _handler_dict.get("sink")
+                if isinstance(_sink, (str, Path)):
+                    _logs_dir = os.path.dirname(_sink)
                     if _logs_dir:
                         io_utils.create_dir(create_dir=_logs_dir)
 
-                _handler_id = logger.add(
-                    **handler.model_dump(
-                        exclude_none=True,
-                        exclude={
-                            "name",
-                            "type_",
-                            "error",
-                            "custom_serialize",
-                            "enabled",
-                        },
-                        by_alias=True,
-                    )
-                )
-                self.handlers_map[handler.name] = _handler_id
+            _handler_id = logger.add(**_handler_dict)
+            self.handlers_map[handler.name] = _handler_id
 
         except Exception:
             logger.critical(f"Failed to add custom log handler to logger!")
             raise
 
         return _handler_id
-
-    def _load_intercepter(self) -> None:
-        """Load intercept handlers to catch third-pary modules log or mute them."""
-
-        init_intercepter(self.config)
-        return
 
     # ATTRIBUTES
     # handlers_map
@@ -192,6 +205,41 @@ class LoggerLoader:
         return
 
     # config
+
+    # config_file_path
+    @property
+    def config_file_path(self) -> str:
+        try:
+            return self.__config_file_path
+        except AttributeError:
+            self.__config_file_path = LoggerLoader._CONFIG_PATH
+
+        return self.__config_file_path
+
+    @config_file_path.setter
+    def config_file_path(self, config_file_path: str) -> None:
+        if not isinstance(config_file_path, str):
+            raise TypeError(
+                f"`config_file_path` attribute type {type(config_file_path)} is invalid, must be a <str>!"
+            )
+
+        config_file_path = config_file_path.strip()
+        if config_file_path == "":
+            raise ValueError("`config_file_path` attribute value is empty!")
+
+        if (
+            (not config_file_path.lower().endswith((".yml", ".yaml")))
+            and (not config_file_path.lower().endswith(".json"))
+            and (not config_file_path.lower().endswith(".toml"))
+        ):
+            raise ValueError(
+                f"`config_file_path` attribute value '{config_file_path}' is invalid, "
+                f"file must be '.yml', '.yaml', '.json' or '.toml' format!"
+            )
+
+        self.__config_file_path = config_file_path
+
+    # config_file_path
     # ATTRIBUTES
 
 
