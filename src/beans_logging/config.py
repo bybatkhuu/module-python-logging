@@ -16,6 +16,11 @@ from .schemas import ExtraBaseModel, LogHandlerPM, LoguruHandlerPM
 
 
 def _get_handlers() -> dict[str, LogHandlerPM]:
+    """Get default log handlers.
+
+    Returns:
+        dict[str, LogHandlerPM]: Default handlers as dictionary.
+    """
 
     _log_handlers: dict[str, LogHandlerPM] = {
         "default.all.std_handler": LogHandlerPM(type_=LogHandlerTypeEnum.STD),

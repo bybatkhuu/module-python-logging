@@ -25,6 +25,7 @@ from ._intercept import init_intercepter
 
 
 class LoggerLoader:
+    """ """
 
     _CONFIG_PATH = os.path.join(os.getcwd(), "configs", "logger.yml")
 
@@ -67,6 +68,7 @@ class LoggerLoader:
         return logger
 
     def _load_config_file(self) -> None:
+        """Load logger config from file."""
 
         if self.config_path and os.path.isfile(self.config_path):
             _config_data = io_utils.read_config_file(config_path=self.config_path)
@@ -79,6 +81,11 @@ class LoggerLoader:
 
     @validate_call
     def update_config(self, config: dict[str, Any]) -> None:
+        """Update current logger config with new config values.
+
+        Args:
+            config (dict[str, Any], required): New config values to update current logger config.
+        """
 
         _config_dict = self.config.model_dump()
         _merged_dict = utils.deep_merge(_config_dict, config)
@@ -94,6 +101,15 @@ class LoggerLoader:
 
     @validate_call
     def remove_handler(self, handler: str | int | None = None) -> None:
+        """Remove handler from logger.
+
+        Args:
+            handler (str | int | None, optional): Handler name or ID to remove from logger.
+                                                    Default is None, which removes all handlers.
+
+        Raises:
+            ValueError: If handler name or ID is not found in handlers map.
+        """
 
         if handler:
             if isinstance(handler, str):
@@ -129,6 +145,16 @@ class LoggerLoader:
         handler: LogHandlerPM | LoguruHandlerPM | dict[str, Any],
         name: str | None = None,
     ) -> int | None:
+        """Add handler to logger.
+
+        Args:
+            handler (LogHandlerPM | LoguruHandlerPM | dict[str, Any], required): Handler model or dictionary to add to
+                                                                                    logger.
+            name    (str | None                                     , optional): Handler name. Default is None.
+
+        Returns:
+            int | None: Handler ID if added successfully, otherwise None.
+        """
 
         _handler_id: int | None = None
         try:

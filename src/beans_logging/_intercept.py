@@ -46,6 +46,11 @@ class InterceptHandler(Handler):
 
 @validate_call
 def init_intercepter(config: LoggerConfigPM) -> None:
+    """Initialize log interceptor based on provided config.
+
+    Args:
+        config (LoggerConfigPM, required): Main logger config model to use intercepter settings.
+    """
 
     _intercept_handler = InterceptHandler()
 

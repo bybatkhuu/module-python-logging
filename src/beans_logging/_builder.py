@@ -21,6 +21,18 @@ from .rotators import Rotator
 
 @validate_call
 def build_handler(handler: LogHandlerPM, config: LoggerConfigPM) -> dict[str, Any]:
+    """Build handler config as dictionary for Loguru logger to add new handler.
+
+    Args:
+        handler (LogHandlerPM  , required): Target log handler model.
+        config  (LoggerConfigPM, required): Default main config model to fill missing values.
+
+    Raises:
+        ValueError: 'sink' attribute is empty, required for any log handler except std and file handlers!
+
+    Returns:
+        dict[str, Any]: Loguru handler config as dictionary.
+    """
 
     _handler_dict = handler.model_dump(by_alias=True, exclude_none=True)
 

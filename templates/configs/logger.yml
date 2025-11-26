@@ -33,18 +33,18 @@ logger:
       enabled: true
     default.all.file_handler:
       type: FILE
-      enabled: true
+      enabled: false
     default.err.file_handler:
       type: FILE
       error: true
-      enabled: true
+      enabled: false
     default.all.json_handler:
       type: FILE
       serialize: true
-      enabled: true
+      enabled: false
     default.err.json_handler:
       type: FILE
       serialize: true
       error: true
-      enabled: true
+      enabled: false
   extra:
