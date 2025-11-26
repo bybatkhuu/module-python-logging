@@ -1,13 +1,13 @@
 logger:
-  app_name: app
+  # app_name: app
   default:
     level:
-      base: TRACE
+      base: INFO
       err: WARNING
-    format_str: "[{time:YYYY-MM-DD HH:mm:ss.SSS Z} | {extra[level_short]:<5} | {name}:{line}]: {message}"
-    stream:
-      colorize: true
+    std:
       format_str: "[<c>{time:YYYY-MM-DD HH:mm:ss.SSS Z}</c> | <level>{extra[level_short]:<5}</level> | <w>{name}:{line}</w>]: <level>{message}</level>"
+      colorize: true
+    format_str: "[{time:YYYY-MM-DD HH:mm:ss.SSS Z} | {extra[level_short]:<5} | {name}:{line}]: {message}"
     file:
       logs_dir: "./logs"
       rotate_size: 10000000
@@ -21,33 +21,30 @@ logger:
         log_path: "json/{app_name}.json.all123.log"
         err_path: "json/{app_name}.json.err.log"
     custom_serialize: false
-  handlers:
-    - name: default.std_handler
-      type: STREAM
-      error: false
-      enabled: true
-    - name: default.file_handler
-      type: FILE
-      error: false
-      enabled: true
-    - name: default.err.file_handler
-      type: FILE
-      error: true
-      enabled: true
-    - name: default.json.file_handler
-      type: FILE
-      serialize: true
-      error: false
-      enabled: true
-    - name: default.json.err.file_handler
-      type: FILE
-      serialize: true
-      error: true
-      enabled: true
   intercept:
     enabled: true
     only_base: false
     ignore_modules: []
     include_modules: []
     mute_modules: []
+  handlers:
+    default.all.std_handler:
+      type: STD
+      enabled: true
+    default.all.file_handler:
+      type: FILE
+      enabled: true
+    default.err.file_handler:
+      type: FILE
+      error: true
+      enabled: true
+    default.all.json_handler:
+      type: FILE
+      serialize: true
+      enabled: true
+    default.err.json_handler:
+      type: FILE
+      serialize: true
+      error: true
+      enabled: true
   extra:

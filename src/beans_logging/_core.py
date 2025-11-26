@@ -1,6 +1,8 @@
 # Standard libraries
 import os
 import copy
+import uuid
+from pprint import pprint
 from pathlib import Path
 from typing import Any, TYPE_CHECKING
 
@@ -58,8 +60,8 @@ class LoggerLoader:
         self.remove_handler()
         self._load_config_file()
 
-        for _handler in self.config.handlers:
-            self.add_handler(_handler)
+        for _key, _handler in self.config.handlers.items():
+            self.add_handler(name=_key, handler=_handler)
 
         init_intercepter(config=self.config)
         return logger
@@ -76,21 +78,17 @@ class LoggerLoader:
         return
 
     @validate_call
-    def update_config(self, config: LoggerConfigPM | dict[str, Any]) -> None:
+    def update_config(self, config: dict[str, Any]) -> None:
 
-        if isinstance(config, dict):
-            _config_dict = self.config.model_dump()
-            _merged_dict = utils.deep_merge(_config_dict, config)
-            try:
-                self.config = LoggerConfigPM(**_merged_dict)
-            except Exception:
-                logger.critical(
-                    "Failed to load `config` argument into <class 'LoggerConfigPM'>."
-                )
-                raise
-
-        elif isinstance(config, LoggerConfigPM):
-            self.config = config
+        _config_dict = self.config.model_dump()
+        _merged_dict = utils.deep_merge(_config_dict, config)
+        try:
+            self.config = LoggerConfigPM(**_merged_dict)
+        except Exception:
+            logger.critical(
+                "Failed to load `config` argument into <class 'LoggerConfigPM'>."
+            )
+            raise
 
         return
 
@@ -127,7 +125,9 @@ class LoggerLoader:
 
     @validate_call
     def add_handler(
-        self, handler: LogHandlerPM | LoguruHandlerPM | dict[str, Any]
+        self,
+        handler: LogHandlerPM | LoguruHandlerPM | dict[str, Any],
+        name: str | None = None,
     ) -> int | None:
 
         _handler_id: int | None = None
@@ -148,7 +148,10 @@ class LoggerLoader:
                         io_utils.create_dir(create_dir=_logs_dir)
 
                 _handler_id = logger.add(**_handler_dict)
-                self.handlers_map[handler.name] = _handler_id
+                if not name:
+                    name = f"log_handler.{uuid.uuid4().hex}"
+
+                self.handlers_map[name] = _handler_id
 
         except Exception:
             logger.critical(f"Failed to add custom log handler to logger!")

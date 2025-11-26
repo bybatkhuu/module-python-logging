@@ -15,44 +15,28 @@ from ._constants import LogHandlerTypeEnum, LogLevelEnum
 from .schemas import ExtraBaseModel, LogHandlerPM, LoguruHandlerPM
 
 
-def _get_handlers() -> list[LogHandlerPM]:
+def _get_handlers() -> dict[str, LogHandlerPM]:
 
-    _log_handlers: list[LogHandlerPM] = [
-        LogHandlerPM(
-            name="default.std_handler",
-            type_=LogHandlerTypeEnum.STREAM,
+    _log_handlers: dict[str, LogHandlerPM] = {
+        "default.all.std_handler": LogHandlerPM(type_=LogHandlerTypeEnum.STD),
+        "default.all.file_handler": LogHandlerPM(
+            type_=LogHandlerTypeEnum.FILE, enabled=False
         ),
-        LogHandlerPM(
-            name="default.file_handler",
-            type_=LogHandlerTypeEnum.FILE,
-            enabled=False,
+        "default.err.file_handler": LogHandlerPM(
+            type_=LogHandlerTypeEnum.FILE, error=True, enabled=False
         ),
-        LogHandlerPM(
-            name="default.err.file_handler",
-            type_=LogHandlerTypeEnum.FILE,
-            error=True,
-            enabled=False,
+        "default.all.json_handler": LogHandlerPM(
+            type_=LogHandlerTypeEnum.FILE, serialize=True, enabled=True
         ),
-        LogHandlerPM(
-            name="default.json.file_handler",
-            type_=LogHandlerTypeEnum.FILE,
-            serialize=True,
-            enabled=False,
+        "default.err.json_handler": LogHandlerPM(
+            type_=LogHandlerTypeEnum.FILE, serialize=True, error=True, enabled=True
         ),
-        LogHandlerPM(
-            name="default.json.err.file_handler",
-            type_=LogHandlerTypeEnum.FILE,
-            serialize=True,
-            error=True,
-            enabled=False,
-        ),
-    ]
+    }
 
     return _log_handlers
 
 
-class StreamConfigPM(ExtraBaseModel):
-    colorize: bool = Field(default=True)
+class StdConfigPM(ExtraBaseModel):
     format_str: str = Field(
         default=(
             "[<c>{time:YYYY-MM-DD HH:mm:ss.SSS Z}</c> | <level>{extra[level_short]:<5}</level> | <w>{name}:{line}</w>]: "
@@ -61,6 +45,7 @@ class StreamConfigPM(ExtraBaseModel):
         min_length=8,
         max_length=512,
     )
+    colorize: bool = Field(default=True)
 
 
 class PathsConfigPM(ExtraBaseModel):
@@ -134,12 +119,12 @@ class LevelConfigPM(ExtraBaseModel):
 
 class DefaultConfigPM(ExtraBaseModel):
     level: LevelConfigPM = Field(default_factory=LevelConfigPM)
+    std: StdConfigPM = Field(default_factory=StdConfigPM)
     format_str: str = Field(
         default="[{time:YYYY-MM-DD HH:mm:ss.SSS Z} | {extra[level_short]:<5} | {name}:{line}]: {message}",
         min_length=8,
         max_length=512,
     )
-    stream: StreamConfigPM = Field(default_factory=StreamConfigPM)
     file: FileConfigPM = Field(default_factory=FileConfigPM)
     custom_serialize: bool = Field(default=False)
 
@@ -161,20 +146,20 @@ class LoggerConfigPM(ExtraBaseModel):
         default_factory=utils.get_slug_name, min_length=1, max_length=128
     )
     default: DefaultConfigPM = Field(default_factory=DefaultConfigPM)
-    handlers: list[LogHandlerPM] = Field(default_factory=_get_handlers)
     intercept: InterceptConfigPM = Field(default_factory=InterceptConfigPM)
+    handlers: dict[str, LogHandlerPM] = Field(default_factory=_get_handlers)
     extra: ExtraConfigPM | None = Field(default_factory=ExtraConfigPM)
 
     @field_validator("handlers", mode="before")
     @classmethod
     def _check_handlers(cls, val: Any) -> Any:
         if val:
-            if not isinstance(val, list):
+            if not isinstance(val, dict):
                 raise TypeError(
                     f"'handlers' attribute type {type(val).__name__} is invalid, must be a list of <LogHandlerPM>, <LoguruHandlerPM> or dict!"
                 )
 
-            for _i, _handler in enumerate(val):
+            for _i, _handler in val.items():
                 if not isinstance(_handler, (LogHandlerPM, LoguruHandlerPM, dict)):
                     raise TypeError(
                         f"'handlers' attribute index {_i} type {type(_handler).__name__} is invalid, must be <LogHandlerPM>, <LoguruHandlerPM> or dict!"

@@ -2,7 +2,7 @@ from enum import Enum
 
 
 class LogHandlerTypeEnum(str, Enum):
-    STREAM = "STREAM"
+    STD = "STD"
     FILE = "FILE"
     SOCKET = "SOCKET"
     HTTP = "HTTP"

@@ -22,10 +22,10 @@ from .rotator import Rotator
 @validate_call
 def build_handler(handler: LogHandlerPM, config: LoggerConfigPM) -> dict[str, Any]:
 
-    _handler_dict = handler.model_dump(exclude_none=True)
+    _handler_dict = handler.model_dump(by_alias=True, exclude_none=True)
 
     if _handler_dict.get("sink") is None:
-        if _handler_dict.get("type") == LogHandlerTypeEnum.STREAM:
+        if _handler_dict.get("type") == LogHandlerTypeEnum.STD:
             _handler_dict["sink"] = std_sink
         elif _handler_dict.get("type") == LogHandlerTypeEnum.FILE:
             _logs_path: str = ""
@@ -58,7 +58,7 @@ def build_handler(handler: LogHandlerPM, config: LoggerConfigPM) -> dict[str, An
             _handler_dict["sink"] = _logs_path
     else:
         raise ValueError(
-            "'sink' attribute is empty, required for any log handler except stream and file handlers!"
+            "'sink' attribute is empty, required for any log handler except std and file handlers!"
         )
 
     if _handler_dict.get("level") is None:
@@ -77,13 +77,13 @@ def build_handler(handler: LogHandlerPM, config: LoggerConfigPM) -> dict[str, An
         _handler_dict["format"] = json_formatter
 
     if (_handler_dict.get("format") is None) and (not _handler_dict.get("serialize")):
-        if _handler_dict.get("type") == LogHandlerTypeEnum.STREAM:
-            _handler_dict["format"] = config.default.stream.format_str
+        if _handler_dict.get("type") == LogHandlerTypeEnum.STD:
+            _handler_dict["format"] = config.default.std.format_str
         else:
             _handler_dict["format"] = config.default.format_str
 
     if _handler_dict.get("filter") is None:
-        if _handler_dict.get("type") == LogHandlerTypeEnum.STREAM:
+        if _handler_dict.get("type") == LogHandlerTypeEnum.STD:
             _handler_dict["filter"] = use_std_filter
         elif _handler_dict.get("type") == LogHandlerTypeEnum.FILE:
             if _handler_dict.get("serialize") or _handler_dict.get("custom_serialize"):
@@ -109,9 +109,9 @@ def build_handler(handler: LogHandlerPM, config: LoggerConfigPM) -> dict[str, An
         _handler_dict["diagnose"] = True
 
     if (_handler_dict.get("colorize") is None) and (
-        _handler_dict.get("type") == LogHandlerTypeEnum.STREAM
+        _handler_dict.get("type") == LogHandlerTypeEnum.STD
     ):
-        _handler_dict["colorize"] = config.default.stream.colorize
+        _handler_dict["colorize"] = config.default.std.colorize
 
     if _handler_dict.get("type") == LogHandlerTypeEnum.FILE:
         if _handler_dict.get("enqueue") is None:
@@ -129,7 +129,6 @@ def build_handler(handler: LogHandlerPM, config: LoggerConfigPM) -> dict[str, An
         if _handler_dict.get("encoding") is None:
             _handler_dict["encoding"] = config.default.file.encoding
 
-    _handler_dict.pop("name", None)
     _handler_dict.pop("type", None)
     _handler_dict.pop("error", None)
     _handler_dict.pop("custom_serialize", None)

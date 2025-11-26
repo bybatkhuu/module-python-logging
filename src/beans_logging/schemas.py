@@ -29,6 +29,7 @@ class ExtraBaseModel(BaseModel):
         validate_default=True,
         validate_assignment=True,
         serialize_by_alias=True,
+        validate_by_name=True,
         arbitrary_types_allowed=True,
     )
 
@@ -93,7 +94,6 @@ class LoguruHandlerPM(ExtraBaseModel):
 
 
 class LogHandlerPM(LoguruHandlerPM):
-    name: str = Field(default_factory=lambda: f"log_handler.{uuid.uuid4().hex}")
     type_: LogHandlerTypeEnum = Field(
         default=LogHandlerTypeEnum.UNKNOWN,
         validation_alias="type",
