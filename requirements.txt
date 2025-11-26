@@ -1,3 +1,3 @@
-pydantic[timezone]>=2.11.0,<3.0.0
+pydantic[timezone]>=2.9.2,<3.0.0
 loguru>=0.7.3,<1.0.0
 potato_util>=0.2.0,<1.0.0

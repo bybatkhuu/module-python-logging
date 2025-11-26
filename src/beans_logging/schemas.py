@@ -1,6 +1,5 @@
 import os
 import sys
-import uuid
 import inspect
 import datetime
 from pathlib import Path
@@ -28,6 +27,7 @@ class ExtraBaseModel(BaseModel):
         extra="allow",
         validate_default=True,
         validate_assignment=True,
+        populate_by_name=True,  # Remove in Pydantic v3
         serialize_by_alias=True,
         validate_by_name=True,
         arbitrary_types_allowed=True,

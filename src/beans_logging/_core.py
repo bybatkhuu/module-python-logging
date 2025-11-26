@@ -212,7 +212,7 @@ class LoggerLoader:
         try:
             return self.__handlers_map
         except AttributeError:
-            self.__handlers_map = {"default.loguru_handler": 0}
+            raise AttributeError("`handlers_map` attribute is not set!")
 
         return self.__handlers_map
 
