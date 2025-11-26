@@ -24,7 +24,22 @@ from ._intercept import init_intercepter
 
 
 class LoggerLoader:
-    """ """
+    """LoggerLoader class for setting up loguru logger.
+
+    Attributes:
+        _CONFIG_PATH (str): Default config file path. Default is '${PWD}/configs/logger.yml'.
+
+        handlers_map     (dict[str, int]): Map of handler names to their IDs. Default is {'default.loguru_handler': 0}.
+        config           (LoggerConfigPM): Main logger configuration model. Default is LoggerConfigPM().
+        config_file_path (str           ): Path to logger configuration file. Default is _CONFIG_PATH.
+
+    Methods:
+        load()             : Load logger handlers based on logger config.
+        _load_config_file(): Load logger config from file.
+        update_config()    : Update current logger config with new config values.
+        remove_handler()   : Remove handler from logger.
+        add_handler()      : Add handler to logger.
+    """
 
     _CONFIG_PATH = os.path.join(os.getcwd(), "configs", "logger.yml")
 
@@ -50,15 +65,21 @@ class LoggerLoader:
         if auto_load:
             self.load()
 
-    def load(self) -> "Logger":
+    @validate_call
+    def load(self, load_config_file: bool = True) -> "Logger":
         """Load logger handlers based on logger config.
+
+        Args:
+            load_config_file (bool, optional): Whether to load config from file before loading handlers.
+                                                    Default is True.
 
         Returns:
             Logger: Main loguru logger instance.
         """
 
         self.remove_handler()
-        self._load_config_file()
+        if load_config_file:
+            self._load_config_file()
 
         for _key, _handler in self.config.handlers.items():
             self.add_handler(name=_key, handler=_handler)
