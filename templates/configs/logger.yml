@@ -18,7 +18,7 @@ logger:
         log_path: "{app_name}.all.log"
         err_path: "{app_name}.err.log"
       json:
-        log_path: "json/{app_name}.json.all123.log"
+        log_path: "json/{app_name}.json.all.log"
         err_path: "json/{app_name}.json.err.log"
     custom_serialize: false
   intercept:
