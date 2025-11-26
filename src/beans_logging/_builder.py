@@ -16,7 +16,7 @@ from .filters import (
     use_file_json_filter,
     use_file_json_err_filter,
 )
-from .rotator import Rotator
+from .rotators import Rotator
 
 
 @validate_call
