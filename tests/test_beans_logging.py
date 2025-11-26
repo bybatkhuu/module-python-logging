@@ -25,8 +25,8 @@ def test_init(logger: Logger, logger_loader: LoggerLoader):
     logger.info("Testing initialization of 'LoggerLoader'...")
 
     assert isinstance(logger_loader, LoggerLoader)
-    assert logger_loader.handlers_map == {"default": 0}
-    assert logger_loader.config_file_path == LoggerLoader._CONFIG_FILE_PATH
+    assert logger_loader.handlers_map == {"default.loguru_handler": 0}
+    assert logger_loader.config_file_path == LoggerLoader._CONFIG_PATH
     assert isinstance(logger_loader.config, LoggerConfigPM)
 
     logger.success("Done: Initialization of 'LoggerLoader'.\n")
@@ -35,7 +35,7 @@ def test_init(logger: Logger, logger_loader: LoggerLoader):
 def test_load(logger: Logger, logger_loader: LoggerLoader):
     logger.info("Testing 'load' method of 'LoggerLoader'...")
 
-    logger_loader.update_config(config={"level": "TRACE"})
+    logger_loader.update_config(config={"default": {"base": {"level": "TRACE"}}})
     _logger: Logger = logger_loader.load()
 
     assert isinstance(_logger, Logger)

@@ -1,4 +1,3 @@
-import os
 import sys
 import datetime
 from typing import Any
@@ -31,10 +30,10 @@ def _get_handlers() -> dict[str, LogHandlerPM]:
             type_=LogHandlerTypeEnum.FILE, error=True, enabled=False
         ),
         "default.all.json_handler": LogHandlerPM(
-            type_=LogHandlerTypeEnum.FILE, serialize=True, enabled=True
+            type_=LogHandlerTypeEnum.FILE, serialize=True, enabled=False
         ),
         "default.err.json_handler": LogHandlerPM(
-            type_=LogHandlerTypeEnum.FILE, serialize=True, error=True, enabled=True
+            type_=LogHandlerTypeEnum.FILE, serialize=True, error=True, enabled=False
         ),
     }
 
