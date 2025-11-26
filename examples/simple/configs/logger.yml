@@ -5,18 +5,10 @@ logger:
       base: TRACE
   handlers:
     default.all.file_handler:
-      type: FILE
       enabled: true
     default.err.file_handler:
-      type: FILE
-      error: true
       enabled: true
     default.all.json_handler:
-      type: FILE
-      serialize: true
       enabled: true
     default.err.json_handler:
-      type: FILE
-      serialize: true
-      error: true
       enabled: true
