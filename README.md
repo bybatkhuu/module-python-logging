@@ -155,12 +155,18 @@ logger.info("Logging info.")
 
 ```yml
 logger:
-  app_name: "my-app"
-  level: "TRACE"
-  file:
-    log_handlers:
+  app_name: my-app
+  default:
+    level:
+      base: TRACE
+  handlers:
+    default.all.file_handler:
       enabled: true
-    json_handlers:
+    default.err.file_handler:
+      enabled: true
+    default.all.json_handler:
+      enabled: true
+    default.err.json_handler:
       enabled: true
 ```
 
@@ -211,28 +217,28 @@ python ./main.py
 **Output**:
 
 ```txt
-[2023-09-01 00:00:00.000 +09:00 | TRACE | beans_logging._base:478]: Intercepted modules: ['concurrent', 'concurrent.futures', 'asyncio']; Muted modules: [];
-[2023-09-01 00:00:00.000 +09:00 | TRACE | __main__:7]: Tracing...
-[2023-09-01 00:00:00.000 +09:00 | DEBUG | __main__:8]: Debugging...
-[2023-09-01 00:00:00.000 +09:00 | INFO  | __main__:9]: Logging info.
-[2023-09-01 00:00:00.000 +09:00 | OK    | __main__:10]: Success.
-[2023-09-01 00:00:00.000 +09:00 | WARN  | __main__:11]: Warning something.
-[2023-09-01 00:00:00.000 +09:00 | ERROR | __main__:12]: Error occured.
-[2023-09-01 00:00:00.000 +09:00 | CRIT  | __main__:13]: CRITICAL ERROR.
-[2023-09-01 00:00:00.000 +09:00 | ERROR | __main__:25]: division by zero
-[2023-09-01 00:00:00.000 +09:00 | ERROR | __main__:32]: Show me, what value is wrong:
+[2025-11-01 00:00:00.735 +09:00 | TRACE | beans_logging._intercept:96]: Intercepted modules: ['potato_util._base', 'potato_util.io', 'concurrent', 'concurrent.futures', 'asyncio', 'potato_util.io._sync', 'potato_util']; Muted modules: [];
+[2025-11-01 00:00:00.736 +09:00 | TRACE | __main__:6]: Tracing...
+[2025-11-01 00:00:00.736 +09:00 | DEBUG | __main__:7]: Debugging...
+[2025-11-01 00:00:00.736 +09:00 | INFO  | __main__:8]: Logging info.
+[2025-11-01 00:00:00.736 +09:00 | OK    | __main__:9]: Success.
+[2025-11-01 00:00:00.736 +09:00 | WARN  | __main__:10]: Warning something.
+[2025-11-01 00:00:00.736 +09:00 | ERROR | __main__:11]: Error occured.
+[2025-11-01 00:00:00.736 +09:00 | CRIT  | __main__:12]: CRITICAL ERROR.
+[2025-11-01 00:00:00.736 +09:00 | ERROR | __main__:24]: division by zero
+[2025-11-01 00:00:00.737 +09:00 | ERROR | __main__:31]: Show me, what value is wrong:
 Traceback (most recent call last):
 
-> File "/home/user/workspaces/projects/beans_logging/examples/simple/./main.py", line 30, in <module>
+> File "/home/user/workspaces/projects/my/module-python-logging/examples/simple/./main.py", line 29, in <module>
     nested(0)
-    └ <function nested at 0x10802a4c0>
+    └ <function nested at 0x102f37910>
 
-  File "/home/user/workspaces/projects/beans_logging/examples/simple/./main.py", line 23, in nested
+  File "/home/user/workspaces/projects/my/module-python-logging/examples/simple/./main.py", line 22, in nested
     divide(5, c)
     │         └ 0
-    └ <function divide at 0x1052f31f0>
+    └ <function divide at 0x102f377f0>
 
-  File "/home/user/workspaces/projects/beans_logging/examples/simple/./main.py", line 17, in divide
+  File "/home/user/workspaces/projects/my/module-python-logging/examples/simple/./main.py", line 16, in divide
     _result = a / b
               │   └ 0
               └ 5
@@ -250,37 +256,54 @@ ZeroDivisionError: division by zero
 
 ```yaml
 logger:
-  # app_name: "app"
-  level: "INFO"
-  use_diagnose: false
-  stream:
-    use_color: true
-    use_icon: false
-    format_str: "[<c>{time:YYYY-MM-DD HH:mm:ss.SSS Z}</c> | <level>{level_short:<5}</level> | <w>{name}:{line}</w>]: <level>{message}</level>"
-    std_handler:
-      enabled: true
-  file:
-    logs_dir: "./logs"
-    rotate_size: 10000000 # 10MB
-    rotate_time: "00:00:00"
-    backup_count: 90
-    log_handlers:
-      enabled: false
-      format_str: "[{time:YYYY-MM-DD HH:mm:ss.SSS Z} | {level_short:<5} | {name}:{line}]: {message}"
-      log_path: "{app_name}.std.all.log"
-      err_path: "{app_name}.std.err.log"
-    json_handlers:
-      enabled: false
-      use_custom: false
-      log_path: "{app_name}.json.all.log"
-      err_path: "{app_name}.json.err.log"
+  # app_name: app
+  default:
+    level:
+      base: INFO
+      err: WARNING
+    std:
+      format_str: "[<c>{time:YYYY-MM-DD HH:mm:ss.SSS Z}</c> | <level>{extra[level_short]:<5}</level> | <w>{name}:{line}</w>]: <level>{message}</level>"
+      colorize: true
+    format_str: "[{time:YYYY-MM-DD HH:mm:ss.SSS Z} | {extra[level_short]:<5} | {name}:{line}]: {message}"
+    file:
+      logs_dir: "./logs"
+      rotate_size: 10000000
+      rotate_time: "00:00:00"
+      retention: 90
+      encoding: utf8
+      plain:
+        log_path: "{app_name}.all.log"
+        err_path: "{app_name}.err.log"
+      json:
+        log_path: "json/{app_name}.json.all.log"
+        err_path: "json/{app_name}.json.err.log"
+    custom_serialize: false
   intercept:
-    auto_load:
-      enabled: true
-      only_base: false
-      ignore_modules: []
+    enabled: true
+    only_base: false
+    ignore_modules: []
     include_modules: []
     mute_modules: []
+  handlers:
+    default.all.std_handler:
+      type: STD
+      enabled: true
+    default.all.file_handler:
+      type: FILE
+      enabled: false
+    default.err.file_handler:
+      type: FILE
+      error: true
+      enabled: false
+    default.all.json_handler:
+      type: FILE
+      serialize: true
+      enabled: false
+    default.err.json_handler:
+      type: FILE
+      serialize: true
+      error: true
+      enabled: false
   extra:
 ```
 
@@ -292,10 +315,6 @@ logger:
 # ENV=LOCAL
 # DEBUG=false
 # TZ=UTC
-
-# BEANS_LOGGING_DISABLE_DEFAULT=false
-# BEANS_LOGGING_CONFIG_PATH="./configs/logger.yml"
-# BEANS_LOGGING_LOGS_DIR="./logs"
 ```
 
 ---

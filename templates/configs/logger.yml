@@ -1,33 +1,50 @@
 logger:
-  # app_name: "app"
-  level: "INFO"
-  use_diagnose: false
-  stream:
-    use_color: true
-    use_icon: false
-    format_str: "[<c>{time:YYYY-MM-DD HH:mm:ss.SSS Z}</c> | <level>{level_short:<5}</level> | <w>{name}:{line}</w>]: <level>{message}</level>"
-    std_handler:
-      enabled: true
-  file:
-    logs_dir: "./logs"
-    rotate_size: 10000000 # 10MB
-    rotate_time: "00:00:00"
-    backup_count: 90
-    log_handlers:
-      enabled: false
-      format_str: "[{time:YYYY-MM-DD HH:mm:ss.SSS Z} | {level_short:<5} | {name}:{line}]: {message}"
-      log_path: "{app_name}.std.all.log"
-      err_path: "{app_name}.std.err.log"
-    json_handlers:
-      enabled: false
-      use_custom: false
-      log_path: "{app_name}.json.all.log"
-      err_path: "{app_name}.json.err.log"
+  # app_name: app
+  default:
+    level:
+      base: INFO
+      err: WARNING
+    std:
+      format_str: "[<c>{time:YYYY-MM-DD HH:mm:ss.SSS Z}</c> | <level>{extra[level_short]:<5}</level> | <w>{name}:{line}</w>]: <level>{message}</level>"
+      colorize: true
+    format_str: "[{time:YYYY-MM-DD HH:mm:ss.SSS Z} | {extra[level_short]:<5} | {name}:{line}]: {message}"
+    file:
+      logs_dir: "./logs"
+      rotate_size: 10000000
+      rotate_time: "00:00:00"
+      retention: 90
+      encoding: utf8
+      plain:
+        log_path: "{app_name}.all.log"
+        err_path: "{app_name}.err.log"
+      json:
+        log_path: "json/{app_name}.json.all.log"
+        err_path: "json/{app_name}.json.err.log"
+    custom_serialize: false
   intercept:
-    auto_load:
-      enabled: true
-      only_base: false
-      ignore_modules: []
+    enabled: true
+    only_base: false
+    ignore_modules: []
     include_modules: []
     mute_modules: []
+  handlers:
+    default.all.std_handler:
+      type: STD
+      enabled: true
+    default.all.file_handler:
+      type: FILE
+      enabled: false
+    default.err.file_handler:
+      type: FILE
+      error: true
+      enabled: false
+    default.all.json_handler:
+      type: FILE
+      serialize: true
+      enabled: false
+    default.err.json_handler:
+      type: FILE
+      serialize: true
+      error: true
+      enabled: false
   extra:

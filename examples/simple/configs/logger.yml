@@ -1,8 +1,14 @@
 logger:
-  app_name: "my-app"
-  level: "TRACE"
-  file:
-    log_handlers:
+  app_name: my-app
+  default:
+    level:
+      base: TRACE
+  handlers:
+    default.all.file_handler:
       enabled: true
-    json_handlers:
+    default.err.file_handler:
+      enabled: true
+    default.all.json_handler:
+      enabled: true
+    default.err.json_handler:
       enabled: true

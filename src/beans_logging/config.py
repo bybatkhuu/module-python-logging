@@ -1,69 +1,60 @@
-import os
+import sys
 import datetime
 from typing import Any
-from typing_extensions import Self
 
-from pydantic import BaseModel, Field, field_validator, model_validator, ConfigDict
+if sys.version_info >= (3, 11):
+    from typing import Self
+else:
+    from typing_extensions import Self
 
-from ._constants import LogLevelEnum
-from ._utils import get_slug_name
+import potato_util as utils
+from pydantic import Field, model_validator, field_validator
 
-
-class ExtraBaseModel(BaseModel):
-    model_config = ConfigDict(extra="allow")
-
-
-class StdHandlerConfigPM(ExtraBaseModel):
-    enabled: bool = Field(default=True)
+from ._constants import LogHandlerTypeEnum, LogLevelEnum
+from .schemas import ExtraBaseModel, LogHandlerPM, LoguruHandlerPM
 
 
-class StreamConfigPM(ExtraBaseModel):
-    use_color: bool = Field(default=True)
-    use_icon: bool = Field(default=False)
+def _get_handlers() -> dict[str, LogHandlerPM]:
+    """Get default log handlers.
+
+    Returns:
+        dict[str, LogHandlerPM]: Default handlers as dictionary.
+    """
+
+    _log_handlers: dict[str, LogHandlerPM] = {
+        "default.all.std_handler": LogHandlerPM(type_=LogHandlerTypeEnum.STD),
+        "default.all.file_handler": LogHandlerPM(
+            type_=LogHandlerTypeEnum.FILE, enabled=False
+        ),
+        "default.err.file_handler": LogHandlerPM(
+            type_=LogHandlerTypeEnum.FILE, error=True, enabled=False
+        ),
+        "default.all.json_handler": LogHandlerPM(
+            type_=LogHandlerTypeEnum.FILE, serialize=True, enabled=False
+        ),
+        "default.err.json_handler": LogHandlerPM(
+            type_=LogHandlerTypeEnum.FILE, serialize=True, error=True, enabled=False
+        ),
+    }
+
+    return _log_handlers
+
+
+class StdConfigPM(ExtraBaseModel):
     format_str: str = Field(
         default=(
-            "[<c>{time:YYYY-MM-DD HH:mm:ss.SSS Z}</c> | <level>{level_short:<5}</level> | <w>{name}:{line}</w>]: "
-            "<level>{message}</level>"
+            "[<c>{time:YYYY-MM-DD HH:mm:ss.SSS Z}</c> | <level>{extra[level_short]:<5}</level> | <w>{name}:{line}</w>]:"
+            " <level>{message}</level>"
         ),
         min_length=8,
         max_length=512,
     )
-    std_handler: StdHandlerConfigPM = Field(default_factory=StdHandlerConfigPM)
+    colorize: bool = Field(default=True)
 
 
-class LogHandlersConfigPM(ExtraBaseModel):
-    enabled: bool = Field(default=False)
-    format_str: str = Field(
-        default="[{time:YYYY-MM-DD HH:mm:ss.SSS Z} | {level_short:<5} | {name}:{line}]: {message}",
-        min_length=8,
-        max_length=512,
-    )
-    log_path: str = Field(
-        default="{app_name}.std.all.log", min_length=4, max_length=1024
-    )
-    err_path: str = Field(
-        default="{app_name}.std.err.log", min_length=4, max_length=1024
-    )
-
-    @model_validator(mode="after")
-    def _check_log_path(self) -> Self:
-        if self.log_path == self.err_path:
-            raise ValueError(
-                f"`log_path` and `err_path` attributes have same value: '{self.log_path}', must be different!"
-            )
-
-        return self
-
-
-class JsonHandlersConfigPM(ExtraBaseModel):
-    enabled: bool = Field(default=False)
-    use_custom: bool = Field(default=False)
-    log_path: str = Field(
-        default="{app_name}.json.all.log", min_length=4, max_length=1024
-    )
-    err_path: str = Field(
-        default="{app_name}.json.err.log", min_length=4, max_length=1024
-    )
+class PathsConfigPM(ExtraBaseModel):
+    log_path: str = Field(..., min_length=4, max_length=1024)
+    err_path: str = Field(..., min_length=4, max_length=1024)
 
     @model_validator(mode="after")
     def _check_log_path(self) -> Self:
@@ -77,7 +68,7 @@ class JsonHandlersConfigPM(ExtraBaseModel):
 
 class FileConfigPM(ExtraBaseModel):
     logs_dir: str = Field(
-        default_factory=lambda: os.path.join(os.getcwd(), "logs"),
+        default="./logs",
         min_length=2,
         max_length=1024,
     )
@@ -85,10 +76,23 @@ class FileConfigPM(ExtraBaseModel):
         default=10_000_000, ge=1_000, lt=1_000_000_000  # 10MB = 10 * 1000 * 1000
     )
     rotate_time: datetime.time = Field(default_factory=lambda: datetime.time(0, 0, 0))
-    backup_count: int = Field(default=90, ge=1)
+    retention: int = Field(default=90, ge=1)
     encoding: str = Field(default="utf8", min_length=2, max_length=31)
-    log_handlers: LogHandlersConfigPM = Field(default_factory=LogHandlersConfigPM)
-    json_handlers: JsonHandlersConfigPM = Field(default_factory=JsonHandlersConfigPM)
+
+    plain: PathsConfigPM = Field(
+        default_factory=lambda: PathsConfigPM(
+            log_path="{app_name}.all.log",
+            err_path="{app_name}.err.log",
+        )
+    )
+    json_: PathsConfigPM = Field(
+        default_factory=lambda: PathsConfigPM(
+            log_path="json/{app_name}.json.all.log",
+            err_path="json/{app_name}.json.err.log",
+        ),
+        validation_alias="json",
+        serialization_alias="json",
+    )
 
     @field_validator("rotate_time", mode="before")
     @classmethod
@@ -99,14 +103,40 @@ class FileConfigPM(ExtraBaseModel):
         return val
 
 
-class AutoLoadConfigPM(ExtraBaseModel):
-    enabled: bool = Field(default=True)
-    only_base: bool = Field(default=False)
-    ignore_modules: list[str] = Field(default=[])
+class LevelConfigPM(ExtraBaseModel):
+    base: str | int | LogLevelEnum = Field(default=LogLevelEnum.INFO)
+    err: str | int | LogLevelEnum = Field(default=LogLevelEnum.WARNING)
+
+    @field_validator("base", mode="before")
+    @classmethod
+    def _check_level(cls, val: Any) -> Any:
+        if not isinstance(val, (str, int, LogLevelEnum)):
+            raise TypeError(
+                f"Level attribute type {type(val).__name__} is invalid, must be str, int or <LogLevelEnum>!"
+            )
+
+        if utils.is_debug_mode() and (val != LogLevelEnum.TRACE) and (val != 5):
+            val = LogLevelEnum.DEBUG
+
+        return val
+
+
+class DefaultConfigPM(ExtraBaseModel):
+    level: LevelConfigPM = Field(default_factory=LevelConfigPM)
+    std: StdConfigPM = Field(default_factory=StdConfigPM)
+    format_str: str = Field(
+        default="[{time:YYYY-MM-DD HH:mm:ss.SSS Z} | {extra[level_short]:<5} | {name}:{line}]: {message}",
+        min_length=8,
+        max_length=512,
+    )
+    file: FileConfigPM = Field(default_factory=FileConfigPM)
+    custom_serialize: bool = Field(default=False)
 
 
 class InterceptConfigPM(ExtraBaseModel):
-    auto_load: AutoLoadConfigPM = Field(default_factory=AutoLoadConfigPM)
+    enabled: bool = Field(default=True)
+    only_base: bool = Field(default=False)
+    ignore_modules: list[str] = Field(default=[])
     include_modules: list[str] = Field(default=[])
     mute_modules: list[str] = Field(default=[])
 
@@ -116,23 +146,41 @@ class ExtraConfigPM(ExtraBaseModel):
 
 
 class LoggerConfigPM(ExtraBaseModel):
-    app_name: str = Field(default_factory=get_slug_name, min_length=1, max_length=128)
-    level: LogLevelEnum = Field(default=LogLevelEnum.INFO)
-    use_backtrace: bool = Field(default=True)
-    use_diagnose: bool = Field(default=False)
-    stream: StreamConfigPM = Field(default_factory=StreamConfigPM)
-    file: FileConfigPM = Field(default_factory=FileConfigPM)
+    app_name: str = Field(
+        default_factory=utils.get_slug_name, min_length=1, max_length=128
+    )
+    default: DefaultConfigPM = Field(default_factory=DefaultConfigPM)
     intercept: InterceptConfigPM = Field(default_factory=InterceptConfigPM)
+    handlers: dict[str, LogHandlerPM] = Field(default_factory=_get_handlers)
     extra: ExtraConfigPM | None = Field(default_factory=ExtraConfigPM)
+
+    @field_validator("handlers", mode="before")
+    @classmethod
+    def _check_handlers(cls, val: Any) -> Any:
+        if val:
+            if not isinstance(val, dict):
+                raise TypeError(
+                    f"'handlers' attribute type {type(val).__name__} is invalid, must be a dict of <LogHandlerPM>, "
+                    f"<LoguruHandlerPM> or dict!"
+                )
+
+            for _i, _handler in val.items():
+                if not isinstance(_handler, (LogHandlerPM, LoguruHandlerPM, dict)):
+                    raise TypeError(
+                        f"'handlers' attribute index {_i} type {type(_handler).__name__} is invalid, must be "
+                        f"<LogHandlerPM>, <LoguruHandlerPM> or dict!"
+                    )
+
+                if isinstance(_handler, LoguruHandlerPM):
+                    val[_i] = LogHandlerPM(
+                        **_handler.model_dump(exclude_none=True, exclude_unset=True)
+                    )
+                elif isinstance(_handler, dict):
+                    val[_i] = LogHandlerPM(**_handler)
+
+        return val
 
 
 __all__ = [
-    "StdHandlerConfigPM",
-    "StreamConfigPM",
-    "LogHandlersConfigPM",
-    "JsonHandlersConfigPM",
-    "FileConfigPM",
-    "AutoLoadConfigPM",
-    "InterceptConfigPM",
     "LoggerConfigPM",
 ]

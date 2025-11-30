@@ -1,8 +1,12 @@
 import json
 import traceback
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from loguru import Record
 
 
-def json_format(record: dict) -> str:
+def json_formatter(record: "Record") -> str:
     """Custom json formatter for loguru logger.
 
     Args:
@@ -16,13 +20,20 @@ def json_format(record: dict) -> str:
     if record["exception"]:
         _error = {}
         _error_type, _error_value, _error_traceback = record["exception"]
-        _error["type"] = _error_type.__name__
+        if _error_type:
+            _error["type"] = _error_type.__name__
+        else:
+            _error["type"] = "None"
+
         _error["value"] = str(_error_value)
         _error["traceback"] = "".join(traceback.format_tb(_error_traceback))
 
     _extra = None
     if record["extra"] and (0 < len(record["extra"])):
         _extra = record["extra"]
+
+    if _extra and ("serialized" in _extra):
+        del _extra["serialized"]
 
     _json_record = {
         "timestamp": record["time"].strftime("%Y-%m-%dT%H:%M:%S%z"),
@@ -39,5 +50,10 @@ def json_format(record: dict) -> str:
         "elapsed": str(record["elapsed"]),
     }
 
-    record["serialized"] = json.dumps(_json_record)
-    return "{serialized}\n"
+    record["extra"]["serialized"] = json.dumps(_json_record)
+    return "{extra[serialized]}\n"
+
+
+__all__ = [
+    "json_formatter",
+]
