@@ -68,10 +68,10 @@ def build_handler(handler: LogHandlerPM, config: LoggerConfigPM) -> dict[str, An
                 _logs_path = _logs_path.format(app_name=config.app_name)
 
             _handler_dict["sink"] = _logs_path
-    else:
-        raise ValueError(
-            "'sink' attribute is empty, required for any log handler except std and file handlers!"
-        )
+        else:
+            raise ValueError(
+                "'sink' attribute is empty, required for any log handler except std and file handlers!"
+            )
 
     if _handler_dict.get("level") is None:
         if _handler_dict.get("error"):

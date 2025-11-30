@@ -43,8 +43,8 @@ def _get_handlers() -> dict[str, LogHandlerPM]:
 class StdConfigPM(ExtraBaseModel):
     format_str: str = Field(
         default=(
-            "[<c>{time:YYYY-MM-DD HH:mm:ss.SSS Z}</c> | <level>{extra[level_short]:<5}</level> | <w>{name}:{line}</w>]: "
-            "<level>{message}</level>"
+            "[<c>{time:YYYY-MM-DD HH:mm:ss.SSS Z}</c> | <level>{extra[level_short]:<5}</level> | <w>{name}:{line}</w>]:"
+            " <level>{message}</level>"
         ),
         min_length=8,
         max_length=512,
@@ -160,13 +160,15 @@ class LoggerConfigPM(ExtraBaseModel):
         if val:
             if not isinstance(val, dict):
                 raise TypeError(
-                    f"'handlers' attribute type {type(val).__name__} is invalid, must be a list of <LogHandlerPM>, <LoguruHandlerPM> or dict!"
+                    f"'handlers' attribute type {type(val).__name__} is invalid, must be a dict of <LogHandlerPM>, "
+                    f"<LoguruHandlerPM> or dict!"
                 )
 
             for _i, _handler in val.items():
                 if not isinstance(_handler, (LogHandlerPM, LoguruHandlerPM, dict)):
                     raise TypeError(
-                        f"'handlers' attribute index {_i} type {type(_handler).__name__} is invalid, must be <LogHandlerPM>, <LoguruHandlerPM> or dict!"
+                        f"'handlers' attribute index {_i} type {type(_handler).__name__} is invalid, must be "
+                        f"<LogHandlerPM>, <LoguruHandlerPM> or dict!"
                     )
 
                 if isinstance(_handler, LoguruHandlerPM):

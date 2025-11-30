@@ -14,8 +14,10 @@ def std_sink(message: "Message") -> None:
 
     if message.record["level"].no < 40:
         sys.stdout.write(message)
+        # sys.stdout.flush()
     else:
         sys.stderr.write(message)
+        # sys.stderr.flush()
 
     return
 

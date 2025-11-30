@@ -47,7 +47,7 @@ class LoggerLoader:
     def __init__(
         self,
         config: LoggerConfigPM | dict[str, Any] | None = None,
-        config_path: str | None = _CONFIG_PATH,
+        config_path: str = _CONFIG_PATH,
         auto_load: bool = False,
         **kwargs,
     ) -> None:
@@ -145,7 +145,7 @@ class LoggerLoader:
             elif isinstance(handler, int):
                 if handler in self.handlers_map.values():
                     logger.remove(handler)
-                    for _handler_name, _handler_id in self.handlers_map.items():
+                    for _handler_name, _handler_id in list(self.handlers_map.items()):
                         if handler == _handler_id:
                             self.handlers_map.pop(_handler_name)
                             break
