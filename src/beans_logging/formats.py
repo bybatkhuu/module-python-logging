@@ -20,12 +20,16 @@ def json_formatter(record: "Record") -> str:
     if record["exception"]:
         _error = {}
         _error_type, _error_value, _error_traceback = record["exception"]
-        _error["type"] = str(_error_type)
+        if _error_type:
+            _error["type"] = _error_type.__name__
+        else:
+            _error["type"] = "None"
+
         _error["value"] = str(_error_value)
         _error["traceback"] = "".join(traceback.format_tb(_error_traceback))
 
     _extra = None
-    if ("extra" in record) and record["extra"] and (0 < len(record["extra"])):
+    if record["extra"] and (0 < len(record["extra"])):
         _extra = record["extra"]
 
     if _extra and ("serialized" in _extra):

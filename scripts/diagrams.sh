@@ -13,7 +13,7 @@ cd "${_PROJECT_DIR}" || exit 2
 
 
 if ! command -v dot >/dev/null 2>&1; then
-	echo "[ERROR]: Not found 'dot' command, please install 'graphiz' first!" >&2
+	echo "[ERROR]: Not found 'dot' command, please install 'graphviz' first!" >&2
 	exit 1
 fi
 
