@@ -3,7 +3,6 @@ set -euo pipefail
 
 
 ## --- Base --- ##
-# Getting path of this script file:
 _SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]:-"$0"}")" >/dev/null 2>&1 && pwd -P)"
 _PROJECT_DIR="$(cd "${_SCRIPT_DIR}/.." >/dev/null 2>&1 && pwd)"
 cd "${_PROJECT_DIR}" || exit 2
@@ -11,6 +10,12 @@ cd "${_PROJECT_DIR}" || exit 2
 
 # shellcheck disable=SC1091
 [ -f .env ] && . .env
+
+
+if [ ! -f ./scripts/get-version.sh ]; then
+	echo "[ERROR]: 'get-version.sh' script not found!" >&2
+	exit 1
+fi
 ## --- Base --- ##
 
 
@@ -88,10 +93,11 @@ fi
 
 if [ "${_IS_COMMIT}" == true ]; then
 	if ! command -v git >/dev/null 2>&1; then
-		echo "[ERROR]: Not found 'git' command, please install it first." >&2
+		echo "[ERROR]: Not found 'git' command, please install it first!" >&2
 		exit 1
 	fi
 fi
+
 
 ## --- Main --- ##
 main()

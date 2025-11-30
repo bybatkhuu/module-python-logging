@@ -9,7 +9,7 @@ cd "${_PROJECT_DIR}" || exit 2
 
 
 if ! command -v python >/dev/null 2>&1; then
-	echo "[ERROR]: Not found 'python' command, please install it first." >&2
+	echo "[ERROR]: Not found 'python' command, please install it first!" >&2
 	exit 1
 fi
 
@@ -75,17 +75,27 @@ done
 
 if [ "${_IS_UPLOAD}" == true ]; then
 	if ! command -v twine >/dev/null 2>&1; then
-		echo "[ERROR]: Not found 'twine' command, please install it first." >&2
+		echo "[ERROR]: Not found 'twine' command, please install it first!" >&2
 		exit 1
 	fi
 fi
 
 
 if [ "${_IS_CLEAN}" == true ]; then
+	if [ ! -f ./scripts/clean.sh ]; then
+		echo "[ERROR]: 'clean.sh' script not found!" >&2
+		exit 1
+	fi
+
 	./scripts/clean.sh || exit 2
 fi
 
 if [ "${_IS_TEST}" == true ]; then
+	if [ ! -f ./scripts/test.sh ]; then
+		echo "[ERROR]: 'test.sh' script not found!" >&2
+		exit 1
+	fi
+
 	./scripts/test.sh || exit 2
 fi
 
