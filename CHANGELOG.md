@@ -1,5 +1,22 @@
 # Changelog
 
+## v7.0.0 (2025-11-30)
+
+<!-- Release notes generated using configuration in .github/release.yml at v7.0.0 -->
+
+## What's Changed
+### 💥 Breaking Changes
+* Major update: enhance and refactor logging module with new features. by @bybatkhuu in https://github.com/bybatkhuu/module-python-logging/pull/35
+### 📦 Dependencies
+* ⬆️ Update pylint requirement from <4.0.0,>=3.0.4 to >=3.0.4,<5.0.0 by @dependabot[bot] in https://github.com/bybatkhuu/module-python-logging/pull/32
+* ⬆️ Update pytest requirement from <9.0.0,>=8.0.2 to >=8.0.2,<10.0.0 by @dependabot[bot] in https://github.com/bybatkhuu/module-python-logging/pull/33
+* ⬆️ Update mkdocstrings[python] requirement from <1.0.0,>=0.24.3 to >=0.24.3,<2.0.0 by @dependabot[bot] in https://github.com/bybatkhuu/module-python-logging/pull/34
+
+## New Contributors
+* @dependabot[bot] made their first contribution in https://github.com/bybatkhuu/module-python-logging/pull/32
+
+**Full Changelog**: https://github.com/bybatkhuu/module-python-logging/compare/v6.0.3...v7.0.0
+
 ## v6.0.3 (2025-10-02)
 
 <!-- Release notes generated using configuration in .github/release.yml at v6.0.3 -->
