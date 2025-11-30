@@ -112,7 +112,8 @@ class LogHandlerPM(LoguruHandlerPM):
             (not callable(self.sink)) or (not inspect.iscoroutinefunction(self.sink))
         ):
             raise ValueError(
-                f"'loop' attribute is set but 'sink' attribute type {type(self.sink)} is invalid, 'loop' only can be used with async callable (coroutine function) 'sink'!"
+                f"'loop' attribute is set but 'sink' attribute type {type(self.sink)} is invalid, "
+                "'loop' only can be used with async callable (coroutine function) 'sink'!"
             )
 
         if not isinstance(self.sink, (str, os.PathLike)):
@@ -128,7 +129,8 @@ class LogHandlerPM(LoguruHandlerPM):
             ):
                 if getattr(self, _attr) is not None:
                     raise ValueError(
-                        f"'{_attr}' attribute is set but 'sink' attribute type {type(self.sink).__name__} is invalid, '{_attr}' can only be used with file path 'sink'!"
+                        f"'{_attr}' attribute is set but 'sink' attribute type {type(self.sink).__name__} is invalid, "
+                        f"'{_attr}' can only be used with file path 'sink'!"
                     )
 
         return self

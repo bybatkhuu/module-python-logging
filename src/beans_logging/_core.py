@@ -200,7 +200,7 @@ class LoggerLoader:
                 self.handlers_map[name] = _handler_id
 
         except Exception:
-            logger.critical(f"Failed to add custom log handler to logger!")
+            logger.critical("Failed to add custom log handler to logger!")
             raise
 
         return _handler_id
@@ -213,8 +213,6 @@ class LoggerLoader:
             return self.__handlers_map
         except AttributeError:
             raise AttributeError("`handlers_map` attribute is not set!")
-
-        return self.__handlers_map
 
     @handlers_map.setter
     def handlers_map(self, handlers_map: dict[str, int]) -> None:
