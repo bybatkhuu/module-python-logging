@@ -29,9 +29,9 @@ class LoggerLoader:
     Attributes:
         _CONFIG_PATH (str): Default config file path. Default is '${PWD}/configs/logger.yml'.
 
-        handlers_map     (dict[str, int]): Map of handler names to their IDs. Default is {'default.loguru_handler': 0}.
-        config           (LoggerConfigPM): Main logger configuration model. Default is LoggerConfigPM().
-        config_file_path (str           ): Path to logger configuration file. Default is _CONFIG_PATH.
+        handlers_map (dict[str, int]): Map of handler names to their IDs. Default is {'default.loguru_handler': 0}.
+        config       (LoggerConfigPM): Main logger configuration model. Default is LoggerConfigPM().
+        config_path  (str           ): Path to logger configuration file. Default is _CONFIG_PATH.
 
     Methods:
         load()             : Load logger handlers based on logger config.
@@ -253,40 +253,40 @@ class LoggerLoader:
 
     # config
 
-    # config_file_path
+    # config_path
     @property
-    def config_file_path(self) -> str:
+    def config_path(self) -> str:
         try:
-            return self.__config_file_path
+            return self.__config_path
         except AttributeError:
-            self.__config_file_path = LoggerLoader._CONFIG_PATH
+            self.__config_path = LoggerLoader._CONFIG_PATH
 
-        return self.__config_file_path
+        return self.__config_path
 
-    @config_file_path.setter
-    def config_file_path(self, config_file_path: str) -> None:
-        if not isinstance(config_file_path, str):
+    @config_path.setter
+    def config_path(self, config_path: str) -> None:
+        if not isinstance(config_path, str):
             raise TypeError(
-                f"`config_file_path` attribute type {type(config_file_path)} is invalid, must be a <str>!"
+                f"`config_path` attribute type {type(config_path)} is invalid, must be a <str>!"
             )
 
-        config_file_path = config_file_path.strip()
-        if config_file_path == "":
-            raise ValueError("`config_file_path` attribute value is empty!")
+        config_path = config_path.strip()
+        if config_path == "":
+            raise ValueError("`config_path` attribute value is empty!")
 
         if (
-            (not config_file_path.lower().endswith((".yml", ".yaml")))
-            and (not config_file_path.lower().endswith(".json"))
-            and (not config_file_path.lower().endswith(".toml"))
+            (not config_path.lower().endswith((".yml", ".yaml")))
+            and (not config_path.lower().endswith(".json"))
+            and (not config_path.lower().endswith(".toml"))
         ):
             raise ValueError(
-                f"`config_file_path` attribute value '{config_file_path}' is invalid, "
+                f"`config_path` attribute value '{config_path}' is invalid, "
                 f"file must be '.yml', '.yaml', '.json' or '.toml' format!"
             )
 
-        self.__config_file_path = config_file_path
+        self.__config_path = config_path
 
-    # config_file_path
+    # config_path
     # ATTRIBUTES
 
 

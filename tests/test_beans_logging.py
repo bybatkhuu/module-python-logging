@@ -26,7 +26,7 @@ def test_init(logger: Logger, logger_loader: LoggerLoader):
 
     assert isinstance(logger_loader, LoggerLoader)
     assert logger_loader.handlers_map == {"default.loguru_handler": 0}
-    assert logger_loader.config_file_path == LoggerLoader._CONFIG_PATH
+    assert logger_loader.config_path == LoggerLoader._CONFIG_PATH
     assert isinstance(logger_loader.config, LoggerConfigPM)
 
     logger.success("Done: Initialization of 'LoggerLoader'.\n")
