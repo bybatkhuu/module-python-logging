@@ -1,5 +1,6 @@
 import os
 from typing import Any
+from pathlib import Path
 
 from pydantic import validate_call
 
@@ -43,35 +44,33 @@ def build_handler(handler: LogHandlerPM, config: LoggerConfigPM) -> dict[str, An
             _logs_path: str = ""
             if _handler_dict.get("serialize") or _handler_dict.get("custom_serialize"):
                 if _handler_dict.get("error"):
-                    _logs_path = os.path.join(
-                        config.default.file.logs_dir,
-                        config.default.file.json_.err_path,
-                    )
+                    _logs_path = config.default.file.json_.err_path
                 else:
-                    _logs_path = os.path.join(
-                        config.default.file.logs_dir,
-                        config.default.file.json_.log_path,
-                    )
+                    _logs_path = config.default.file.json_.log_path
             else:
                 if _handler_dict.get("error"):
-                    _logs_path = os.path.join(
-                        config.default.file.logs_dir,
-                        config.default.file.plain.err_path,
-                    )
+                    _logs_path = config.default.file.plain.err_path
                 else:
-                    _logs_path = os.path.join(
-                        config.default.file.logs_dir,
-                        config.default.file.plain.log_path,
-                    )
-
-            if "{app_name}" in _logs_path:
-                _logs_path = _logs_path.format(app_name=config.app_name)
+                    _logs_path = config.default.file.plain.log_path
 
             _handler_dict["sink"] = _logs_path
         else:
             raise ValueError(
                 "'sink' attribute is empty, required for any log handler except std and file handlers!"
             )
+
+    _sink = _handler_dict.get("sink")
+    if isinstance(_sink, (str, Path)):
+        if (not os.path.exists(_sink)) and (not os.path.isabs(_sink)):
+            _sink = os.path.join(config.default.file.logs_dir, _sink)
+
+        if isinstance(_sink, Path):
+            _sink = str(_sink)
+
+        if "{app_name}" in _sink:
+            _sink = _sink.format(app_name=config.app_name)
+
+        _handler_dict["sink"] = _sink
 
     if _handler_dict.get("level") is None:
         if _handler_dict.get("error"):

@@ -1,3 +1,4 @@
+import os
 import sys
 import datetime
 from typing import Any
@@ -68,7 +69,7 @@ class PathsConfigPM(ExtraBaseModel):
 
 class FileConfigPM(ExtraBaseModel):
     logs_dir: str = Field(
-        default="./logs",
+        default_factory=lambda: os.path.join(os.getcwd(), "logs"),
         min_length=2,
         max_length=1024,
     )
@@ -99,6 +100,14 @@ class FileConfigPM(ExtraBaseModel):
     def _check_rotate_time(cls, val: Any) -> Any:
         if isinstance(val, str):
             val = datetime.time.fromisoformat(val)
+
+        return val
+
+    @field_validator("logs_dir", mode="before")
+    @classmethod
+    def _check_logs_dir(cls, val: Any) -> Any:
+        if isinstance(val, str) and (not os.path.isabs(val)):
+            val = os.path.abspath(val)
 
         return val
 
