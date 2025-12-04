@@ -31,11 +31,6 @@ classifiers = [
 ]
 dynamic = ["version", "dependencies", "optional-dependencies"]
 
-# [tool.setuptools.packages.find]
-# where = ["src"]
-# include = ["beans_logging*"]
-# namespaces = false
-
 [tool.setuptools.dynamic]
 version = { attr = "beans_logging.__version__.__version__" }
 dependencies = { file = "./requirements.txt" }
