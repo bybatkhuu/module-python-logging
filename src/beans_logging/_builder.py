@@ -40,20 +40,6 @@ def build_handler(handler: LogHandlerPM, config: LoggerConfigPM) -> dict[str, An
     if _handler_dict.get("sink") is None:
         if _handler_dict.get("type") == LogHandlerTypeEnum.STD:
             _handler_dict["sink"] = std_sink
-        elif _handler_dict.get("type") == LogHandlerTypeEnum.FILE:
-            _logs_path: str = ""
-            if _handler_dict.get("serialize") or _handler_dict.get("custom_serialize"):
-                if _handler_dict.get("error"):
-                    _logs_path = config.default.file.json_.err_path
-                else:
-                    _logs_path = config.default.file.json_.log_path
-            else:
-                if _handler_dict.get("error"):
-                    _logs_path = config.default.file.plain.err_path
-                else:
-                    _logs_path = config.default.file.plain.log_path
-
-            _handler_dict["sink"] = _logs_path
         else:
             raise ValueError(
                 "'sink' attribute is empty, required for any log handler except std and file handlers!"
@@ -88,10 +74,7 @@ def build_handler(handler: LogHandlerPM, config: LoggerConfigPM) -> dict[str, An
         _handler_dict["format"] = json_formatter
 
     if (_handler_dict.get("format") is None) and (not _handler_dict.get("serialize")):
-        if _handler_dict.get("type") == LogHandlerTypeEnum.STD:
-            _handler_dict["format"] = config.default.std.format_str
-        else:
-            _handler_dict["format"] = config.default.format_str
+        _handler_dict["format"] = config.default.format_str
 
     if _handler_dict.get("filter") is None:
         if _handler_dict.get("type") == LogHandlerTypeEnum.STD:
@@ -118,11 +101,6 @@ def build_handler(handler: LogHandlerPM, config: LoggerConfigPM) -> dict[str, An
         or (_handler_dict.get("level") == 5)
     ):
         _handler_dict["diagnose"] = True
-
-    if (_handler_dict.get("colorize") is None) and (
-        _handler_dict.get("type") == LogHandlerTypeEnum.STD
-    ):
-        _handler_dict["colorize"] = config.default.std.colorize
 
     if _handler_dict.get("type") == LogHandlerTypeEnum.FILE:
         if _handler_dict.get("enqueue") is None:
