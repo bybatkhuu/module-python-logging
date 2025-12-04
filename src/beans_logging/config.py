@@ -1,14 +1,9 @@
-import sys
+import os
 import datetime
 from typing import Any
 
-if sys.version_info >= (3, 11):
-    from typing import Self
-else:
-    from typing_extensions import Self
-
 import potato_util as utils
-from pydantic import Field, model_validator, field_validator
+from pydantic import Field, field_validator
 
 from ._constants import LogHandlerTypeEnum, LogLevelEnum
 from .schemas import ExtraBaseModel, LogHandlerPM, LoguruHandlerPM
@@ -22,53 +17,46 @@ def _get_handlers() -> dict[str, LogHandlerPM]:
     """
 
     _log_handlers: dict[str, LogHandlerPM] = {
-        "default.all.std_handler": LogHandlerPM(type_=LogHandlerTypeEnum.STD),
+        "default.all.std_handler": LogHandlerPM(
+            type_=LogHandlerTypeEnum.STD,
+            format_=(
+                "[<c>{time:YYYY-MM-DD HH:mm:ss.SSS Z}</c> | <level>{extra[level_short]:<5}</level> | "
+                "<w>{name}:{line}</w>]: <level>{message}</level>"
+            ),
+            colorize=True,
+        ),
         "default.all.file_handler": LogHandlerPM(
-            type_=LogHandlerTypeEnum.FILE, enabled=False
+            type_=LogHandlerTypeEnum.FILE,
+            sink="{app_name}.all.log",
+            enabled=False,
         ),
         "default.err.file_handler": LogHandlerPM(
-            type_=LogHandlerTypeEnum.FILE, error=True, enabled=False
+            type_=LogHandlerTypeEnum.FILE,
+            sink="{app_name}.err.log",
+            error=True,
+            enabled=False,
         ),
         "default.all.json_handler": LogHandlerPM(
-            type_=LogHandlerTypeEnum.FILE, serialize=True, enabled=False
+            type_=LogHandlerTypeEnum.FILE,
+            sink="json/{app_name}.json.all.log",
+            serialize=True,
+            enabled=False,
         ),
         "default.err.json_handler": LogHandlerPM(
-            type_=LogHandlerTypeEnum.FILE, serialize=True, error=True, enabled=False
+            type_=LogHandlerTypeEnum.FILE,
+            sink="json/{app_name}.json.err.log",
+            serialize=True,
+            error=True,
+            enabled=False,
         ),
     }
 
     return _log_handlers
 
 
-class StdConfigPM(ExtraBaseModel):
-    format_str: str = Field(
-        default=(
-            "[<c>{time:YYYY-MM-DD HH:mm:ss.SSS Z}</c> | <level>{extra[level_short]:<5}</level> | <w>{name}:{line}</w>]:"
-            " <level>{message}</level>"
-        ),
-        min_length=8,
-        max_length=512,
-    )
-    colorize: bool = Field(default=True)
-
-
-class PathsConfigPM(ExtraBaseModel):
-    log_path: str = Field(..., min_length=4, max_length=1024)
-    err_path: str = Field(..., min_length=4, max_length=1024)
-
-    @model_validator(mode="after")
-    def _check_log_path(self) -> Self:
-        if self.log_path == self.err_path:
-            raise ValueError(
-                f"`log_path` and `err_path` attributes have same value: '{self.log_path}', must be different!"
-            )
-
-        return self
-
-
 class FileConfigPM(ExtraBaseModel):
     logs_dir: str = Field(
-        default="./logs",
+        default_factory=lambda: os.path.join(os.getcwd(), "logs"),
         min_length=2,
         max_length=1024,
     )
@@ -79,26 +67,19 @@ class FileConfigPM(ExtraBaseModel):
     retention: int = Field(default=90, ge=1)
     encoding: str = Field(default="utf8", min_length=2, max_length=31)
 
-    plain: PathsConfigPM = Field(
-        default_factory=lambda: PathsConfigPM(
-            log_path="{app_name}.all.log",
-            err_path="{app_name}.err.log",
-        )
-    )
-    json_: PathsConfigPM = Field(
-        default_factory=lambda: PathsConfigPM(
-            log_path="json/{app_name}.json.all.log",
-            err_path="json/{app_name}.json.err.log",
-        ),
-        validation_alias="json",
-        serialization_alias="json",
-    )
-
     @field_validator("rotate_time", mode="before")
     @classmethod
     def _check_rotate_time(cls, val: Any) -> Any:
         if isinstance(val, str):
             val = datetime.time.fromisoformat(val)
+
+        return val
+
+    @field_validator("logs_dir", mode="before")
+    @classmethod
+    def _check_logs_dir(cls, val: Any) -> Any:
+        if isinstance(val, str) and (not os.path.isabs(val)):
+            val = os.path.abspath(val)
 
         return val
 
@@ -123,7 +104,6 @@ class LevelConfigPM(ExtraBaseModel):
 
 class DefaultConfigPM(ExtraBaseModel):
     level: LevelConfigPM = Field(default_factory=LevelConfigPM)
-    std: StdConfigPM = Field(default_factory=StdConfigPM)
     format_str: str = Field(
         default="[{time:YYYY-MM-DD HH:mm:ss.SSS Z} | {extra[level_short]:<5} | {name}:{line}]: {message}",
         min_length=8,

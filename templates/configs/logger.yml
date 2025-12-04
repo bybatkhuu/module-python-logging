@@ -4,9 +4,6 @@ logger:
     level:
       base: INFO
       err: WARNING
-    std:
-      format_str: "[<c>{time:YYYY-MM-DD HH:mm:ss.SSS Z}</c> | <level>{extra[level_short]:<5}</level> | <w>{name}:{line}</w>]: <level>{message}</level>"
-      colorize: true
     format_str: "[{time:YYYY-MM-DD HH:mm:ss.SSS Z} | {extra[level_short]:<5} | {name}:{line}]: {message}"
     file:
       logs_dir: "./logs"
@@ -14,12 +11,6 @@ logger:
       rotate_time: "00:00:00"
       retention: 90
       encoding: utf8
-      plain:
-        log_path: "{app_name}.all.log"
-        err_path: "{app_name}.err.log"
-      json:
-        log_path: "json/{app_name}.json.all.log"
-        err_path: "json/{app_name}.json.err.log"
     custom_serialize: false
   intercept:
     enabled: true
@@ -30,20 +21,26 @@ logger:
   handlers:
     default.all.std_handler:
       type: STD
+      format: "[<c>{time:YYYY-MM-DD HH:mm:ss.SSS Z}</c> | <level>{extra[level_short]:<5}</level> | <w>{name}:{line}</w>]: <level>{message}</level>"
+      colorize: true
       enabled: true
     default.all.file_handler:
       type: FILE
+      sink: "{app_name}.all.log"
       enabled: false
     default.err.file_handler:
       type: FILE
+      sink: "{app_name}.err.log"
       error: true
       enabled: false
     default.all.json_handler:
       type: FILE
+      sink: "json/{app_name}.json.all.log"
       serialize: true
       enabled: false
     default.err.json_handler:
       type: FILE
+      sink: "json/{app_name}.json.err.log"
       serialize: true
       error: true
       enabled: false
