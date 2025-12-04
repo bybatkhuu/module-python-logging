@@ -4,42 +4,7 @@ title: Installation
 
 # 🛠 Installation
 
-## 1. 📥 Download or clone the repository
-
-[TIP] Skip this step, if you're going to install the package directly from **PyPi** or **GitHub** repository.
-
-**1.1.** Prepare projects directory (if not exists):
-
-```sh
-# Create projects directory:
-mkdir -pv ~/workspaces/projects
-
-# Enter into projects directory:
-cd ~/workspaces/projects
-```
-
-**1.2.** Follow one of the below options **[A]**, **[B]** or **[C]**:
-
-**OPTION A.** Clone the repository:
-
-```sh
-git clone https://github.com/bybatkhuu/module-python-logging.git && \
-    cd module-python-logging
-```
-
-**OPTION B.** Clone the repository (for **DEVELOPMENT**: git + ssh key):
-
-```sh
-git clone git@github.com:bybatkhuu/module-python-logging.git && \
-    cd module-python-logging
-```
-
-**OPTION C.** Download source code:
-
-1. Download archived **zip** file from [**releases**](https://github.com/bybatkhuu/module-python-logging/releases).
-2. Extract it into the projects directory.
-
-### 2. 📦 Install the package
+## 📦 Install the package
 
 [NOTE] Choose one of the following methods to install the package **[A ~ F]**:
 
