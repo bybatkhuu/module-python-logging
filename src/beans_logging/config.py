@@ -20,7 +20,7 @@ def _get_handlers() -> dict[str, LogHandlerPM]:
         "default.all.std_handler": LogHandlerPM(
             type_=LogHandlerTypeEnum.STD,
             format_=(
-                "[<c>{time:YYYY-MM-DD HH:mm:ss.SSS Z}</c> | <level>{extra[level_short]:<5}</level> |"
+                "[<c>{time:YYYY-MM-DD HH:mm:ss.SSS Z}</c> | <level>{extra[level_short]:<5}</level> | "
                 "<w>{name}:{line}</w>]: <level>{message}</level>"
             ),
             colorize=True,

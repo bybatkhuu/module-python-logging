@@ -42,12 +42,12 @@ def build_handler(handler: LogHandlerPM, config: LoggerConfigPM) -> dict[str, An
             _handler_dict["sink"] = std_sink
         else:
             raise ValueError(
-                "'sink' attribute is empty, required for any log handler except std and file handlers!"
+                "'sink' attribute is empty, required for any log handler except std handler!"
             )
 
     _sink = _handler_dict.get("sink")
     if isinstance(_sink, (str, Path)):
-        if (not os.path.exists(_sink)) and (not os.path.isabs(_sink)):
+        if not os.path.isabs(_sink):
             _sink = os.path.join(config.default.file.logs_dir, _sink)
 
         if isinstance(_sink, Path):
