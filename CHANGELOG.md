@@ -1,5 +1,16 @@
 # Changelog
 
+## v7.1.0 (2025-12-04)
+
+<!-- Release notes generated using configuration in .github/release.yml at v7.1.0 -->
+
+## What's Changed
+### 🐛 Fixes
+* Streamline log path handling and simplify logger configuration by @bybatkhuu in https://github.com/bybatkhuu/module-python-logging/pull/36
+
+
+**Full Changelog**: https://github.com/bybatkhuu/module-python-logging/compare/v7.0.0...v7.1.0
+
 ## v7.0.0 (2025-11-30)
 
 <!-- Release notes generated using configuration in .github/release.yml at v7.0.0 -->
