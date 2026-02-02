@@ -9,7 +9,7 @@ from ._constants import LogHandlerTypeEnum, LogLevelEnum
 from .schemas import ExtraBaseModel, LogHandlerPM, LoguruHandlerPM
 
 
-def _get_handlers() -> dict[str, LogHandlerPM]:
+def get_default_handlers() -> dict[str, LogHandlerPM]:
     """Get default log handlers.
 
     Returns:
@@ -131,36 +131,42 @@ class LoggerConfigPM(ExtraBaseModel):
     )
     default: DefaultConfigPM = Field(default_factory=DefaultConfigPM)
     intercept: InterceptConfigPM = Field(default_factory=InterceptConfigPM)
-    handlers: dict[str, LogHandlerPM] = Field(default_factory=_get_handlers)
+    handlers: dict[str, LogHandlerPM] = Field(default_factory=get_default_handlers)
     extra: ExtraConfigPM | None = Field(default_factory=ExtraConfigPM)
 
     @field_validator("handlers", mode="before")
     @classmethod
-    def _check_handlers(cls, val: Any) -> Any:
-        if val:
-            if not isinstance(val, dict):
+    def _check_handlers(cls, val: Any) -> dict[str, LogHandlerPM]:
+        _default_handlers = get_default_handlers()
+
+        if not val:
+            return _default_handlers
+
+        if not isinstance(val, dict):
+            raise TypeError(
+                f"'handlers' attribute type {type(val).__name__} is invalid, must be a dict of <LogHandlerPM>, "
+                f"<LoguruHandlerPM> or dict!"
+            )
+
+        for _i, _handler in val.items():
+            if not isinstance(_handler, (LogHandlerPM, LoguruHandlerPM, dict)):
                 raise TypeError(
-                    f"'handlers' attribute type {type(val).__name__} is invalid, must be a dict of <LogHandlerPM>, "
-                    f"<LoguruHandlerPM> or dict!"
+                    f"'handlers' attribute index {_i} type {type(_handler).__name__} is invalid, must be "
+                    f"<LogHandlerPM>, <LoguruHandlerPM> or dict!"
                 )
 
-            for _i, _handler in val.items():
-                if not isinstance(_handler, (LogHandlerPM, LoguruHandlerPM, dict)):
-                    raise TypeError(
-                        f"'handlers' attribute index {_i} type {type(_handler).__name__} is invalid, must be "
-                        f"<LogHandlerPM>, <LoguruHandlerPM> or dict!"
-                    )
+            if isinstance(_handler, LoguruHandlerPM):
+                val[_i] = LogHandlerPM(
+                    **_handler.model_dump(exclude_none=True, exclude_unset=True)
+                )
+            elif isinstance(_handler, dict):
+                val[_i] = LogHandlerPM(**_handler)
 
-                if isinstance(_handler, LoguruHandlerPM):
-                    val[_i] = LogHandlerPM(
-                        **_handler.model_dump(exclude_none=True, exclude_unset=True)
-                    )
-                elif isinstance(_handler, dict):
-                    val[_i] = LogHandlerPM(**_handler)
-
+        val = {**_default_handlers, **val}
         return val
 
 
 __all__ = [
     "LoggerConfigPM",
+    "get_default_handlers",
 ]
