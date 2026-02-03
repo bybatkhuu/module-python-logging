@@ -64,15 +64,15 @@ class LoggerLoader:
         self.config_path = config_path
 
         if auto_load:
-            self.load()
+            self.load(load_config_file=True)
 
     @validate_call
-    def load(self, load_config_file: bool = True) -> "Logger":
+    def load(self, load_config_file: bool = False) -> "Logger":
         """Load logger handlers based on logger config.
 
         Args:
             load_config_file (bool, optional): Whether to load config from file before loading handlers.
-                                                    Default is True.
+                                                    Default is False.
 
         Returns:
             Logger: Main loguru logger instance.
