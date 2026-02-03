@@ -36,7 +36,7 @@ def build_handler(handler: LogHandlerPM, config: LoggerConfigPM) -> dict[str, An
     """
 
     if handler.sink is None:
-        if handler.type_ == LogHandlerTypeEnum.STD:
+        if handler.h_type == LogHandlerTypeEnum.STD:
             handler.sink = std_sink
         else:
             raise ValueError(
@@ -73,9 +73,9 @@ def build_handler(handler: LogHandlerPM, config: LoggerConfigPM) -> dict[str, An
         handler.format_ = config.default.format_str
 
     if handler.filter_ is None:
-        if handler.type_ == LogHandlerTypeEnum.STD:
+        if handler.h_type == LogHandlerTypeEnum.STD:
             handler.filter_ = use_std_filter
-        elif handler.type_ == LogHandlerTypeEnum.FILE:
+        elif handler.h_type == LogHandlerTypeEnum.FILE:
             if handler.serialize or handler.custom_serialize:
                 if handler.error:
                     handler.filter_ = use_file_json_err_filter
@@ -97,7 +97,7 @@ def build_handler(handler: LogHandlerPM, config: LoggerConfigPM) -> dict[str, An
     ):
         handler.diagnose = True
 
-    if handler.type_ == LogHandlerTypeEnum.FILE:
+    if handler.h_type == LogHandlerTypeEnum.FILE:
         if handler.enqueue is None:
             handler.enqueue = True
 
@@ -118,7 +118,7 @@ def build_handler(handler: LogHandlerPM, config: LoggerConfigPM) -> dict[str, An
         exclude_none=True,
         exclude={
             "enabled",
-            "type_",
+            "h_type",
             "error",
             "custom_serialize",
         },

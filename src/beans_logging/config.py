@@ -26,7 +26,7 @@ def get_default_handlers() -> dict[str, LogHandlerPM]:
 
     _log_handlers: dict[str, LogHandlerPM] = {
         DEFAULT_ALL_STD_HANDLER_NAME: LogHandlerPM(
-            type_=LogHandlerTypeEnum.STD,
+            h_type=LogHandlerTypeEnum.STD,
             format_=(
                 "[<c>{time:YYYY-MM-DD HH:mm:ss.SSS Z}</c> | <level>{extra[level_short]:<5}</level> | "
                 "<w>{name}:{line}</w>]: <level>{message}</level>"
@@ -35,24 +35,24 @@ def get_default_handlers() -> dict[str, LogHandlerPM]:
         ),
         DEFAULT_ALL_FILE_HANDLER_NAME: LogHandlerPM(
             enabled=False,
-            type_=LogHandlerTypeEnum.FILE,
+            h_type=LogHandlerTypeEnum.FILE,
             sink="{app_name}.all.log",
         ),
         DEFAULT_ERR_FILE_HANDLER_NAME: LogHandlerPM(
             enabled=False,
-            type_=LogHandlerTypeEnum.FILE,
+            h_type=LogHandlerTypeEnum.FILE,
             sink="{app_name}.err.log",
             error=True,
         ),
         DEFAULT_ALL_JSON_HANDLER_NAME: LogHandlerPM(
             enabled=False,
-            type_=LogHandlerTypeEnum.FILE,
+            h_type=LogHandlerTypeEnum.FILE,
             sink="json/{app_name}.all.json.log",
             serialize=True,
         ),
         DEFAULT_ERR_JSON_HANDLER_NAME: LogHandlerPM(
             enabled=False,
-            type_=LogHandlerTypeEnum.FILE,
+            h_type=LogHandlerTypeEnum.FILE,
             sink="json/{app_name}.err.json.log",
             serialize=True,
             error=True,
