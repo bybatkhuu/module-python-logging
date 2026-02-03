@@ -24,7 +24,23 @@ class LogLevelEnum(str, Enum):
     CRITICAL = "CRITICAL"
 
 
+DEFAULT_LOGURU_HANDLER_NAME = "default.loguru.handler"
+DEFAULT_ALL_STD_HANDLER_NAME = "default.all.std_handler"
+DEFAULT_ALL_FILE_HANDLER_NAME = "default.all.file_handler"
+DEFAULT_ERR_FILE_HANDLER_NAME = "default.err.file_handler"
+DEFAULT_ALL_JSON_HANDLER_NAME = "default.all.json_handler"
+DEFAULT_ERR_JSON_HANDLER_NAME = "default.err.json_handler"
+DEFAULT_NO_HANDLER_NAME_PREFIX = "log_handler."
+
+
 __all__ = [
     "LogHandlerTypeEnum",
     "LogLevelEnum",
+    "DEFAULT_LOGURU_HANDLER_NAME",
+    "DEFAULT_ALL_STD_HANDLER_NAME",
+    "DEFAULT_ALL_FILE_HANDLER_NAME",
+    "DEFAULT_ERR_FILE_HANDLER_NAME",
+    "DEFAULT_ALL_JSON_HANDLER_NAME",
+    "DEFAULT_ERR_JSON_HANDLER_NAME",
+    "DEFAULT_NO_HANDLER_NAME_PREFIX",
 ]

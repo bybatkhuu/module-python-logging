@@ -5,7 +5,15 @@ from typing import Any
 import potato_util as utils
 from pydantic import Field, field_validator
 
-from .constants import LogLevelEnum, LogHandlerTypeEnum
+from .constants import (
+    LogLevelEnum,
+    LogHandlerTypeEnum,
+    DEFAULT_ALL_STD_HANDLER_NAME,
+    DEFAULT_ALL_FILE_HANDLER_NAME,
+    DEFAULT_ERR_FILE_HANDLER_NAME,
+    DEFAULT_ALL_JSON_HANDLER_NAME,
+    DEFAULT_ERR_JSON_HANDLER_NAME,
+)
 from .schemas import ExtraBaseModel, LogHandlerPM
 
 
@@ -17,7 +25,7 @@ def get_default_handlers() -> dict[str, LogHandlerPM]:
     """
 
     _log_handlers: dict[str, LogHandlerPM] = {
-        "default.all.std_handler": LogHandlerPM(
+        DEFAULT_ALL_STD_HANDLER_NAME: LogHandlerPM(
             type_=LogHandlerTypeEnum.STD,
             format_=(
                 "[<c>{time:YYYY-MM-DD HH:mm:ss.SSS Z}</c> | <level>{extra[level_short]:<5}</level> | "
@@ -25,27 +33,27 @@ def get_default_handlers() -> dict[str, LogHandlerPM]:
             ),
             colorize=True,
         ),
-        "default.all.file_handler": LogHandlerPM(
+        DEFAULT_ALL_FILE_HANDLER_NAME: LogHandlerPM(
             enabled=False,
             type_=LogHandlerTypeEnum.FILE,
             sink="{app_name}.all.log",
         ),
-        "default.err.file_handler": LogHandlerPM(
+        DEFAULT_ERR_FILE_HANDLER_NAME: LogHandlerPM(
             enabled=False,
             type_=LogHandlerTypeEnum.FILE,
             sink="{app_name}.err.log",
             error=True,
         ),
-        "default.all.json_handler": LogHandlerPM(
+        DEFAULT_ALL_JSON_HANDLER_NAME: LogHandlerPM(
             enabled=False,
             type_=LogHandlerTypeEnum.FILE,
-            sink="json/{app_name}.json.all.log",
+            sink="json/{app_name}.all.json.log",
             serialize=True,
         ),
-        "default.err.json_handler": LogHandlerPM(
+        DEFAULT_ERR_JSON_HANDLER_NAME: LogHandlerPM(
             enabled=False,
             type_=LogHandlerTypeEnum.FILE,
-            sink="json/{app_name}.json.err.log",
+            sink="json/{app_name}.err.json.log",
             serialize=True,
             error=True,
         ),

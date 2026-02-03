@@ -17,6 +17,7 @@ from pydantic import validate_call
 from potato_util import io as io_utils
 
 # Internal modules
+from .constants import DEFAULT_LOGURU_HANDLER_NAME, DEFAULT_NO_HANDLER_NAME_PREFIX
 from .schemas import LogHandlerPM, LoguruHandlerPM
 from .config import LoggerConfigPM
 from ._builder import build_handler
@@ -52,7 +53,7 @@ class LoggerLoader:
         **kwargs,
     ) -> None:
 
-        self.handlers_map = {"default.loguru_handler": 0}
+        self.handlers_map = {DEFAULT_LOGURU_HANDLER_NAME: 0}
         if not config:
             config = LoggerConfigPM()
 
@@ -195,7 +196,7 @@ class LoggerLoader:
 
                 _handler_id = logger.add(**_handler_dict)
                 if not name:
-                    name = f"log_handler.{uuid.uuid4().hex}"
+                    name = f"{DEFAULT_NO_HANDLER_NAME_PREFIX}{uuid.uuid4().hex}"
 
                 self.handlers_map[name] = _handler_id
 
