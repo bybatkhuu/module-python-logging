@@ -3,4 +3,4 @@
 try:
     from .src.beans_logging.auto import *
 except ImportError:
-    from src.beans_logging.auto import *
+    from src.beans_logging.auto import *  # type: ignore
