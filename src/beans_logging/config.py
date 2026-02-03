@@ -138,6 +138,12 @@ class LoggerConfigPM(ExtraBaseModel):
     @classmethod
     def _check_handlers(cls, val: Any) -> dict[str, LogHandlerPM]:
 
+        _default_handlers = get_default_handlers()
+
+        if not val:
+            val = _default_handlers
+            return val
+
         if not isinstance(val, dict):
             raise TypeError(
                 f"'handlers' attribute type {type(val).__name__} is invalid, must be a dict of <LogHandlerPM> or dict!"
@@ -155,14 +161,15 @@ class LoggerConfigPM(ExtraBaseModel):
                     by_alias=True, exclude_unset=True, exclude_none=True
                 )
 
-        _default_handlers = get_default_handlers()
-        for _key, _handler in _default_handlers.items():
-            _default_handlers[_key] = _handler.model_dump(
+        _default_dict = {
+            _key: _handler.model_dump(
                 by_alias=True, exclude_unset=True, exclude_none=True
             )
+            for _key, _handler in _default_handlers.items()
+        }
 
-        if _default_handlers != val:
-            val = utils.deep_merge(_default_handlers, val)
+        if _default_dict != val:
+            val = utils.deep_merge(_default_dict, val)
 
         for _key, _handler in val.items():
             val[_key] = LogHandlerPM(**_handler)
