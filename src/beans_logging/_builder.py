@@ -4,7 +4,7 @@ from pathlib import Path
 
 from pydantic import validate_call
 
-from ._constants import LogHandlerTypeEnum, LogLevelEnum
+from .constants import LogHandlerTypeEnum, LogLevelEnum
 from .schemas import LogHandlerPM
 from .config import LoggerConfigPM
 from .sinks import std_sink
@@ -35,17 +35,15 @@ def build_handler(handler: LogHandlerPM, config: LoggerConfigPM) -> dict[str, An
         dict[str, Any]: Loguru handler config as dictionary.
     """
 
-    _handler_dict = handler.model_dump(by_alias=True, exclude_none=True)
-
-    if _handler_dict.get("sink") is None:
-        if _handler_dict.get("type") == LogHandlerTypeEnum.STD:
-            _handler_dict["sink"] = std_sink
+    if handler.sink is None:
+        if handler.type_ == LogHandlerTypeEnum.STD:
+            handler.sink = std_sink
         else:
             raise ValueError(
                 "'sink' attribute is empty, required for any log handler except std handler!"
             )
 
-    _sink = _handler_dict.get("sink")
+    _sink = handler.sink
     if isinstance(_sink, (str, Path)):
         if not os.path.isabs(_sink):
             _sink = os.path.join(config.default.file.logs_dir, _sink)
@@ -56,72 +54,75 @@ def build_handler(handler: LogHandlerPM, config: LoggerConfigPM) -> dict[str, An
         if "{app_name}" in _sink:
             _sink = _sink.format(app_name=config.app_name)
 
-        _handler_dict["sink"] = _sink
+        handler.sink = _sink
 
-    if _handler_dict.get("level") is None:
-        if _handler_dict.get("error"):
-            _handler_dict["level"] = config.default.level.err
+    if handler.level is None:
+        if handler.error:
+            handler.level = config.default.level.err
         else:
-            _handler_dict["level"] = config.default.level.base
+            handler.level = config.default.level.base
 
-    if (_handler_dict.get("custom_serialize") is None) and _handler_dict.get(
-        "serialize"
-    ):
-        _handler_dict["custom_serialize"] = config.default.custom_serialize
+    if (handler.custom_serialize is None) and handler.serialize:
+        handler.custom_serialize = config.default.custom_serialize
 
-    if _handler_dict.get("custom_serialize"):
-        _handler_dict["serialize"] = False
-        _handler_dict["format"] = json_formatter
+    if handler.custom_serialize:
+        handler.serialize = False
+        handler.format_ = json_formatter
 
-    if (_handler_dict.get("format") is None) and (not _handler_dict.get("serialize")):
-        _handler_dict["format"] = config.default.format_str
+    if (handler.format_ is None) and (not handler.serialize):
+        handler.format_ = config.default.format_str
 
-    if _handler_dict.get("filter") is None:
-        if _handler_dict.get("type") == LogHandlerTypeEnum.STD:
-            _handler_dict["filter"] = use_std_filter
-        elif _handler_dict.get("type") == LogHandlerTypeEnum.FILE:
-            if _handler_dict.get("serialize") or _handler_dict.get("custom_serialize"):
-                if _handler_dict.get("error"):
-                    _handler_dict["filter"] = use_file_json_err_filter
+    if handler.filter_ is None:
+        if handler.type_ == LogHandlerTypeEnum.STD:
+            handler.filter_ = use_std_filter
+        elif handler.type_ == LogHandlerTypeEnum.FILE:
+            if handler.serialize or handler.custom_serialize:
+                if handler.error:
+                    handler.filter_ = use_file_json_err_filter
                 else:
-                    _handler_dict["filter"] = use_file_json_filter
+                    handler.filter_ = use_file_json_filter
             else:
-                if _handler_dict.get("error"):
-                    _handler_dict["filter"] = use_file_err_filter
+                if handler.error:
+                    handler.filter_ = use_file_err_filter
                 else:
-                    _handler_dict["filter"] = use_file_filter
+                    handler.filter_ = use_file_filter
         else:
-            _handler_dict["filter"] = use_all_filter
+            handler.filter_ = use_all_filter
 
-    if _handler_dict.get("backtrace") is None:
-        _handler_dict["backtrace"] = True
+    if handler.backtrace is None:
+        handler.backtrace = True
 
-    if (_handler_dict.get("diagnose") is None) and (
-        (_handler_dict.get("level") == LogLevelEnum.TRACE)
-        or (_handler_dict.get("level") == 5)
+    if (handler.diagnose is None) and (
+        (handler.level == LogLevelEnum.TRACE) or (handler.level == 5)
     ):
-        _handler_dict["diagnose"] = True
+        handler.diagnose = True
 
-    if _handler_dict.get("type") == LogHandlerTypeEnum.FILE:
-        if _handler_dict.get("enqueue") is None:
-            _handler_dict["enqueue"] = True
+    if handler.type_ == LogHandlerTypeEnum.FILE:
+        if handler.enqueue is None:
+            handler.enqueue = True
 
-        if _handler_dict.get("rotation") is None:
-            _handler_dict["rotation"] = Rotator(
+        if handler.rotation is None:
+            handler.rotation = Rotator(
                 rotate_size=config.default.file.rotate_size,
                 rotate_time=config.default.file.rotate_time,
             ).should_rotate
 
-        if _handler_dict.get("retention") is None:
-            _handler_dict["retention"] = config.default.file.retention
+        if handler.retention is None:
+            handler.retention = config.default.file.retention
 
-        if _handler_dict.get("encoding") is None:
-            _handler_dict["encoding"] = config.default.file.encoding
+        if handler.encoding is None:
+            handler.encoding = config.default.file.encoding
 
-    _handler_dict.pop("type", None)
-    _handler_dict.pop("error", None)
-    _handler_dict.pop("custom_serialize", None)
-    _handler_dict.pop("enabled", None)
+    _handler_dict = handler.model_dump(
+        by_alias=True,
+        exclude_none=True,
+        exclude={
+            "enabled",
+            "type_",
+            "error",
+            "custom_serialize",
+        },
+    )
 
     return _handler_dict
 

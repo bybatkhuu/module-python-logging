@@ -3,4 +3,4 @@
 try:
     from .src.beans_logging import *
 except ImportError:
-    from src.beans_logging import *
+    from src.beans_logging import *  # type: ignore

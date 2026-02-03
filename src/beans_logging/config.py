@@ -5,8 +5,8 @@ from typing import Any
 import potato_util as utils
 from pydantic import Field, field_validator
 
-from ._constants import LogHandlerTypeEnum, LogLevelEnum
-from .schemas import ExtraBaseModel, LogHandlerPM, LoguruHandlerPM
+from .constants import LogLevelEnum, LogHandlerTypeEnum
+from .schemas import ExtraBaseModel, LogHandlerPM
 
 
 def get_default_handlers() -> dict[str, LogHandlerPM]:
@@ -26,28 +26,28 @@ def get_default_handlers() -> dict[str, LogHandlerPM]:
             colorize=True,
         ),
         "default.all.file_handler": LogHandlerPM(
+            enabled=False,
             type_=LogHandlerTypeEnum.FILE,
             sink="{app_name}.all.log",
-            enabled=False,
         ),
         "default.err.file_handler": LogHandlerPM(
+            enabled=False,
             type_=LogHandlerTypeEnum.FILE,
             sink="{app_name}.err.log",
             error=True,
-            enabled=False,
         ),
         "default.all.json_handler": LogHandlerPM(
+            enabled=False,
             type_=LogHandlerTypeEnum.FILE,
             sink="json/{app_name}.json.all.log",
             serialize=True,
-            enabled=False,
         ),
         "default.err.json_handler": LogHandlerPM(
+            enabled=False,
             type_=LogHandlerTypeEnum.FILE,
             sink="json/{app_name}.json.err.log",
             serialize=True,
             error=True,
-            enabled=False,
         ),
     }
 
@@ -137,32 +137,36 @@ class LoggerConfigPM(ExtraBaseModel):
     @field_validator("handlers", mode="before")
     @classmethod
     def _check_handlers(cls, val: Any) -> dict[str, LogHandlerPM]:
-        _default_handlers = get_default_handlers()
-
-        if not val:
-            return _default_handlers
 
         if not isinstance(val, dict):
             raise TypeError(
-                f"'handlers' attribute type {type(val).__name__} is invalid, must be a dict of <LogHandlerPM>, "
-                f"<LoguruHandlerPM> or dict!"
+                f"'handlers' attribute type {type(val).__name__} is invalid, must be a dict of <LogHandlerPM> or dict!"
             )
 
-        for _i, _handler in val.items():
-            if not isinstance(_handler, (LogHandlerPM, LoguruHandlerPM, dict)):
+        for _key, _handler in val.items():
+            if not isinstance(_handler, (LogHandlerPM, dict)):
                 raise TypeError(
-                    f"'handlers' attribute index {_i} type {type(_handler).__name__} is invalid, must be "
-                    f"<LogHandlerPM>, <LoguruHandlerPM> or dict!"
+                    f"'handlers' attribute's '{_key}' key -> value type {type(_handler).__name__} is invalid, must be "
+                    f"<LogHandlerPM> or dict!"
                 )
 
-            if isinstance(_handler, LoguruHandlerPM):
-                val[_i] = LogHandlerPM(
-                    **_handler.model_dump(exclude_none=True, exclude_unset=True)
+            if isinstance(_handler, LogHandlerPM):
+                val[_key] = _handler.model_dump(
+                    by_alias=True, exclude_unset=True, exclude_none=True
                 )
-            elif isinstance(_handler, dict):
-                val[_i] = LogHandlerPM(**_handler)
 
-        val = {**_default_handlers, **val}
+        _default_handlers = get_default_handlers()
+        for _key, _handler in _default_handlers.items():
+            _default_handlers[_key] = _handler.model_dump(
+                by_alias=True, exclude_unset=True, exclude_none=True
+            )
+
+        if _default_handlers != val:
+            val = utils.deep_merge(_default_handlers, val)
+
+        for _key, _handler in val.items():
+            val[_key] = LogHandlerPM(**_handler)
+
         return val
 
 

@@ -20,7 +20,7 @@ from potato_util import io as io_utils
 from .schemas import LogHandlerPM, LoguruHandlerPM
 from .config import LoggerConfigPM
 from ._builder import build_handler
-from ._intercept import init_intercepter
+from .intercepters import add_intercepter
 
 
 class LoggerLoader:
@@ -84,7 +84,7 @@ class LoggerLoader:
         for _key, _handler in self.config.handlers.items():
             self.add_handler(name=_key, handler=_handler)
 
-        init_intercepter(config=self.config)
+        add_intercepter(config=self.config)
         return logger
 
     def _load_config_file(self) -> None:

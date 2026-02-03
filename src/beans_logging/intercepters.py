@@ -45,7 +45,7 @@ class InterceptHandler(Handler):
 
 
 @validate_call
-def init_intercepter(config: LoggerConfigPM) -> None:
+def add_intercepter(config: LoggerConfigPM) -> None:
     """Initialize log interceptor based on provided config.
 
     Args:
@@ -102,5 +102,5 @@ def init_intercepter(config: LoggerConfigPM) -> None:
 
 __all__ = [
     "InterceptHandler",
-    "init_intercepter",
+    "add_intercepter",
 ]

@@ -19,7 +19,7 @@ if TYPE_CHECKING:
     from loguru import Record, Message
 from pydantic import BaseModel, Field, ConfigDict, model_validator
 
-from ._constants import LogHandlerTypeEnum, LogLevelEnum
+from .constants import LogHandlerTypeEnum, LogLevelEnum
 
 
 class ExtraBaseModel(BaseModel):
