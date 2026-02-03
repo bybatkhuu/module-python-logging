@@ -187,5 +187,6 @@ class LoggerConfigPM(ExtraBaseModel):
 
 __all__ = [
     "LoggerConfigPM",
+    "InterceptConfigPM",
     "get_default_handlers",
 ]
