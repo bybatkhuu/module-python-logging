@@ -62,10 +62,10 @@ def build_handler(handler: LogHandlerPM, config: LoggerConfigPM) -> dict[str, An
         else:
             handler.level = config.default.level.base
 
-    if (handler.custom_serialize is None) and handler.serialize:
-        handler.custom_serialize = config.default.custom_serialize
+    if (handler.use_custom_serialize is None) and handler.serialize:
+        handler.use_custom_serialize = config.default.use_custom_serialize
 
-    if handler.custom_serialize:
+    if handler.use_custom_serialize:
         handler.serialize = False
         handler.format_ = json_format
 
@@ -76,7 +76,7 @@ def build_handler(handler: LogHandlerPM, config: LoggerConfigPM) -> dict[str, An
         if handler.h_type == LogHandlerTypeEnum.STD:
             handler.filter_ = std_filter
         elif handler.h_type == LogHandlerTypeEnum.FILE:
-            if handler.serialize or handler.custom_serialize:
+            if handler.serialize or handler.use_custom_serialize:
                 if handler.error:
                     handler.filter_ = err_json_filter
                 else:
@@ -120,7 +120,7 @@ def build_handler(handler: LogHandlerPM, config: LoggerConfigPM) -> dict[str, An
             "enabled",
             "h_type",
             "error",
-            "custom_serialize",
+            "use_custom_serialize",
         },
     )
 

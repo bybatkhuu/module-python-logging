@@ -97,7 +97,7 @@ class LogHandlerPM(LoguruHandlerPM):
     h_type: LogHandlerTypeEnum = Field(default=LogHandlerTypeEnum.UNKNOWN)
     sink: _SinkType | None = Field(default=None)
     level: str | int | LogLevelEnum | None = Field(default=None)
-    custom_serialize: bool | None = Field(default=None)
+    use_custom_serialize: bool | None = Field(default=None)
     error: bool = Field(default=False)
     enabled: bool = Field(default=True)
 

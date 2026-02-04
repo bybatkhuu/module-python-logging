@@ -118,7 +118,7 @@ class DefaultConfigPM(ExtraBaseModel):
         max_length=512,
     )
     file: FileConfigPM = Field(default_factory=FileConfigPM)
-    custom_serialize: bool = Field(default=False)
+    use_custom_serialize: bool = Field(default=False)
 
 
 class InterceptConfigPM(ExtraBaseModel):

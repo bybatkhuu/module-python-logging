@@ -236,7 +236,7 @@ logger:
       rotate_time: "00:00:00"
       retention: 90
       encoding: utf8
-    custom_serialize: false
+    use_custom_serialize: false
   intercept:
     enabled: true
     only_base: false
