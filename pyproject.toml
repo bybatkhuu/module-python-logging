@@ -49,10 +49,6 @@ dev = { file = [
 	"./requirements/requirements.dev.txt",
 ] }
 
-# [tool.pyright]
-# venvPath = "."
-# venv = ".venv"
-
 [project.urls]
 Homepage = "https://github.com/bybatkhuu/module-python-logging"
 Documentation = "https://pylogging-docs.bybatkhuu.dev"
