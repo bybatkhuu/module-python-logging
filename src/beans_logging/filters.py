@@ -55,11 +55,11 @@ def all_handlers_filter(record: "Record") -> bool:
     return True
 
 
-def all_std_filter(record: "Record") -> bool:
-    """Filter message for all std handlers that use this filter.
+def std_filter(record: "Record") -> bool:
+    """Filter message for std handlers that use this filter.
 
     Args:
-        record (dict): Log record as dictionary.
+        record (Record): Log record as dictionary.
 
     Returns:
         bool: False if record is disabled by extra 'disable_{DEFAULT_ALL_STD_HANDLER_NAME}' key, True otherwise.
@@ -74,8 +74,8 @@ def all_std_filter(record: "Record") -> bool:
     return True
 
 
-def all_file_filter(record: "Record") -> bool:
-    """Filter message for all file handlers that use this filter.
+def file_filter(record: "Record") -> bool:
+    """Filter message for file handlers that use this filter.
 
     Args:
         record (Record): Log record as dictionary.
@@ -112,8 +112,8 @@ def err_file_filter(record: "Record") -> bool:
     return True
 
 
-def all_json_filter(record: "Record") -> bool:
-    """Filter message for all json file handlers that use this filter.
+def json_filter(record: "Record") -> bool:
+    """Filter message for json file handlers that use this filter.
 
     Args:
         record (Record): Log record as dictionary.
@@ -153,9 +153,9 @@ def err_json_filter(record: "Record") -> bool:
 __all__ = [
     "add_level_short",
     "all_handlers_filter",
-    "all_std_filter",
-    "all_file_filter",
+    "std_filter",
+    "file_filter",
     "err_file_filter",
-    "all_json_filter",
+    "json_filter",
     "err_json_filter",
 ]

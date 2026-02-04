@@ -11,10 +11,10 @@ from .sinks import std_sink
 from .formats import json_format
 from .filters import (
     all_handlers_filter,
-    all_std_filter,
-    all_file_filter,
+    std_filter,
+    file_filter,
     err_file_filter,
-    all_json_filter,
+    json_filter,
     err_json_filter,
 )
 from .rotators import Rotator
@@ -74,18 +74,18 @@ def build_handler(handler: LogHandlerPM, config: LoggerConfigPM) -> dict[str, An
 
     if handler.filter_ is None:
         if handler.h_type == LogHandlerTypeEnum.STD:
-            handler.filter_ = all_std_filter
+            handler.filter_ = std_filter
         elif handler.h_type == LogHandlerTypeEnum.FILE:
             if handler.serialize or handler.custom_serialize:
                 if handler.error:
                     handler.filter_ = err_json_filter
                 else:
-                    handler.filter_ = all_json_filter
+                    handler.filter_ = json_filter
             else:
                 if handler.error:
                     handler.filter_ = err_file_filter
                 else:
-                    handler.filter_ = all_file_filter
+                    handler.filter_ = file_filter
         else:
             handler.filter_ = all_handlers_filter
 
