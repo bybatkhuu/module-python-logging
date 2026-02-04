@@ -14,9 +14,11 @@ if sys.version_info >= (3, 11):
 else:
     from typing_extensions import Self
 
-
 if TYPE_CHECKING:
     from loguru import Record, Message
+else:
+    from ._typing import Record, Message
+
 from pydantic import BaseModel, Field, ConfigDict, model_validator
 
 from .constants import LogHandlerTypeEnum, LogLevelEnum

@@ -4,6 +4,8 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from loguru import Record
+else:
+    from ._typing import Record
 
 
 def json_format(record: "Record") -> str:

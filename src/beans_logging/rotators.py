@@ -3,6 +3,8 @@ from typing import TextIO, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from loguru import Message
+else:
+    from ._typing import Message
 
 
 class Rotator:
