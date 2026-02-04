@@ -1,3 +1,4 @@
 nav:
-  - LoggerLoader: LoggerLoader.md
+  - LoggerLoader.md
+  - LoggerConfigPM.md
   # - "*"

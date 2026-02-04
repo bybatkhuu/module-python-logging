@@ -24,7 +24,7 @@ class LogLevelEnum(str, Enum):
     CRITICAL = "CRITICAL"
 
 
-DEFAULT_LOGURU_HANDLER_NAME = "default.loguru.handler"
+DEFAULT_LOGURU_HANDLER_NAME = "default.loguru.std_handler"
 DEFAULT_ALL_STD_HANDLER_NAME = "default.all.std_handler"
 DEFAULT_ALL_FILE_HANDLER_NAME = "default.all.file_handler"
 DEFAULT_ERR_FILE_HANDLER_NAME = "default.err.file_handler"
