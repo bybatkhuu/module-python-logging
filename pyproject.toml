@@ -36,8 +36,6 @@ version = { attr = "beans_logging.__version__.__version__" }
 dependencies = { file = "./requirements.txt" }
 
 [tool.setuptools.dynamic.optional-dependencies]
-fastapi = { file = ["./requirements/requirements.fastapi.txt"] }
-
 # Options dependencies for DEVELOPMENT
 test = { file = ["./requirements/requirements.test.txt"] }
 build = { file = ["./requirements/requirements.build.txt"] }
