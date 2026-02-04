@@ -6,6 +6,14 @@ hide:
 
 # 📌 Release Notes
 
+## v9.0.2 (2026-02-04)
+
+<!-- Release notes generated using configuration in .github/release.yml at v9.0.2 -->
+
+
+
+**Full Changelog**: https://github.com/bybatkhuu/module-python-logging/compare/v9.0.1...v9.0.2
+
 ## v9.0.1 (2026-02-04)
 
 <!-- Release notes generated using configuration in .github/release.yml at v9.0.1 -->
