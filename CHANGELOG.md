@@ -1,5 +1,16 @@
 # Changelog
 
+## v9.0.0 (2026-02-04)
+
+<!-- Release notes generated using configuration in .github/release.yml at v9.0.0 -->
+
+## What's Changed
+### 💥 Breaking Changes
+* feat!: standardize handler names and update logging configuration filters by @bybatkhuu in https://github.com/bybatkhuu/module-python-logging/pull/41
+
+
+**Full Changelog**: https://github.com/bybatkhuu/module-python-logging/compare/v8.0.2...v9.0.0
+
 ## v8.0.2 (2026-02-04)
 
 <!-- Release notes generated using configuration in .github/release.yml at v8.0.2 -->
