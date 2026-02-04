@@ -28,8 +28,8 @@ def get_default_handlers() -> dict[str, LogHandlerPM]:
         DEFAULT_ALL_STD_HANDLER_NAME: LogHandlerPM(
             h_type=LogHandlerTypeEnum.STD,
             format_=(
-                "[<c>{time:YYYY-MM-DD HH:mm:ss.SSS Z}</c> | <level>{extra[level_short]:<5}</level> | "
-                "<w>{name}:{line}</w>]: <level>{message}</level>"
+                "[<c>{time:YYYY-MM-DD HH:mm:ss.SSS Z}</c> | <level>{extra[level_short]:<5}</level> |"
+                " <w>{name}:{line}</w>]: <level>{message}</level>"
             ),
             colorize=True,
         ),
@@ -118,7 +118,7 @@ class DefaultConfigPM(ExtraBaseModel):
         max_length=512,
     )
     file: FileConfigPM = Field(default_factory=FileConfigPM)
-    custom_serialize: bool = Field(default=False)
+    use_custom_serialize: bool = Field(default=False)
 
 
 class InterceptConfigPM(ExtraBaseModel):
