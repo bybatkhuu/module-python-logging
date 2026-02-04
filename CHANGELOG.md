@@ -1,5 +1,16 @@
 # Changelog
 
+## v9.0.1 (2026-02-04)
+
+<!-- Release notes generated using configuration in .github/release.yml at v9.0.1 -->
+
+## What's Changed
+### 🐛 Fixes
+* feat: add typing definitions for logging records and update imports by @bybatkhuu in https://github.com/bybatkhuu/module-python-logging/pull/42
+
+
+**Full Changelog**: https://github.com/bybatkhuu/module-python-logging/compare/v9.0.0...v9.0.1
+
 ## v9.0.0 (2026-02-04)
 
 <!-- Release notes generated using configuration in .github/release.yml at v9.0.0 -->
