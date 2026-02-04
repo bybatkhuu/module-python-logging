@@ -6,6 +6,19 @@ hide:
 
 # 📌 Release Notes
 
+## v8.0.0 (2026-02-04)
+
+<!-- Release notes generated using configuration in .github/release.yml at v8.0.0 -->
+
+## What's Changed
+### 💥 Breaking Changes
+* feat!: small but a lot of breaking changes... by @bybatkhuu in https://github.com/bybatkhuu/module-python-logging/pull/38
+### 📦 Dependencies
+* chore(deps): update beans-logging-fastapi requirement from <2.0.0,>=1.0.0 to >=1.0.0,<3.0.0 by @dependabot[bot] in https://github.com/bybatkhuu/module-python-logging/pull/37
+
+
+**Full Changelog**: https://github.com/bybatkhuu/module-python-logging/compare/v7.1.0...v8.0.0
+
 ## v7.1.0 (2025-12-04)
 
 <!-- Release notes generated using configuration in .github/release.yml at v7.1.0 -->
