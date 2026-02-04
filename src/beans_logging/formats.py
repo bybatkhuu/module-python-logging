@@ -6,7 +6,7 @@ if TYPE_CHECKING:
     from loguru import Record
 
 
-def json_formatter(record: "Record") -> str:
+def json_format(record: "Record") -> str:
     """Custom json formatter for loguru logger.
 
     Args:
@@ -55,5 +55,5 @@ def json_formatter(record: "Record") -> str:
 
 
 __all__ = [
-    "json_formatter",
+    "json_format",
 ]

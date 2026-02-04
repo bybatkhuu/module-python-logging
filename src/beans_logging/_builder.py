@@ -8,14 +8,14 @@ from .constants import LogHandlerTypeEnum, LogLevelEnum
 from .schemas import LogHandlerPM
 from .config import LoggerConfigPM
 from .sinks import std_sink
-from .formats import json_formatter
+from .formats import json_format
 from .filters import (
-    use_all_filter,
-    use_std_filter,
-    use_file_filter,
-    use_file_err_filter,
-    use_file_json_filter,
-    use_file_json_err_filter,
+    all_handlers_filter,
+    all_std_filter,
+    all_file_filter,
+    err_file_filter,
+    all_json_filter,
+    err_json_filter,
 )
 from .rotators import Rotator
 
@@ -67,27 +67,27 @@ def build_handler(handler: LogHandlerPM, config: LoggerConfigPM) -> dict[str, An
 
     if handler.custom_serialize:
         handler.serialize = False
-        handler.format_ = json_formatter
+        handler.format_ = json_format
 
     if (handler.format_ is None) and (not handler.serialize):
         handler.format_ = config.default.format_str
 
     if handler.filter_ is None:
         if handler.h_type == LogHandlerTypeEnum.STD:
-            handler.filter_ = use_std_filter
+            handler.filter_ = all_std_filter
         elif handler.h_type == LogHandlerTypeEnum.FILE:
             if handler.serialize or handler.custom_serialize:
                 if handler.error:
-                    handler.filter_ = use_file_json_err_filter
+                    handler.filter_ = err_json_filter
                 else:
-                    handler.filter_ = use_file_json_filter
+                    handler.filter_ = all_json_filter
             else:
                 if handler.error:
-                    handler.filter_ = use_file_err_filter
+                    handler.filter_ = err_file_filter
                 else:
-                    handler.filter_ = use_file_filter
+                    handler.filter_ = all_file_filter
         else:
-            handler.filter_ = use_all_filter
+            handler.filter_ = all_handlers_filter
 
     if handler.backtrace is None:
         handler.backtrace = True
