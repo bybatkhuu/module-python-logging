@@ -6,6 +6,17 @@ hide:
 
 # 📌 Release Notes
 
+## v8.0.2 (2026-02-04)
+
+<!-- Release notes generated using configuration in .github/release.yml at v8.0.2 -->
+
+## What's Changed
+### 🐛 Fixes
+* fix: include missing classes in __all__ export in config.py by @bybatkhuu in https://github.com/bybatkhuu/module-python-logging/pull/40
+
+
+**Full Changelog**: https://github.com/bybatkhuu/module-python-logging/compare/v8.0.1...v8.0.2
+
 ## v8.0.1 (2026-02-04)
 
 <!-- Release notes generated using configuration in .github/release.yml at v8.0.1 -->
