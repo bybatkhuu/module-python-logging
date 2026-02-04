@@ -1,5 +1,6 @@
 import pytest
 
+from beans_logging.constants import DEFAULT_LOGURU_HANDLER_NAME
 from beans_logging import Logger, LoggerConfigPM, LoggerLoader
 
 
@@ -25,7 +26,7 @@ def test_init(logger: Logger, logger_loader: LoggerLoader):
     logger.info("Testing initialization of 'LoggerLoader'...")
 
     assert isinstance(logger_loader, LoggerLoader)
-    assert logger_loader.handlers_map == {"default.loguru_handler": 0}
+    assert logger_loader.handlers_map == {DEFAULT_LOGURU_HANDLER_NAME: 0}
     assert logger_loader.config_path == LoggerLoader._CONFIG_PATH
     assert isinstance(logger_loader.config, LoggerConfigPM)
 

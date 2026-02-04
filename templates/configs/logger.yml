@@ -20,28 +20,28 @@ logger:
     mute_modules: []
   handlers:
     default.all.std_handler:
-      type: STD
+      enabled: true
+      h_type: STD
       format: "[<c>{time:YYYY-MM-DD HH:mm:ss.SSS Z}</c> | <level>{extra[level_short]:<5}</level> | <w>{name}:{line}</w>]: <level>{message}</level>"
       colorize: true
-      enabled: true
     default.all.file_handler:
-      type: FILE
-      sink: "{app_name}.all.log"
       enabled: false
+      h_type: FILE
+      sink: "{app_name}.all.log"
     default.err.file_handler:
-      type: FILE
+      enabled: false
+      h_type: FILE
       sink: "{app_name}.err.log"
       error: true
-      enabled: false
     default.all.json_handler:
-      type: FILE
-      sink: "json/{app_name}.json.all.log"
-      serialize: true
       enabled: false
+      h_type: FILE
+      sink: "json/{app_name}.all.json.log"
+      serialize: true
     default.err.json_handler:
-      type: FILE
-      sink: "json/{app_name}.json.err.log"
+      enabled: false
+      h_type: FILE
+      sink: "json/{app_name}.err.json.log"
       serialize: true
       error: true
-      enabled: false
   extra:

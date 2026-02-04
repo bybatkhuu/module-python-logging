@@ -17,10 +17,11 @@ from pydantic import validate_call
 from potato_util import io as io_utils
 
 # Internal modules
+from .constants import DEFAULT_LOGURU_HANDLER_NAME, DEFAULT_NO_HANDLER_NAME_PREFIX
 from .schemas import LogHandlerPM, LoguruHandlerPM
 from .config import LoggerConfigPM
 from ._builder import build_handler
-from ._intercept import init_intercepter
+from .intercepters import add_intercepter
 
 
 class LoggerLoader:
@@ -52,7 +53,7 @@ class LoggerLoader:
         **kwargs,
     ) -> None:
 
-        self.handlers_map = {"default.loguru_handler": 0}
+        self.handlers_map = {DEFAULT_LOGURU_HANDLER_NAME: 0}
         if not config:
             config = LoggerConfigPM()
 
@@ -63,15 +64,15 @@ class LoggerLoader:
         self.config_path = config_path
 
         if auto_load:
-            self.load()
+            self.load(load_config_file=True)
 
     @validate_call
-    def load(self, load_config_file: bool = True) -> "Logger":
+    def load(self, load_config_file: bool = False) -> "Logger":
         """Load logger handlers based on logger config.
 
         Args:
             load_config_file (bool, optional): Whether to load config from file before loading handlers.
-                                                    Default is True.
+                                                    Default is False.
 
         Returns:
             Logger: Main loguru logger instance.
@@ -84,7 +85,7 @@ class LoggerLoader:
         for _key, _handler in self.config.handlers.items():
             self.add_handler(name=_key, handler=_handler)
 
-        init_intercepter(config=self.config)
+        add_intercepter(config=self.config)
         return logger
 
     def _load_config_file(self) -> None:
@@ -195,7 +196,7 @@ class LoggerLoader:
 
                 _handler_id = logger.add(**_handler_dict)
                 if not name:
-                    name = f"log_handler.{uuid.uuid4().hex}"
+                    name = f"{DEFAULT_NO_HANDLER_NAME_PREFIX}{uuid.uuid4().hex}"
 
                 self.handlers_map[name] = _handler_id
 
