@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from loguru import Message
 else:
-    from ._typing import Message
+    from .typing import Message
 
 
 def std_sink(message: "Message") -> None:

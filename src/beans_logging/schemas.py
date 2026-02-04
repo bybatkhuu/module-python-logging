@@ -17,7 +17,7 @@ else:
 if TYPE_CHECKING:
     from loguru import Record, Message
 else:
-    from ._typing import Record, Message
+    from .typing import Record, Message
 
 from pydantic import BaseModel, Field, ConfigDict, model_validator
 

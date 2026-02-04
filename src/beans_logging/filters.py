@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from loguru import Record
 else:
-    from ._typing import Record
+    from .typing import Record
 
 from .constants import (
     DEFAULT_ALL_STD_HANDLER_NAME,
