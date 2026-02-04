@@ -6,6 +6,14 @@ hide:
 
 # 📌 Release Notes
 
+## v8.0.1 (2026-02-04)
+
+<!-- Release notes generated using configuration in .github/release.yml at v8.0.1 -->
+
+
+
+**Full Changelog**: https://github.com/bybatkhuu/module-python-logging/compare/v8.0.0...v8.0.1
+
 ## v8.0.0 (2026-02-04)
 
 <!-- Release notes generated using configuration in .github/release.yml at v8.0.0 -->
