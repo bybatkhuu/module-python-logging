@@ -2,7 +2,6 @@
 
 from beans_logging.auto import logger
 
-
 logger.trace("Tracing...")
 logger.debug("Debugging...")
 logger.info("Logging info.")
