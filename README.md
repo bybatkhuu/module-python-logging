@@ -121,12 +121,11 @@ logger.info("Logging info.")
 
 [**`configs/logger.yml`**](./examples/simple/configs/logger.yml):
 
-```yml
+```yaml
 logger:
   app_name: my-app
-  default:
-    level:
-      base: TRACE
+  level:
+    base: TRACE
   handlers:
     default.all.file_handler:
       enabled: true
@@ -225,18 +224,17 @@ ZeroDivisionError: division by zero
 ```yaml
 logger:
   # app_name: app
-  default:
-    level:
-      base: INFO
-      err: WARNING
-    format_str: "[{time:YYYY-MM-DD HH:mm:ss.SSS Z} | {extra[level_short]:<5} | {name}:{line}]: {message}"
-    file:
-      logs_dir: "./logs"
-      rotate_size: 10000000
-      rotate_time: "00:00:00"
-      retention: 90
-      encoding: utf8
-    use_custom_serialize: false
+  level:
+    base: INFO
+    err: WARNING
+  format_str: "[{time:YYYY-MM-DD HH:mm:ss.SSS Z} | {extra[level_short]:<5} | {name}:{line}]: {message}"
+  file:
+    logs_dir: "./logs"
+    rotate_size: 10000000
+    rotate_time: "00:00:00"
+    retention: 90
+    encoding: utf8
+  use_custom_serialize: false
   intercept:
     enabled: true
     only_base: false
