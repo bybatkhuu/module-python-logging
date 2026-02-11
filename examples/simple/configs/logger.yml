@@ -1,8 +1,7 @@
 logger:
   app_name: my-app
-  default:
-    level:
-      base: TRACE
+  level:
+    base: TRACE
   handlers:
     all_file_handler:
       enabled: true

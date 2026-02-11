@@ -46,7 +46,7 @@ def build_handler(handler: LogHandlerPM, config: LoggerConfigPM) -> dict[str, An
     _sink = handler.sink
     if isinstance(_sink, (str, Path)):
         if not os.path.isabs(_sink):
-            _sink = os.path.join(config.default.file.logs_dir, _sink)
+            _sink = os.path.join(config.file.logs_dir, _sink)
 
         if isinstance(_sink, Path):
             _sink = str(_sink)
@@ -58,19 +58,19 @@ def build_handler(handler: LogHandlerPM, config: LoggerConfigPM) -> dict[str, An
 
     if handler.level is None:
         if handler.error:
-            handler.level = config.default.level.err
+            handler.level = config.level.err
         else:
-            handler.level = config.default.level.base
+            handler.level = config.level.base
 
     if (handler.use_custom_serialize is None) and handler.serialize:
-        handler.use_custom_serialize = config.default.use_custom_serialize
+        handler.use_custom_serialize = config.use_custom_serialize
 
     if handler.use_custom_serialize:
         handler.serialize = False
         handler.format_ = json_format
 
     if (handler.format_ is None) and (not handler.serialize):
-        handler.format_ = config.default.format_str
+        handler.format_ = config.format_str
 
     if handler.filter_ is None:
         if handler.h_type == LogHandlerTypeEnum.STD:
@@ -103,15 +103,15 @@ def build_handler(handler: LogHandlerPM, config: LoggerConfigPM) -> dict[str, An
 
         if handler.rotation is None:
             handler.rotation = Rotator(
-                rotate_size=config.default.file.rotate_size,
-                rotate_time=config.default.file.rotate_time,
+                rotate_size=config.file.rotate_size,
+                rotate_time=config.file.rotate_time,
             ).should_rotate
 
         if handler.retention is None:
-            handler.retention = config.default.file.retention
+            handler.retention = config.file.retention
 
         if handler.encoding is None:
-            handler.encoding = config.default.file.encoding
+            handler.encoding = config.file.encoding
 
     _handler_dict = handler.model_dump(
         by_alias=True,

@@ -110,17 +110,6 @@ class LevelConfigPM(ExtraBaseModel):
         return val
 
 
-class DefaultConfigPM(ExtraBaseModel):
-    level: LevelConfigPM = Field(default_factory=LevelConfigPM)
-    format_str: str = Field(
-        default="[{time:YYYY-MM-DD HH:mm:ss.SSS Z} | {extra[level_short]:<5} | {name}:{line}]: {message}",
-        min_length=8,
-        max_length=512,
-    )
-    file: FileConfigPM = Field(default_factory=FileConfigPM)
-    use_custom_serialize: bool = Field(default=False)
-
-
 class InterceptConfigPM(ExtraBaseModel):
     enabled: bool = Field(default=True)
     only_base: bool = Field(default=False)
@@ -137,7 +126,14 @@ class LoggerConfigPM(ExtraBaseModel):
     app_name: str = Field(
         default_factory=utils.get_slug_name, min_length=1, max_length=128
     )
-    default: DefaultConfigPM = Field(default_factory=DefaultConfigPM)
+    level: LevelConfigPM = Field(default_factory=LevelConfigPM)
+    format_str: str = Field(
+        default="[{time:YYYY-MM-DD HH:mm:ss.SSS Z} | {extra[level_short]:<5} | {name}:{line}]: {message}",
+        min_length=8,
+        max_length=512,
+    )
+    file: FileConfigPM = Field(default_factory=FileConfigPM)
+    use_custom_serialize: bool = Field(default=False)
     intercept: InterceptConfigPM = Field(default_factory=InterceptConfigPM)
     handlers: dict[str, LogHandlerPM] = Field(default_factory=get_default_handlers)
     extra: ExtraConfigPM | None = Field(default_factory=ExtraConfigPM)
@@ -188,7 +184,6 @@ class LoggerConfigPM(ExtraBaseModel):
 __all__ = [
     "LoggerConfigPM",
     "InterceptConfigPM",
-    "DefaultConfigPM",
     "FileConfigPM",
     "LevelConfigPM",
     "get_default_handlers",
