@@ -98,7 +98,7 @@ class LevelConfigPM(ExtraBaseModel):
 
     @field_validator("base", mode="before")
     @classmethod
-    def _check_level(cls, val: Any) -> Any:
+    def _check_level(cls, val: Any) -> str | int | LogLevelEnum:
         if not isinstance(val, (str, int, LogLevelEnum)):
             raise TypeError(
                 f"Level attribute type {type(val).__name__} is invalid, must be str, int or <LogLevelEnum>!"
