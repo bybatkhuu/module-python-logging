@@ -6,6 +6,17 @@ hide:
 
 # 📌 Release Notes
 
+## v10.0.0 (2026-02-11)
+
+<!-- Release notes generated using configuration in .github/release.yml at v10.0.0 -->
+
+## What's Changed
+### 💥 Breaking Changes
+* feat!: removed 'default' option to simplify configuration by @bybatkhuu in https://github.com/bybatkhuu/module-python-logging/pull/45
+
+
+**Full Changelog**: https://github.com/bybatkhuu/module-python-logging/compare/v9.1.1...v10.0.0
+
 ## v9.1.1 (2026-02-11)
 
 <!-- Release notes generated using configuration in .github/release.yml at v9.1.1 -->
