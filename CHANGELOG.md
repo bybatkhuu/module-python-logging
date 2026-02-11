@@ -1,5 +1,16 @@
 # Changelog
 
+## v9.1.1 (2026-02-11)
+
+<!-- Release notes generated using configuration in .github/release.yml at v9.1.1 -->
+
+## What's Changed
+### 🐛 Fixes
+* fix: update potato_util version and refine type hint for _check_level… by @bybatkhuu in https://github.com/bybatkhuu/module-python-logging/pull/44
+
+
+**Full Changelog**: https://github.com/bybatkhuu/module-python-logging/compare/v9.1.0...v9.1.1
+
 ## v9.1.0 (2026-02-04)
 
 <!-- Release notes generated using configuration in .github/release.yml at v9.1.0 -->
