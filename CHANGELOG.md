@@ -1,5 +1,16 @@
 # Changelog
 
+## v10.0.1 (2026-02-19)
+
+<!-- Release notes generated using configuration in .github/release.yml at v10.0.1 -->
+
+## What's Changed
+### 🐛 Fixes
+* fix: simplify _check_level method by removing type checks by @bybatkhuu in https://github.com/bybatkhuu/module-python-logging/pull/46
+
+
+**Full Changelog**: https://github.com/bybatkhuu/module-python-logging/compare/v10.0.0...v10.0.1
+
 ## v10.0.0 (2026-02-11)
 
 <!-- Release notes generated using configuration in .github/release.yml at v10.0.0 -->
