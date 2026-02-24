@@ -1,5 +1,13 @@
 # Changelog
 
+## v10.0.2 (2026-02-24)
+
+<!-- Release notes generated using configuration in .github/release.yml at v10.0.2 -->
+
+
+
+**Full Changelog**: https://github.com/bybatkhuu/module-python-logging/compare/v10.0.1...v10.0.2
+
 ## v10.0.1 (2026-02-19)
 
 <!-- Release notes generated using configuration in .github/release.yml at v10.0.1 -->
