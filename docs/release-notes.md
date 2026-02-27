@@ -6,6 +6,17 @@ hide:
 
 # 📌 Release Notes
 
+## v10.0.3 (2026-02-27)
+
+<!-- Release notes generated using configuration in .github/release.yml at v10.0.3 -->
+
+## What's Changed
+### 🐛 Fixes
+* fix: update potato_util version to 0.5.3 by @bybatkhuu in https://github.com/bybatkhuu/module-python-logging/pull/47
+
+
+**Full Changelog**: https://github.com/bybatkhuu/module-python-logging/compare/v10.0.2...v10.0.3
+
 ## v10.0.2 (2026-02-24)
 
 <!-- Release notes generated using configuration in .github/release.yml at v10.0.2 -->
