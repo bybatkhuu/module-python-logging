@@ -17,7 +17,6 @@ project/
 ├── docs/                   # Documentation of this project
 |   ├── assets/                 # Any assets (images, audios, videos, js, css, html, etc...) used for the documentation
 |   ├── diagrams/               # Diagrams related to this project
-|   ├── blog/                   # Blog posts related to this project
 |   └── .../                    # MkDocs pages - markdown files
 ├── examples/               # Example source codes of this project
 ├── requirements/           # Python dependency requirements for different environments
