@@ -4,6 +4,7 @@ from .__version__ import __version__
 from .schemas import LoguruHandlerPM, LogHandlerPM
 from .config import get_default_handlers, LoggerConfigPM
 from ._core import Logger, logger, LoggerLoader
+from .mode import log_at
 
 __all__ = [
     "__version__",
@@ -14,4 +15,5 @@ __all__ = [
     "Logger",
     "logger",
     "LoggerLoader",
+    "log_at",
 ]

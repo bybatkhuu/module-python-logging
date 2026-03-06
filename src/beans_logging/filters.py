@@ -4,10 +4,10 @@ if TYPE_CHECKING:
     from loguru import Record
 
 from .constants import (
-    DEFAULT_ALL_STD_HANDLER_NAME,
-    DEFAULT_ALL_FILE_HANDLER_NAME,
+    DEFAULT_STD_HANDLER_NAME,
+    DEFAULT_FILE_HANDLER_NAME,
     DEFAULT_ERR_FILE_HANDLER_NAME,
-    DEFAULT_ALL_JSON_HANDLER_NAME,
+    DEFAULT_JSON_HANDLER_NAME,
     DEFAULT_ERR_JSON_HANDLER_NAME,
 )
 
@@ -62,13 +62,13 @@ def std_filter(record: "Record") -> bool:
         record (Record): Log record as dictionary.
 
     Returns:
-        bool: False if record is disabled by extra 'disable_{DEFAULT_ALL_STD_HANDLER_NAME}' key, True otherwise.
+        bool: False if record is disabled by extra 'disable_{DEFAULT_STD_HANDLER_NAME}' key, True otherwise.
     """
 
     if not all_handlers_filter(record):
         return False
 
-    if record["extra"].get(f"disable_{DEFAULT_ALL_STD_HANDLER_NAME}", False):
+    if record["extra"].get(f"disable_{DEFAULT_STD_HANDLER_NAME}", False):
         return False
 
     return True
@@ -81,13 +81,13 @@ def file_filter(record: "Record") -> bool:
         record (Record): Log record as dictionary.
 
     Returns:
-        bool: False if record is disabled by extra 'disable_{DEFAULT_ALL_FILE_HANDLER_NAME}' key, True otherwise.
+        bool: False if record is disabled by extra 'disable_{DEFAULT_FILE_HANDLER_NAME}' key, True otherwise.
     """
 
     if not all_handlers_filter(record):
         return False
 
-    if record["extra"].get(f"disable_{DEFAULT_ALL_FILE_HANDLER_NAME}", False):
+    if record["extra"].get(f"disable_{DEFAULT_FILE_HANDLER_NAME}", False):
         return False
 
     return True
@@ -119,13 +119,13 @@ def json_filter(record: "Record") -> bool:
         record (Record): Log record as dictionary.
 
     Returns:
-        bool: False if record is disabled by extra 'disable_{DEFAULT_ALL_JSON_HANDLER_NAME}' key, True otherwise.
+        bool: False if record is disabled by extra 'disable_{DEFAULT_JSON_HANDLER_NAME}' key, True otherwise.
     """
 
     if not all_handlers_filter(record):
         return False
 
-    if record["extra"].get(f"disable_{DEFAULT_ALL_JSON_HANDLER_NAME}", False):
+    if record["extra"].get(f"disable_{DEFAULT_JSON_HANDLER_NAME}", False):
         return False
 
     return True

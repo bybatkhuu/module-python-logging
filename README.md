@@ -127,13 +127,13 @@ logger:
   level:
     base: TRACE
   handlers:
-    default.all.file_handler:
+    file_handler:
       enabled: true
-    default.err.file_handler:
+    err_file_handler:
       enabled: true
-    default.all.json_handler:
+    json_handler:
       enabled: true
-    default.err.json_handler:
+    err_json_handler:
       enabled: true
 ```
 
@@ -242,12 +242,12 @@ logger:
     include_modules: []
     mute_modules: []
   handlers:
-    all_std_handler:
+    std_handler:
       enabled: true
       h_type: STD
       format: "[<c>{time:YYYY-MM-DD HH:mm:ss.SSS Z}</c> | <level>{extra[level_short]:<5}</level> | <w>{name}:{line}</w>]: <level>{message}</level>"
       colorize: true
-    all_file_handler:
+    file_handler:
       enabled: false
       h_type: FILE
       sink: "{app_name}.all.log"
@@ -256,7 +256,7 @@ logger:
       h_type: FILE
       sink: "{app_name}.err.log"
       error: true
-    all_json_handler:
+    json_handler:
       enabled: false
       h_type: FILE
       sink: "json/{app_name}.all.json.log"
