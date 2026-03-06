@@ -1,5 +1,13 @@
 # Changelog
 
+## v11.0.1 (2026-03-06)
+
+<!-- Release notes generated using configuration in .github/release.yml at v11.0.1 -->
+
+
+
+**Full Changelog**: https://github.com/bybatkhuu/module-python-logging/compare/v11.0.0...v11.0.1
+
 ## v11.0.0 (2026-03-06)
 
 <!-- Release notes generated using configuration in .github/release.yml at v11.0.0 -->
