@@ -15,7 +15,7 @@ def log_at(
     """Log message with level and warn mode.
 
     Args:
-        message   (str               , reqiured): Message to log.
+        message   (str               , required): Message to log.
         level     (LogLevelEnum | str, optional): Log level when warn mode is `WarnEnum.ALWAYS`.
                                                     Defaults to `LogLevelEnum.INFO`.
         warn_mode (WarnEnum | str    , optional): Warn mode to use. Defaults to `WarnEnum.ALWAYS`.
@@ -33,18 +33,7 @@ def log_at(
 
     _logger = logger.opt(depth=3)
     if warn_mode == WarnEnum.ALWAYS:
-        if level == LogLevelEnum.INFO:
-            _logger.info(message)
-        elif level == LogLevelEnum.SUCCESS:
-            _logger.success(message)
-        elif level == LogLevelEnum.WARNING:
-            _logger.warning(message)
-        elif level == LogLevelEnum.ERROR:
-            _logger.error(message)
-        elif level == LogLevelEnum.CRITICAL:
-            _logger.critical(message)
-        elif level == LogLevelEnum.TRACE:
-            _logger.trace(message)
+        _logger.log(level.name, message)
 
     elif warn_mode == WarnEnum.DEBUG:
         _logger.debug(message)
