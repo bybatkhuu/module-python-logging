@@ -6,6 +6,17 @@ hide:
 
 # 📌 Release Notes
 
+## v11.0.0 (2026-03-06)
+
+<!-- Release notes generated using configuration in .github/release.yml at v11.0.0 -->
+
+## What's Changed
+### 💥 Breaking Changes
+* feat!: rename logging handler constants and update configuration files by @bybatkhuu in https://github.com/bybatkhuu/module-python-logging/pull/48
+
+
+**Full Changelog**: https://github.com/bybatkhuu/module-python-logging/compare/v10.0.3...v11.0.0
+
 ## v10.0.3 (2026-02-27)
 
 <!-- Release notes generated using configuration in .github/release.yml at v10.0.3 -->
