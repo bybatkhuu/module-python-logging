@@ -3,11 +3,11 @@ logger:
   level:
     base: TRACE
   handlers:
-    all_file_handler:
+    file_handler:
       enabled: true
     err_file_handler:
       enabled: true
-    all_json_handler:
+    json_handler:
       enabled: true
     err_json_handler:
       enabled: true
