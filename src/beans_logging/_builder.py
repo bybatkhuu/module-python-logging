@@ -96,6 +96,8 @@ def build_handler(handler: LogHandlerPM, config: LoggerConfigPM) -> dict[str, An
         (handler.level == LogLevelEnum.TRACE) or (handler.level == 5)
     ):
         handler.diagnose = True
+    else:
+        handler.diagnose = False
 
     if handler.h_type == LogHandlerTypeEnum.FILE:
         if handler.enqueue is None:
