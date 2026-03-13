@@ -1,10 +1,21 @@
 ---
-title: "Release Notes"
+title: Release Notes
 hide:
   - navigation
 ---
 
 # 📌 Release Notes
+
+## v11.0.2 (2026-03-13)
+
+<!-- Release notes generated using configuration in .github/release.yml at v11.0.2 -->
+
+## What's Changed
+### 🐛 Fixes
+* fix: ensure 'diagnose' attribute is set to False when conditions are … by @bybatkhuu in https://github.com/bybatkhuu/module-python-logging/pull/49
+
+
+**Full Changelog**: https://github.com/bybatkhuu/module-python-logging/compare/v11.0.1...v11.0.2
 
 ## v11.0.1 (2026-03-06)
 
