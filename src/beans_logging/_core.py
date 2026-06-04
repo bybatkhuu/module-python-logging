@@ -82,6 +82,7 @@ class LoggerLoader:
         if load_config_file:
             self._load_config_file()
 
+        logger.configure(extra=self.config.global_extra)
         for _key, _handler in self.config.handlers.items():
             self.add_handler(name=_key, handler=_handler)
 

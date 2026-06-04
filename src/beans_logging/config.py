@@ -26,7 +26,7 @@ def get_default_handlers() -> dict[str, LogHandlerPM]:
 
     _log_handlers: dict[str, LogHandlerPM] = {
         DEFAULT_STD_HANDLER_NAME: LogHandlerPM(
-            h_type=LogHandlerTypeEnum.STD,
+            type_=LogHandlerTypeEnum.STD,
             format_=(
                 "[<c>{time:YYYY-MM-DD HH:mm:ss.SSS Z}</c> | <level>{extra[level_short]:<5}</level> |"
                 " <w>{name}:{line}</w>]: <level>{message}</level>"
@@ -35,24 +35,24 @@ def get_default_handlers() -> dict[str, LogHandlerPM]:
         ),
         DEFAULT_FILE_HANDLER_NAME: LogHandlerPM(
             enabled=False,
-            h_type=LogHandlerTypeEnum.FILE,
+            type_=LogHandlerTypeEnum.FILE,
             sink="{app_name}.all.log",
         ),
         DEFAULT_ERR_FILE_HANDLER_NAME: LogHandlerPM(
             enabled=False,
-            h_type=LogHandlerTypeEnum.FILE,
+            type_=LogHandlerTypeEnum.FILE,
             sink="{app_name}.err.log",
             error=True,
         ),
         DEFAULT_JSON_HANDLER_NAME: LogHandlerPM(
             enabled=False,
-            h_type=LogHandlerTypeEnum.FILE,
+            type_=LogHandlerTypeEnum.FILE,
             sink="json/{app_name}.all.json.log",
             serialize=True,
         ),
         DEFAULT_ERR_JSON_HANDLER_NAME: LogHandlerPM(
             enabled=False,
-            h_type=LogHandlerTypeEnum.FILE,
+            type_=LogHandlerTypeEnum.FILE,
             sink="json/{app_name}.err.json.log",
             serialize=True,
             error=True,
@@ -122,15 +122,18 @@ class LoggerConfigPM(ExtraBaseModel):
         default_factory=utils.get_slug_name, min_length=1, max_length=128
     )
     level: LevelConfigPM = Field(default_factory=LevelConfigPM)
-    format_str: str = Field(
+    default_format: str = Field(
         default="[{time:YYYY-MM-DD HH:mm:ss.SSS Z} | {extra[level_short]:<5} | {name}:{line}]: {message}",
         min_length=8,
         max_length=512,
     )
     file: FileConfigPM = Field(default_factory=FileConfigPM)
-    use_custom_serialize: bool = Field(default=False)
+    custom_serialize: bool = Field(default=False)
     intercept: InterceptConfigPM = Field(default_factory=InterceptConfigPM)
     handlers: dict[str, LogHandlerPM] = Field(default_factory=get_default_handlers)
+    global_extra: dict[str, str] = Field(
+        default={"trace_id": "-", "request_id": "-", "user_id": "-"}
+    )
     extra: ExtraConfigPM | None = Field(default_factory=ExtraConfigPM)
 
     @field_validator("handlers", mode="before")
