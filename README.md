@@ -234,7 +234,7 @@ logger:
     rotate_time: "00:00:00"
     retention: 90
     encoding: utf8
-  use_custom_serialize: false
+  custom_serialize: false
   intercept:
     enabled: true
     only_base: false
@@ -244,29 +244,33 @@ logger:
   handlers:
     std_handler:
       enabled: true
-      h_type: STD
+      type_: STD
       format: "[<c>{time:YYYY-MM-DD HH:mm:ss.SSS Z}</c> | <level>{extra[level_short]:<5}</level> | <w>{name}:{line}</w>]: <level>{message}</level>"
       colorize: true
     file_handler:
       enabled: false
-      h_type: FILE
+      type_: FILE
       sink: "{app_name}.all.log"
     err_file_handler:
       enabled: false
-      h_type: FILE
+      type_: FILE
       sink: "{app_name}.err.log"
       error: true
     json_handler:
       enabled: false
-      h_type: FILE
+      type_: FILE
       sink: "json/{app_name}.all.json.log"
       serialize: true
     err_json_handler:
       enabled: false
-      h_type: FILE
+      type_: FILE
       sink: "json/{app_name}.err.json.log"
       serialize: true
       error: true
+  global_extra:
+    trace_id: "-"
+    request_id: "-"
+    user_id: "-"
   extra:
 ```
 

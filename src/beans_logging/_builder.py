@@ -36,7 +36,7 @@ def build_handler(handler: LogHandlerPM, config: LoggerConfigPM) -> dict[str, An
     """
 
     if handler.sink is None:
-        if handler.h_type == LogHandlerTypeEnum.STD:
+        if handler.type_ == LogHandlerTypeEnum.STD:
             handler.sink = std_sink
         else:
             raise ValueError(
@@ -62,21 +62,21 @@ def build_handler(handler: LogHandlerPM, config: LoggerConfigPM) -> dict[str, An
         else:
             handler.level = config.level.base
 
-    if (handler.use_custom_serialize is None) and handler.serialize:
-        handler.use_custom_serialize = config.use_custom_serialize
+    if (handler.custom_serialize is None) and handler.serialize:
+        handler.custom_serialize = config.custom_serialize
 
-    if handler.use_custom_serialize:
+    if handler.custom_serialize:
         handler.serialize = False
         handler.format_ = json_format
 
     if (handler.format_ is None) and (not handler.serialize):
-        handler.format_ = config.format_str
+        handler.format_ = config.default_format
 
     if handler.filter_ is None:
-        if handler.h_type == LogHandlerTypeEnum.STD:
+        if handler.type_ == LogHandlerTypeEnum.STD:
             handler.filter_ = std_filter
-        elif handler.h_type == LogHandlerTypeEnum.FILE:
-            if handler.serialize or handler.use_custom_serialize:
+        elif handler.type_ == LogHandlerTypeEnum.FILE:
+            if handler.serialize or handler.custom_serialize:
                 if handler.error:
                     handler.filter_ = err_json_filter
                 else:
@@ -99,7 +99,7 @@ def build_handler(handler: LogHandlerPM, config: LoggerConfigPM) -> dict[str, An
     else:
         handler.diagnose = False
 
-    if handler.h_type == LogHandlerTypeEnum.FILE:
+    if handler.type_ == LogHandlerTypeEnum.FILE:
         if handler.enqueue is None:
             handler.enqueue = True
 
@@ -120,9 +120,9 @@ def build_handler(handler: LogHandlerPM, config: LoggerConfigPM) -> dict[str, An
         exclude_none=True,
         exclude={
             "enabled",
-            "h_type",
+            "type_",
             "error",
-            "use_custom_serialize",
+            "custom_serialize",
         },
     )
 
