@@ -22,6 +22,7 @@ class LogLevelEnum(str, Enum):
     WARNING = "WARNING"
     ERROR = "ERROR"
     CRITICAL = "CRITICAL"
+    EXCEPTION = "EXCEPTION"
 
 
 DEFAULT_LOGURU_HANDLER_NAME = "loguru_std_handler"
