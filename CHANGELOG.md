@@ -1,5 +1,16 @@
 # Changelog
 
+## v12.0.0 (2026-06-04)
+
+<!-- Release notes generated using configuration in .github/release.yml at v12.0.0 -->
+
+## What's Changed
+### 💥 Breaking Changes
+* feat(logging)!: standardize handler configuration keys and add global… by @bybatkhuu in https://github.com/bybatkhuu/module-python-logging/pull/75
+
+
+**Full Changelog**: https://github.com/bybatkhuu/module-python-logging/compare/v11.0.3...v12.0.0
+
 ## v11.0.3 (2026-06-04)
 
 <!-- Release notes generated using configuration in .github/release.yml at v11.0.3 -->
