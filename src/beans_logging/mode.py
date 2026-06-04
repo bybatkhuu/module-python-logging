@@ -33,7 +33,10 @@ def log_at(
 
     _logger = logger.opt(depth=3)
     if warn_mode == WarnEnum.ALWAYS:
-        _logger.log(level.name, message)
+        if level == LogLevelEnum.EXCEPTION:
+            _logger.exception(message)
+        else:
+            _logger.log(level.name, message)
 
     elif warn_mode == WarnEnum.DEBUG:
         _logger.debug(message)

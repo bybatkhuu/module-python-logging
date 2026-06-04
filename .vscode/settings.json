@@ -5,7 +5,6 @@
 	"git.autofetch": true,
 	"git.autofetchPeriod": 120,
 	"diffEditor.ignoreTrimWhitespace": false,
-	"editor.fontWeight": "500",
 	"editor.renderWhitespace": "all",
 	"editor.rulers": [
 		120
@@ -148,7 +147,6 @@
 		"**/Thumbs.db": true,
 		"**/docs/assets/js/*.js": true
 	},
-	"python.languageServer": "Pylance",
 	"python.analysis.extraPaths": [
 		"${workspaceFolder}/src"
 	],
