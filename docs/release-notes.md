@@ -6,6 +6,25 @@ hide:
 
 # 📌 Release Notes
 
+## v11.0.3 (2026-06-04)
+
+<!-- Release notes generated using configuration in .github/release.yml at v11.0.3 -->
+
+## What's Changed
+### ✨ Features
+* chore(deps): bump https://github.com/psf/black from 26.1.0 to 26.3.1 by @dependabot[bot] in https://github.com/bybatkhuu/module-python-logging/pull/71
+* chore(deps): bump https://github.com/psf/black from 26.3.1 to 26.5.1 by @dependabot[bot] in https://github.com/bybatkhuu/module-python-logging/pull/73
+### 🐛 Fixes
+* chore(deps): bump https://github.com/gitleaks/gitleaks from v8.30.0 to 8.30.1 by @dependabot[bot] in https://github.com/bybatkhuu/module-python-logging/pull/72
+* chore(deps): bump https://github.com/PyCQA/bandit from 1.9.3 to 1.9.4 by @dependabot[bot] in https://github.com/bybatkhuu/module-python-logging/pull/70
+* Update dependencies: bandit, black, and gitleaks by @bybatkhuu in https://github.com/bybatkhuu/module-python-logging/pull/74
+### 📦 Dependencies
+* chore(deps-dev): update setuptools-scm requirement from <10.0.0,>=8.0.4 to >=8.0.4,<11.0.0 by @dependabot[bot] in https://github.com/bybatkhuu/module-python-logging/pull/50
+* chore(deps): update potato-util requirement from <1.0.0,>=0.5.3 to >=0.7.2,<1.0.0 by @dependabot[bot] in https://github.com/bybatkhuu/module-python-logging/pull/68
+
+
+**Full Changelog**: https://github.com/bybatkhuu/module-python-logging/compare/v11.0.2...v11.0.3
+
 ## v11.0.2 (2026-03-13)
 
 <!-- Release notes generated using configuration in .github/release.yml at v11.0.2 -->
