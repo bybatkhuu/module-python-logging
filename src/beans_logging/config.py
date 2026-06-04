@@ -130,10 +130,10 @@ class LoggerConfigPM(ExtraBaseModel):
     file: FileConfigPM = Field(default_factory=FileConfigPM)
     custom_serialize: bool = Field(default=False)
     intercept: InterceptConfigPM = Field(default_factory=InterceptConfigPM)
-    handlers: dict[str, LogHandlerPM] = Field(default_factory=get_default_handlers)
     global_extra: dict[str, str] = Field(
         default={"trace_id": "-", "request_id": "-", "user_id": "-"}
     )
+    handlers: dict[str, LogHandlerPM] = Field(default_factory=get_default_handlers)
     extra: ExtraConfigPM | None = Field(default_factory=ExtraConfigPM)
 
     @field_validator("handlers", mode="before")

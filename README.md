@@ -241,6 +241,10 @@ logger:
     ignore_modules: []
     include_modules: []
     mute_modules: []
+  global_extra:
+    trace_id: "-"
+    request_id: "-"
+    user_id: "-"
   handlers:
     std_handler:
       enabled: true
@@ -267,10 +271,6 @@ logger:
       sink: "json/{app_name}.err.json.log"
       serialize: true
       error: true
-  global_extra:
-    trace_id: "-"
-    request_id: "-"
-    user_id: "-"
   extra:
 ```
 
