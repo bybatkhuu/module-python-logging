@@ -1,16 +1,24 @@
+from typing import TYPE_CHECKING
+
 from pydantic import validate_call
 from loguru import logger
+
+if TYPE_CHECKING:
+    from loguru import Logger
+else:
+    from loguru._logger import Logger
 
 from potato_util.constants import WarnEnum
 
 from .constants import LogLevelEnum
 
 
-@validate_call
+@validate_call(config={"arbitrary_types_allowed": True})
 def log_at(
     message: str,
     level: LogLevelEnum | str = LogLevelEnum.INFO,
     warn_mode: WarnEnum | str = WarnEnum.ALWAYS,
+    logger: Logger = logger,
 ) -> None:
     """Log message with level and warn mode.
 
@@ -19,6 +27,7 @@ def log_at(
         level     (LogLevelEnum | str, optional): Log level when warn mode is `WarnEnum.ALWAYS`.
                                                     Defaults to `LogLevelEnum.INFO`.
         warn_mode (WarnEnum | str    , optional): Warn mode to use. Defaults to `WarnEnum.ALWAYS`.
+        logger    (Logger            , optional): Logger instance to use. Defaults to `logger`.
 
     Raises:
         ValueError: If `level` is not a valid log level.
