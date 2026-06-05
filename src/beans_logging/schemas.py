@@ -52,20 +52,47 @@ _SinkType = Union[
     Handler,
 ]
 
+FormatType = Union[
+    str, Callable[["Record"], str], Callable[[dict[str, Any]], str], None
+]
+
+_FilterType = Union[
+    Callable[["Record"], bool],
+    Callable[[dict[str, Any]], bool],
+    str,
+    dict[str, Any],
+    None,
+]
+
+_RotationType = Union[
+    str,
+    int,
+    datetime.time,
+    datetime.timedelta,
+    Callable[["Message", TextIO], bool],
+    Callable[[str, TextIO], bool],
+    Callable[[str, Any], bool],
+    None,
+]
+
+_RetentionType = Union[
+    str,
+    int,
+    datetime.timedelta,
+    Callable[[Any], None],
+    None,
+]
+
 
 class LoguruHandlerPM(ExtraBaseModel):
     sink: _SinkType = Field(...)
     level: str | int | None = Field(default=None)
-    format_: (
-        str | Callable[["Record"], str] | Callable[[dict[str, Any]], str] | None
-    ) = Field(default=None, validation_alias="format", serialization_alias="format")
-    filter_: (
-        Callable[["Record"], bool]
-        | Callable[[dict[str, Any]], bool]
-        | str
-        | dict[str, Any]
-        | None
-    ) = Field(default=None, validation_alias="filter", serialization_alias="filter")
+    format_: FormatType = Field(
+        default=None, validation_alias="format", serialization_alias="format"
+    )
+    filter_: _FilterType = Field(
+        default=None, validation_alias="filter", serialization_alias="filter"
+    )
     colorize: bool | None = Field(default=None)
     serialize: bool | None = Field(default=None)
     backtrace: bool | None = Field(default=None)
@@ -74,19 +101,8 @@ class LoguruHandlerPM(ExtraBaseModel):
     context: BaseContext | str | None = Field(default=None)
     catch: bool | None = Field(default=None)
     loop: AbstractEventLoop | None = Field(default=None)
-    rotation: (
-        str
-        | int
-        | datetime.time
-        | datetime.timedelta
-        | Callable[["Message", TextIO], bool]
-        | Callable[[str, TextIO], bool]
-        | Callable[[str, Any], bool]
-        | None
-    ) = Field(default=None)
-    retention: str | int | datetime.timedelta | Callable[[Any], None] | None = Field(
-        default=None
-    )
+    rotation: _RotationType = Field(default=None)
+    retention: _RetentionType = Field(default=None)
     compression: str | Callable[[str], None] | None = Field(default=None)
     delay: bool | None = Field(default=None)
     watch: bool | None = Field(default=None)
@@ -138,4 +154,5 @@ __all__ = [
     "ExtraBaseModel",
     "LoguruHandlerPM",
     "LogHandlerPM",
+    "FormatType",
 ]

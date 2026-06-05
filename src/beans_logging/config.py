@@ -14,7 +14,7 @@ from .constants import (
     DEFAULT_JSON_HANDLER_NAME,
     DEFAULT_ERR_JSON_HANDLER_NAME,
 )
-from .schemas import ExtraBaseModel, LogHandlerPM
+from .schemas import ExtraBaseModel, LogHandlerPM, FormatType
 
 
 def get_default_handlers() -> dict[str, LogHandlerPM]:
@@ -122,16 +122,18 @@ class LoggerConfigPM(ExtraBaseModel):
         default_factory=utils.get_slug_name, min_length=1, max_length=128
     )
     level: LevelConfigPM = Field(default_factory=LevelConfigPM)
-    default_format: str = Field(
-        default="[{time:YYYY-MM-DD HH:mm:ss.SSS Z} | {extra[level_short]:<5} | {name}:{line}]: {message}",
-        min_length=8,
-        max_length=512,
+    default_format: FormatType = Field(
+        default="[{time:YYYY-MM-DD HH:mm:ss.SSS Z} | {extra[level_short]:<5} | {name}:{line}]: {message}"
     )
     file: FileConfigPM = Field(default_factory=FileConfigPM)
     custom_serialize: bool = Field(default=False)
     intercept: InterceptConfigPM = Field(default_factory=InterceptConfigPM)
     global_extra: dict[str, str] = Field(
-        default={"trace_id": "-", "request_id": "-", "user_id": "-"}
+        default={
+            "request_id": "",
+            "trace_id": "",
+            "user_id": "",
+        }
     )
     handlers: dict[str, LogHandlerPM] = Field(default_factory=get_default_handlers)
     extra: ExtraConfigPM | None = Field(default_factory=ExtraConfigPM)

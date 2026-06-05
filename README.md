@@ -227,7 +227,7 @@ logger:
   level:
     base: INFO
     err: WARNING
-  format_str: "[{time:YYYY-MM-DD HH:mm:ss.SSS Z} | {extra[level_short]:<5} | {name}:{line}]: {message}"
+  default_format: "[{time:YYYY-MM-DD HH:mm:ss.SSS Z} | {extra[level_short]:<5} | {name}:{line}]: {message}"
   file:
     logs_dir: "./logs"
     rotate_size: 10000000
@@ -242,9 +242,9 @@ logger:
     include_modules: []
     mute_modules: []
   global_extra:
-    trace_id: "-"
-    request_id: "-"
-    user_id: "-"
+    trace_id: ""
+    request_id: ""
+    user_id: ""
   handlers:
     std_handler:
       enabled: true

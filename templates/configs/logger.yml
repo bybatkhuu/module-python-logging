@@ -18,9 +18,9 @@ logger:
     include_modules: []
     mute_modules: []
   global_extra:
-    trace_id: "-"
-    request_id: "-"
-    user_id: "-"
+    trace_id: ""
+    request_id: ""
+    user_id: ""
   handlers:
     std_handler:
       enabled: true
