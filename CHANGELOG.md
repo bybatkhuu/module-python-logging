@@ -1,5 +1,16 @@
 # Changelog
 
+## v12.0.1 (2026-06-05)
+
+<!-- Release notes generated using configuration in .github/release.yml at v12.0.1 -->
+
+## What's Changed
+### 🐛 Fixes
+* feat: add logger parameter in log_at function by @bybatkhuu in https://github.com/bybatkhuu/module-python-logging/pull/76
+
+
+**Full Changelog**: https://github.com/bybatkhuu/module-python-logging/compare/v12.0.0...v12.0.1
+
 ## v12.0.0 (2026-06-04)
 
 <!-- Release notes generated using configuration in .github/release.yml at v12.0.0 -->
