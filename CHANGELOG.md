@@ -1,5 +1,16 @@
 # Changelog
 
+## v12.0.3 (2026-06-06)
+
+<!-- Release notes generated using configuration in .github/release.yml at v12.0.3 -->
+
+## What's Changed
+### 🐛 Fixes
+* fix: prevent unnecessary log interception when logging is disabled by @bybatkhuu in https://github.com/bybatkhuu/module-python-logging/pull/78
+
+
+**Full Changelog**: https://github.com/bybatkhuu/module-python-logging/compare/v12.0.2...v12.0.3
+
 ## v12.0.2 (2026-06-05)
 
 <!-- Release notes generated using configuration in .github/release.yml at v12.0.2 -->
