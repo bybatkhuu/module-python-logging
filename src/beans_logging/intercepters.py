@@ -52,6 +52,9 @@ def add_intercepter(config: LoggerConfigPM) -> None:
         config (LoggerConfigPM, required): Main logger config model to use intercepter settings.
     """
 
+    if not config.intercept.enabled:
+        return
+
     _intercept_handler = InterceptHandler()
 
     # Intercepting all logs from standard (root logger) logging:
@@ -60,18 +63,17 @@ def add_intercepter(config: LoggerConfigPM) -> None:
     _intercepted_modules = set()
     _muted_modules = set()
 
-    if config.intercept.enabled:
-        for _module_name in list(logging.root.manager.loggerDict.keys()):
-            if config.intercept.only_base:
-                _module_name = _module_name.split(".")[0]
+    for _module_name in list(logging.root.manager.loggerDict.keys()):
+        if config.intercept.only_base:
+            _module_name = _module_name.split(".")[0]
 
-            if (_module_name not in _intercepted_modules) and (
-                _module_name not in config.intercept.ignore_modules
-            ):
-                _logger = logging.getLogger(_module_name)
-                _logger.handlers = [_intercept_handler]
-                _logger.propagate = False
-                _intercepted_modules.add(_module_name)
+        if (_module_name not in _intercepted_modules) and (
+            _module_name not in config.intercept.ignore_modules
+        ):
+            _logger = logging.getLogger(_module_name)
+            _logger.handlers = [_intercept_handler]
+            _logger.propagate = False
+            _intercepted_modules.add(_module_name)
 
     for _include_module_name in config.intercept.include_modules:
         _logger = logging.getLogger(_include_module_name)
