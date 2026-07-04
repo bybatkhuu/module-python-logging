@@ -1,5 +1,20 @@
 # Changelog
 
+## v12.0.4 (2026-07-04)
+
+<!-- Release notes generated using configuration in .github/release.yml at v12.0.4 -->
+
+## What's Changed
+### 💥 Breaking Changes
+* chore(deps): bump actions/checkout from 6 to 7 by @dependabot[bot] in https://github.com/bybatkhuu/module-python-logging/pull/79
+### ✨ Features
+* chore(deps): bump https://github.com/igorshubovych/markdownlint-cli from v0.48.0 to 0.49.0 by @dependabot[bot] in https://github.com/bybatkhuu/module-python-logging/pull/80
+### 📦 Dependencies
+* Upgrade dependencies for GitHub Actions and Python by @bybatkhuu in https://github.com/bybatkhuu/module-python-logging/pull/81
+
+
+**Full Changelog**: https://github.com/bybatkhuu/module-python-logging/compare/v12.0.3...v12.0.4
+
 ## v12.0.3 (2026-06-06)
 
 <!-- Release notes generated using configuration in .github/release.yml at v12.0.3 -->
