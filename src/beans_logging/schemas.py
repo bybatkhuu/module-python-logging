@@ -113,7 +113,7 @@ class LoguruHandlerPM(ExtraBaseModel):
 
 class LogHandlerPM(LoguruHandlerPM):
     type_: LogHandlerTypeEnum = Field(default=LogHandlerTypeEnum.UNKNOWN)
-    sink: _SinkType | None = Field(default=None)
+    sink: _SinkType | None = Field(default=None)  # type: ignore
     level: str | int | LogLevelEnum | None = Field(default=None)
     custom_serialize: bool | None = Field(default=None)
     error: bool = Field(default=False)
