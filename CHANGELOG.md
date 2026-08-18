@@ -1,5 +1,23 @@
 # Changelog
 
+## v12.0.5 (2026-08-18)
+
+<!-- Release notes generated using configuration in .github/release.yml at v12.0.5 -->
+
+## What's Changed
+### 🐛 Fixes
+* chore(deps): bump https://github.com/igorshubovych/markdownlint-cli from v0.49.0 to 0.49.1 by @dependabot[bot] in https://github.com/bybatkhuu/module-python-logging/pull/83
+* Update setuptools and potato_util version constraints by @bybatkhuu in https://github.com/bybatkhuu/module-python-logging/pull/87
+### 👷 CI/CD
+* Update dependencies for setuptools and markdownlint-cli by @bybatkhuu in https://github.com/bybatkhuu/module-python-logging/pull/84
+### 📦 Dependencies
+* chore(deps): update setuptools requirement from <83.0.0,>=70.3.0 to >=70.3.0,<84.0.0 by @dependabot[bot] in https://github.com/bybatkhuu/module-python-logging/pull/82
+* chore(deps): update twine requirement from <7.0.0,>=6.0.1 to >=6.0.1,<8.0.0 by @dependabot[bot] in https://github.com/bybatkhuu/module-python-logging/pull/85
+* chore(deps): update setuptools requirement from <84.0.0,>=70.3.0 to >=70.3.0,<85.0.0 by @dependabot[bot] in https://github.com/bybatkhuu/module-python-logging/pull/86
+
+
+**Full Changelog**: https://github.com/bybatkhuu/module-python-logging/compare/v12.0.4...v12.0.5
+
 ## v12.0.4 (2026-07-04)
 
 <!-- Release notes generated using configuration in .github/release.yml at v12.0.4 -->
