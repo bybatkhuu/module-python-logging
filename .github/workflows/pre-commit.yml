@@ -28,7 +28,7 @@ jobs:
         uses: actions/cache@v6
         with:
           path: ~/.cache/pip
-          key: pip-${{ runner.os }}-${{ hashFiles('requirements.txt', 'requirements/requirements.dev.txt', 'requirements/requirements.test.txt') }}
+          key: pip-${{ runner.os }}-${{ hashFiles('requirements.txt', 'requirements/requirements.test.txt', 'requirements/requirements.dev.txt') }}
       - name: Install pre-commit and dependencies
         run: |
           python -m pip install -U pip
