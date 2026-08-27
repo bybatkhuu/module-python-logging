@@ -1,5 +1,16 @@
 # Changelog
 
+## v12.0.6 (2026-08-27)
+
+<!-- Release notes generated using configuration in .github/release.yml at v12.0.6 -->
+
+## What's Changed
+### ✨ Features
+* feat: enhance logger_loader initialization with dynamic configuration by @bybatkhuu in https://github.com/bybatkhuu/module-python-logging/pull/88
+
+
+**Full Changelog**: https://github.com/bybatkhuu/module-python-logging/compare/v12.0.5...v12.0.6
+
 ## v12.0.5 (2026-08-18)
 
 <!-- Release notes generated using configuration in .github/release.yml at v12.0.5 -->
