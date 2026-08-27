@@ -1,5 +1,16 @@
 # Changelog
 
+## v12.1.0 (2026-08-27)
+
+<!-- Release notes generated using configuration in .github/release.yml at v12.1.0 -->
+
+## What's Changed
+### ✨ Features
+* feat: improve logger configuration handling with dynamic format support by @bybatkhuu in https://github.com/bybatkhuu/module-python-logging/pull/89
+
+
+**Full Changelog**: https://github.com/bybatkhuu/module-python-logging/compare/v12.0.6...v12.1.0
+
 ## v12.0.6 (2026-08-27)
 
 <!-- Release notes generated using configuration in .github/release.yml at v12.0.6 -->
