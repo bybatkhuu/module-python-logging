@@ -16,12 +16,6 @@ from .constants import DEFAULT_STD_HANDLER_NAME
 
 _kwargs: dict[str, Any] = {"auto_load": True}
 
-if _level:
-    if "config" not in _kwargs:
-        _kwargs["config"] = {}
-
-    _kwargs["config"]["level"] = {"base": _level}
-
 _handler_config: dict[str, Any] = {}
 if not _is_colorized:
     _handler_config["colorize"] = False
@@ -29,11 +23,11 @@ if not _is_colorized:
 if _format:
     _handler_config["format_"] = _format
 
-if _handler_config:
-    if "config" not in _kwargs:
-        _kwargs["config"] = {}
+if _level:
+    _handler_config["level"] = _level
 
-    _kwargs["config"]["handlers"] = {DEFAULT_STD_HANDLER_NAME: _handler_config}
+if _handler_config:
+    _kwargs["config"] = {"handlers": {DEFAULT_STD_HANDLER_NAME: _handler_config}}
 
 logger_loader: LoggerLoader = LoggerLoader(**_kwargs)
 
