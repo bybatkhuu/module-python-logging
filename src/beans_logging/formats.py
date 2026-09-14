@@ -1,12 +1,10 @@
 import json
 import traceback
-from typing import TYPE_CHECKING
 
-if TYPE_CHECKING:
-    from loguru import Record
+from .typing import Record
 
 
-def json_format(record: "Record") -> str:
+def json_format(record: Record) -> str:
     """Custom json formatter for loguru logger.
 
     Args:

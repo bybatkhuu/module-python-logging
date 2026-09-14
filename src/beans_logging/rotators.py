@@ -1,8 +1,7 @@
 import datetime
-from typing import TextIO, TYPE_CHECKING
+from typing import TextIO
 
-if TYPE_CHECKING:
-    from loguru import Message
+from .typing import Message
 
 
 class Rotator:
@@ -38,7 +37,7 @@ class Rotator:
             # Add one day to prevent an immediate rotation.
             self._dt_limit += datetime.timedelta(days=1)
 
-    def should_rotate(self, message: "Message", file: TextIO) -> bool:
+    def should_rotate(self, message: Message, file: TextIO) -> bool:
         """Check if the log file should rotate.
 
         Args:

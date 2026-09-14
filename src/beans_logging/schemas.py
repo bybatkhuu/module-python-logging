@@ -6,7 +6,7 @@ from pathlib import Path
 from logging import Handler
 from asyncio import AbstractEventLoop
 from multiprocessing.context import BaseContext
-from typing import TYPE_CHECKING, Any, TextIO, Union, Protocol, runtime_checkable
+from typing import Any, TextIO, Union, Protocol, runtime_checkable
 from collections.abc import Callable, Awaitable
 
 if sys.version_info >= (3, 11):
@@ -14,13 +14,9 @@ if sys.version_info >= (3, 11):
 else:
     from typing_extensions import Self
 
-if TYPE_CHECKING:
-    from loguru import Record, Message
-else:
-    from .typing import Record, Message
-
 from pydantic import BaseModel, Field, ConfigDict, model_validator
 
+from .typing import Record, Message
 from .constants import LogHandlerTypeEnum, LogLevelEnum
 
 
@@ -52,12 +48,10 @@ _SinkType = Union[
     Handler,
 ]
 
-FormatType = Union[
-    str, Callable[["Record"], str], Callable[[dict[str, Any]], str], None
-]
+FormatType = Union[str, Callable[[Record], str], Callable[[dict[str, Any]], str], None]
 
 _FilterType = Union[
-    Callable[["Record"], bool],
+    Callable[[Record], bool],
     Callable[[dict[str, Any]], bool],
     str,
     dict[str, Any],
@@ -69,7 +63,7 @@ _RotationType = Union[
     int,
     datetime.time,
     datetime.timedelta,
-    Callable[["Message", TextIO], bool],
+    Callable[[Message, TextIO], bool],
     Callable[[str, TextIO], bool],
     Callable[[str, Any], bool],
     None,
