@@ -1,8 +1,4 @@
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from loguru import Record
-
+from .typing import Record
 from .constants import (
     DEFAULT_STD_HANDLER_NAME,
     DEFAULT_FILE_HANDLER_NAME,
@@ -12,7 +8,7 @@ from .constants import (
 )
 
 
-def add_level_short(record: "Record") -> "Record":
+def add_level_short(record: Record) -> Record:
     """Filter for adding short level name to log record.
 
     Args:
@@ -37,7 +33,7 @@ def add_level_short(record: "Record") -> "Record":
     return record
 
 
-def all_handlers_filter(record: "Record") -> bool:
+def all_handlers_filter(record: Record) -> bool:
     """Filter message for all handlers that use this filter.
 
     Args:
@@ -55,7 +51,7 @@ def all_handlers_filter(record: "Record") -> bool:
     return True
 
 
-def std_filter(record: "Record") -> bool:
+def std_filter(record: Record) -> bool:
     """Filter message for std handlers that use this filter.
 
     Args:
@@ -74,7 +70,7 @@ def std_filter(record: "Record") -> bool:
     return True
 
 
-def file_filter(record: "Record") -> bool:
+def file_filter(record: Record) -> bool:
     """Filter message for file handlers that use this filter.
 
     Args:
@@ -93,7 +89,7 @@ def file_filter(record: "Record") -> bool:
     return True
 
 
-def err_file_filter(record: "Record") -> bool:
+def err_file_filter(record: Record) -> bool:
     """Filter message for error file handlers that use this filter.
 
     Args:
@@ -112,7 +108,7 @@ def err_file_filter(record: "Record") -> bool:
     return True
 
 
-def json_filter(record: "Record") -> bool:
+def json_filter(record: Record) -> bool:
     """Filter message for json file handlers that use this filter.
 
     Args:
@@ -131,7 +127,7 @@ def json_filter(record: "Record") -> bool:
     return True
 
 
-def err_json_filter(record: "Record") -> bool:
+def err_json_filter(record: Record) -> bool:
     """Filter message for json error file handlers that use this filter.
 
     Args:
