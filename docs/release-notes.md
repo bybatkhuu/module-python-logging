@@ -6,6 +6,17 @@ hide:
 
 # 📌 Release Notes
 
+## v12.2.0 (2026-09-14)
+
+<!-- Release notes generated using configuration in .github/release.yml at v12.2.0 -->
+
+## What's Changed
+### ✨ Features
+* Enhance logging configuration with dynamic level settings by @bybatkhuu in https://github.com/bybatkhuu/module-python-logging/pull/91
+
+
+**Full Changelog**: https://github.com/bybatkhuu/module-python-logging/compare/v12.1.1...v12.2.0
+
 ## v12.1.1 (2026-09-14)
 
 <!-- Release notes generated using configuration in .github/release.yml at v12.1.1 -->
