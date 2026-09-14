@@ -6,6 +6,17 @@ hide:
 
 # 📌 Release Notes
 
+## v12.1.1 (2026-09-14)
+
+<!-- Release notes generated using configuration in .github/release.yml at v12.1.1 -->
+
+## What's Changed
+### 🐛 Fixes
+* Update Python version to 3.11 in workflows and configurations by @bybatkhuu in https://github.com/bybatkhuu/module-python-logging/pull/90
+
+
+**Full Changelog**: https://github.com/bybatkhuu/module-python-logging/compare/v12.1.0...v12.1.1
+
 ## v12.1.0 (2026-08-27)
 
 <!-- Release notes generated using configuration in .github/release.yml at v12.1.0 -->
