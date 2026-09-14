@@ -282,6 +282,10 @@ logger:
 # ENV=LOCAL
 # DEBUG=false
 # TZ=UTC
+
+# BEANS_LOGGING_AUTO_LEVEL=INFO
+# BEANS_LOGGING_AUTO_COLORIZED=true
+# BEANS_LOGGING_AUTO_FORMAT="[<c>{time:YYYY-MM-DD HH:mm:ss.SSS Z}</c> | <level>{extra[level_short]:<5}</level> | <w>{name}:{line}</w>]: <level>{message}</level>"
 ```
 
 ---
